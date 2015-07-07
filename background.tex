@@ -1,0 +1,40 @@
+\section{Background}
+\label{sec:background}
+
+\subsection{Deep Neural Networks}
+\label{subsec:dnn}
+DNNs consist of large numbers of neurons with multiple inputs and a single output called an activation. Neurons are connected hierarchically, layer by layer, with the activations of neurons in layer $l-1$ serving as inputs to neurons in layer $l$.  This deep hierarchical structure enables DNNs to learn complex AI tasks, such as image recognition, speech recognition and text processing~\cite{Bengio09}. DNNs comprise {\it convolutional} layers (possibly interleaved with {\it pooling} layers) at the bottom of the hierarchy followed by {\it fully connected} layers.  Convolutional layers, which are inspired by the visual cortex~\cite{Hubel59}, extract features from input samples, and consist of neurons that are only connected to spatially local neurons in the lower layer~\cite{LeCun98b}.  Pooling layers summarize the features learned by convolutional layers (e.g., identify the maximum intensity in a cluster of image pixels, reduce spectral variance in speech samples).  Fully connected layers classify the learned features into a number of categories (e.g., handwritten digits) and consist of neurons that are connected to all neurons in the lower layer.
+
+\subsection{DNN Training}
+A common approach for training DNNs is using  learning algorithms, such as stochastic gradient descent (SGD)~\cite{Bottou10}, and labeled training data to tune the neural network parameters for a specific task. The parameters are the {\em bias} of each neuron and the {\em weight} of each neural connection. Each training input is processed in three steps: {\em feed-forward evaluation}, {\em back-propagation}, and {\em weight updates}.
+
+{\bf Feed-forward evaluation:}
+Define $a_{i}$ as the activation of neuron $i$ in layer $l$. It is computed as a function of its $J$ inputs from neurons in the preceding layer $l-1$:
+\begin{equation}
+{\it a_{i}} = f\left(\left(\sum\limits_{j=1}^{J}{\it w_{ij}} \times {\it a_{j}}\right) + {\it b_{i}}\right) \ ,
+\label{eqn:fwd_activation}
+\end{equation}
+where $w_{ij}$ is the weight associated with the connection between neurons $i$ at layer $l$ and neuron $j$ at layer $l-1$, and $b_{i}$ is a bias term associated with neuron $i$. The activation function, $f$, associated with all neurons in the network is a pre-defined non-linear function, typically sigmoid or hyperbolic tangent.
+
+{\bf Back-propagation:}
+Error terms $\delta$ are computed for each neuron $i$ in the output layer $L$:
+\begin{equation}
+\delta_{i} = \left(true_{i} - a_{i}\right) \times f'(a_{i})\ ,
+\label{eqn:output_error_term}
+\end{equation}
+where $true(x)$ is the true value of the output and $f'(x)$ is the derivative of $f(x)$.
+These error terms are back-propagated to each neuron $i$ in the layer $l$ from its $S$ connected neurons in layer $l+1$:
+\begin{equation}
+\delta_{i} = \left(\sum\limits_{s=1}^{S}\delta_{s} \times w_{si}\right) \times f'(a_{i}) \ .
+\label{eqn:other_error_term}
+\end{equation}
+
+{\bf Weight updates:}
+These error terms are used to compute the weight deltas, $\Delta w_{ij}$, for updating the weights:
+\begin{equation}
+\Delta w_{ij} = \alpha \times \delta_{i} \times a_{j} ~~for~ j = 1...J \ ,
+\label{eqn:weight_delta}
+\end{equation}
+where $\alpha$ is the learning rate and $J$ is the number of neurons of the layer.  
+
+This process is repeated for each input until the entire training data has been processed, which constitutes a training {\it epoch}. Typically, training continues for multiple epochs, reprocessing the training data set each time, until the error converges to a desired (low) value.
