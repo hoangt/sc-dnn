@@ -21,7 +21,7 @@ Prior software~\cite{Eisenstat82, IntelSparseMatrix} and hardware~\cite{Carter99
 
 Our approach consists of independent techniques for tackling sparse data computation overheads in the processor and memory system.  By separating these concerns, we achieve a flexible and modular design which makes it easy to evaluate the benefits of each technique.  Our processor extensions are based on ``zero-optimizable'' instructions, which are arithmetic instructions (e.g., multiplication) whose results and side effects are pre-determined when an input operand is a zero. Our optimizations exploit zero-optimizable instructions to reduce execution cycles and pressure on critcal processor resources.  Our memory system extensions efficiently track zero data at cache granularity in the caches and main memory to avoid the bandwidth costs associated with moving zero cache lines. Our approach does not require software modifications and so existing binaries can benefit from our optimizations. 
 
-We have evaluated our proposed hardware extensions in a simulation environment using real-world DNN training workloads for image recognition. The results show that our approach can significantly improve DNN training performance in single threaded, multi-threaded, and model-parallelism scenarios.
+We evaluate our proposed hardware extensions in a simulation environment using real-world DNN training workloads for image recognition. The results show that our approach can significantly improve DNN training performance in single threaded, multi-threaded, and model-parallelism scenarios.
 
 This paper makes the following contributions.
 \begin{itemize}
