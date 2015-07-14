@@ -34,7 +34,7 @@ We illustrate our optimizations using the machine code sequences in  Figures~\re
 
 \subsection{Mechanisms}
 
-We propose extensions to a modern OOO pipeline to dynamically optimize the execution of zero-optimizable instructions and the loops containing them.  Our optimizer system comprises of lightweight extensions in the front-end of the pipeline, to avoid critical path delays, and heavyweight extensions in the back-end, to extract maximum performance improvements.  The front-end extensions are focused on enable early instruction issue/commit, while the back-end extensions are focused on instruction squashing in loops.  Figure~\ref{fig:opt_pipeline} presents an overview of augmenting a general six-stage pipeline of an OOO processor with our optimization system.
+We propose extensions to a modern OOO pipeline for dynamic optimization of zero-optimizable instructions and the loops containing them.  Our optimizer system comprises of lightweight extensions in the front-end and heavyweight extensions in the back-end of the pipeline.  The split into lightweight and heavyweight components helps to avoid critical path delays in the front-end, while extracting maximum performance improvements.  The front-end extensions enable early instruction issue/commit, while the back-end extensions enable instruction squashing in loops.  Figure~\ref{fig:opt_pipeline} presents an overview of augmenting a standard OOO six-stage pipeline with our optimization system.
 
 \begin{figure}
 \centering
@@ -60,5 +60,11 @@ We exploit zero operand values to bypass the execute and writeback stages whenev
  
  %\subsubsection{Modify Data Dependencies.}  We can extend current mechanisms for tracking data dependencies among instructions to clear dependencies of zero-optimizable instructions that become redundant due to a zero input operand becoming available. Futhermore, dependencies from instructions that consume the results of a zero-optimizable instruction should be cleared when a zero input makes the instruction an identity function, and thus redundant.  
  
- \subsubsection{Back-End}
+ \subsubsection{Back-End Extensions.}
+ Our backend extensions consists of two components: (i) a mechanism for detecting and optimizing loops based on zero-optimizable instructions, and (ii) an optimized loop code cache.  The goal is to eliminate instructions that are made redundant by zero inputs to zero-optimizable instructions in the loop.  Thus, the optimized loop code is smaller than the original loop 
+ 
+ \paragraph{Loop Optimizer.} This mechanism scans the stream of committed instructions to detect loops that can be optimized based on zero-optimizable 
+ 
+ \paragraph{Optimized Loop Code Cache.}
+ 
  
