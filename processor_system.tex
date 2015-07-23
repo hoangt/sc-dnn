@@ -3,12 +3,24 @@
 
 Our processor optimizations are based on arithmetic operations, such as addition and multiplication, which are performance critical in training computations, and have predetermined results when one of the input operands is a zero. We refer to machine instructions that perform such arithmetic operations as ``zero-optimizable'' instructions. Exploiting zero-optimizable instructions to improve training peformance is promising because, as shown in our profiling studies (Figure~\ref{fig:cifar-10_word_sparsity}), a significant portion of the inputs to training computations are zeroes. 
 
+\begin{comment}
 \begin{figure}
 \centering
 \includegraphics[height=1.4in, width=.9\columnwidth]{Figures/gradient_machine_code.png}
 \caption{(a) original and (b) optimized machine code of the inner loop for computing weight deltas.}
 \label{fig:deltas_code_opt}
 \end{figure}
+\end{comment}
+
+%\begin{comment}
+\begin{figure*}
+\centering
+\includegraphics[height=1.4in, width=1.9\columnwidth]{Figures/deltas_code_opt.png}
+\caption{(a) original and (b) optimized machine code of the inner loop for computing weight deltas.}
+\label{fig:deltas_code_opt}
+\end{figure*}
+%\end{comment}
+
 
 \subsection{Opportunities}
 
@@ -21,12 +33,14 @@ A zero input operand converts an addition instruction into a copy operation of t
 
 \subsubsection{Early Instruction Issue/Commit.}  Normally, an instruction cannot be issued to the execution stage until both input operands are available. However, a multiplication instruction can be issued immediately an input operand is available as zero since the result (i.e., zero) is now independent of the other operand.  For example, I$3$ can be issued once R$1$ is discovered to be zero without waiting for load I$2$ to complete; I$3$ becomes independent of I$2$.  Moreover, I$3$ can proceed to the commit stage, bypassing the multiplication functional unit, because the result and side effect (set R$2$ to zero)  can be directly generated.  Early issue and commit of zero-optimizable instructions can reduce pipeline resource pressure and the waiting times of data dependent instructions, (e.g., I$4$), since those dependences are satisfied quicker. 
 
+\begin{comment}
 \begin{figure}
 \centering
 \includegraphics[height=1.4in, width=.9\columnwidth]{Figures/r2_deltas_opts.png}
 \caption{Loop optimizations if R2 is zero for (a) one iteration (dead instructions are grey), and (b) $N$ consecutive iterations.}
 \label{fig:r2_deltas_opts}
 \end{figure}
+\end{comment}
 
 \subsubsection{Dead Instruction Elimination.} A zero input can make a zero-optimizable instruction redundant (or dead), and safe to eliminate from execution, as well as instructions which it depends on (producers) or which depend on it (consumers).  We exploit this property to improve performance by executing optimized versions of loops, without dead instructions, when a zero-optimizable instruction input is zero.  For concreteness, we examine the opportunities to eliminate dead instructions in loop~\ref{fig:deltas_code_opt}(a) when either source operand of I$3$, R$1$ or R$2$, is zero.  
 
