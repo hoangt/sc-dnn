@@ -9,6 +9,13 @@ extern "C"
 	extern float avx2_mulsum_2_mem(const float *pf0, const float *pf1, INT64 count);
 	extern void avx2_mulsum_3_mem(const float *pf0, const float *pf1, float f2, INT64 count);
 	extern void avx2_fmemcpy(const float *pfSrc, float *pDst,  INT64 length);
+
+	extern float mulsum2_base(const float *pf0, const float *pf1, INT64 count);
+	extern float mulsum2_opt1_75_25(const float *pf0, const float *pf1, INT64 count);
+	extern float mulsum2_opt1_50_50(const float *pf0, const float *pf1, INT64 count);
+	extern float mulsum2_opt1_25_75(const float *pf0, const float *pf1, INT64 count);
+	extern float mulsum2_opt1_0_100(const float *pf0, const float *pf1, INT64 count);
+
 }
     struct ThreadAffinityConfig {
         BOOL _enabled;
@@ -121,7 +128,8 @@ typedef struct Layer {
 	int _OutputSize;
 	int _WeightSize;
 	int _Connections;
-	void Init (int of, int i2h, int i2w)
+        int _FeedForwardSparsity;
+        void Init (int of, int i2h, int i2w, int ffs)
 	{		
 		_OutputFeature = of;
 		_Input2Height = i2h;
@@ -131,31 +139,33 @@ typedef struct Layer {
 		_OutputSize = of * i2h;
 		_WeightSize = _OutputFeature * _Input2Width;
 		_Connections = of * i2h * i2w;
+                _FeedForwardSparsity = ffs;
 	}
 } Layer;
 typedef struct LayerConfig {
 	int _OutputFeature;
 	int _Input2Height;
 	int _Input2Width;
+        int _FeedForwardSparsity;
 } LayerConfig;
 
-LayerConfig W1_Model_KZ_1K[8] = {{96, 63*63, 11*11*3}, {256, 28*28, 25*96}, {384, 12*12, 9*256}, {384, 100, 9*384}, {256, 64, 9*384}, {4096, 1, 4096}, {4096, 1, 4096}, {4096, 1, 1000}};
+LayerConfig W1_Model_KZ_1K[8] = {{96, 63*63, 11*11*3, 0}, {256, 28*28, 25*96, 0}, {384, 12*12, 9*256, 0}, {384, 100, 9*384, 0}, {256, 64, 9*384, 0}, {4096, 1, 4096, 0}, {4096, 1, 4096, 0}, {4096, 1, 1000, 0}};
 
-LayerConfig W4_Model_1K[7] = {{120, 41*41, 243}, {250, 81, 3000}, {400, 9, 2250}, {600, 1, 3600}, {250, 1, 600}, {250, 1, 250}, {1000, 1, 1000}};
-LayerConfig W2_Model_1K[7] = {{120, 85*41, 243}, {250, 20*9, 3000}, {400, 8*3, 2250}, {600, 6, 3600}, {500, 1, 1800}, {500, 1, 500}, {1000, 1, 1000}};
-LayerConfig W1_Model_1K[7] = {{120, 85*85, 243}, {250, 20*20, 3000}, {400, 8*8, 2250}, {600, 6*6, 3600}, {1000, 1, 5400}, {1000, 1, 1000}, {1000, 1, 1000}};
+LayerConfig W4_Model_1K[7] = {{120, 41*41, 243, 0}, {250, 81, 3000, 0}, {400, 9, 2250, 0}, {600, 1, 3600, 0}, {250, 1, 600, 0}, {250, 1, 250, 0}, {1000, 1, 1000, 0}};
+LayerConfig W2_Model_1K[7] = {{120, 85*41, 243, 0}, {250, 20*9, 3000, 0}, {400, 8*3, 2250, 0}, {600, 6, 3600, 0}, {500, 1, 1800, 0}, {500, 1, 500, 0}, {1000, 1, 1000, 0}};
+LayerConfig W1_Model_1K[7] = {{120, 85*85, 243, 0}, {250, 20*20, 3000, 0}, {400, 8*8, 2250, 0}, {600, 6*6, 3600, 0}, {1000, 1, 5400, 0}, {1000, 1, 1000, 0}, {1000, 1, 1000, 0}};
 
-LayerConfig W4_Model_22K[8] = {{120, 63*63, 49*3}, {250, 14*14, 25*120}, {400, 25, 9*250}, {400, 9, 9*400}, {600, 1, 9*400}, {750, 1, 600}, {750, 1, 750}, {3000, 1, 22000}};
-LayerConfig W2_Model_22K[8] = {{120, 128*63, 49*3}, {250, 30*14, 25*120}, {400, 13*5, 9*250}, {400, 11*3, 9*400}, {600, 9, 9*400}, {1500, 1, 3000}, {1500, 1, 1500}, {3000, 1, 22000}};
-LayerConfig W1_Model_22K[8] = {{120, 128*128, 49*3}, {250, 30*30, 25*120}, {400, 13*13, 9*250}, {400, 11*11, 9*400}, {600, 9*9, 9*400}, {3000, 1, 15000}, {3000, 1, 3000}, {3000, 1, 22000}};
+LayerConfig W4_Model_22K[8] = {{120, 63*63, 49*3, 0}, {250, 14*14, 25*120, 0}, {400, 25, 9*250, 0}, {400, 9, 9*400, 0}, {600, 1, 9*400, 0}, {750, 1, 600, 0}, {750, 1, 750, 0}, {3000, 1, 22000, 0}};
+LayerConfig W2_Model_22K[8] = {{120, 128*63, 49*3, 0}, {250, 30*14, 25*120, 0}, {400, 13*5, 9*250, 0}, {400, 11*3, 9*400, 0}, {600, 9, 9*400, 0}, {1500, 1, 3000, 0}, {1500, 1, 1500, 0}, {3000, 1, 22000, 0}};
+LayerConfig W1_Model_22K[8] = {{120, 128*128, 49*3, 0}, {250, 30*30, 25*120, 0}, {400, 13*13, 9*250, 0}, {400, 11*11, 9*400, 0}, {600, 9*9, 9*400, 0}, {3000, 1, 15000, 0}, {3000, 1, 3000, 0}, {3000, 1, 22000, 0}};
 
-LayerConfig W4_Model_MNIST[5] = {{10, 13*13, 25}, {20, 3*3, 25*10}, {80, 1, 100}, {100, 1, 100}, {400, 1, 10}};
-LayerConfig W2_Model_MNIST[5] = {{10, 29*13, 25}, {20, 11*3, 25*10}, {240, 1, 200}, {200, 1, 200}, {400, 1, 10}};
-LayerConfig W1_Model_MNIST[5] = {{10, 29*29, 25}, {20, 11*11, 25*10}, {720, 1, 400}, {400, 1, 400}, {400, 1, 10}};
+LayerConfig W4_Model_MNIST[5] = {{10, 13*13, 25, 0}, {20, 3*3, 25*10, 0}, {80, 1, 100, 0}, {100, 1, 100, 0}, {400, 1, 10, 0}};
+LayerConfig W2_Model_MNIST[5] = {{10, 29*13, 25, 0}, {20, 11*3, 25*10, 0}, {240, 1, 200, 0}, {200, 1, 200, 0}, {400, 1, 10, 0}};
+LayerConfig W1_Model_MNIST[5] = {{10, 29*29, 25, 0}, {20, 11*11, 25*10, 0}, {720, 1, 400, 0}, {400, 1, 400, 0}, {400, 1, 10, 0}};
 
-LayerConfig W4_Model_CIFAR_10[5] = {{64, 14*14, 25*3}, {64, 3*3, 25*64}, {256, 1, 512}, {512, 1, 512}, {2048, 1, 10}};
-LayerConfig W2_Model_CIFAR_10[5] = {{64, 32*14, 25*3}, {64, 12*3, 25*64}, {768, 1, 1024}, {1024, 1, 1024}, {2048, 1, 10}};
-LayerConfig W1_Model_CIFAR_10[5] = {{64, 32*32, 25*3}, {64, 12*12, 25*64}, {2034, 1, 2048}, {2048, 1, 2048}, {2048, 1, 10}};
+LayerConfig W4_Model_CIFAR_10[5] = {{64, 14*14, 25*3, 0}, {64, 3*3, 25*64, 0}, {256, 1, 512, 0}, {512, 1, 512, 0}, {2048, 1, 10, 0}};
+LayerConfig W2_Model_CIFAR_10[5] = {{64, 32*14, 25*3, 0}, {64, 12*3, 25*64, 0}, {768, 1, 1024, 0}, {1024, 1, 1024, 0}, {2048, 1, 10, 0}};
+LayerConfig W1_Model_CIFAR_10[5] = {{64, 32*32, 25*3, 0}, {64, 12*12, 25*64, 0}, {2034, 1, 2048, 0}, {2048, 1, 2048, 0}, {2048, 1, 10, 0}};
 
 typedef enum WorkerCount {ZERO_WORKER = 0, ONE_WORKER, TWO_WORKER, THREE_WORKER, FOUR_WORKER, NUM_WORKER_COUNT} WorkerCount;
 typedef enum ModelType {NO_MODEL = 0, MNIST_MODEL = 1, IMAGENET_1K_MODEL, IMAGENET_22K_MODEL, CIFAR_10_MODEL, IMAGENETKZ_1K_MODEL, NUM_MODEL_TYPE} ModelType;
@@ -205,12 +215,12 @@ typedef struct DNN {
 			if (i == (nLayers - 1))
 			{
 				_Replicated[i] = replicate;
-				_Layers[i].Init(lp[i]._OutputFeature, lp[i]._Input2Height, (replicate) ? lp[i]._Input2Width : lp[i]._Input2Width/nWorkers);
+				_Layers[i].Init(lp[i]._OutputFeature, lp[i]._Input2Height, (replicate) ? lp[i]._Input2Width : lp[i]._Input2Width/nWorkers, lp[i]._FeedForwardSparsity);
 				_nThreads[i] = (replicate) ? ceil((float)g_ThreadCount/nWorkers) : g_ThreadCount;
 			}
 			else {
 				_Replicated[i] = false;
-				_Layers[i].Init(lp[i]._OutputFeature, lp[i]._Input2Height, lp[i]._Input2Width);
+				_Layers[i].Init(lp[i]._OutputFeature, lp[i]._Input2Height, lp[i]._Input2Width, lp[i]._FeedForwardSparsity);
 				_nThreads[i] = g_ThreadCount;
 			}
 		}		
@@ -268,6 +278,104 @@ typedef struct ThreadLayerState {
 		}
 	}
 } ThreadLayerState;
+
+double mulsum2_wrapper(Layer *layer, float *input, float* output) {
+    CHiResTimer timer;
+    int sparsity = layer->_FeedForwardSparsity;
+    if (sparsity == 0) {
+        timer.Start();
+        for (int i = 0; i < layer->_OutputFeature; i++)
+            for (int j = 0; j < layer->_Input2Height; j++)
+                 outACT[i*layer->_Input2Height + j] = mulsum2_base(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), layer->_Input2Width);
+        timer.Stop();
+        return timer.GetElapsedMicroSecs();
+    }
+    else if (sparsity < 25) {
+        INT64 second = layer->_Input2Width * (sparsity / 25);
+        INT64 first = layer->_Input2Width - second;
+        timer.Start();
+        for (int i = 0; i < layer->_OutputFeature; i++)
+            for (int j = 0; j < layer->_Input2Height; j++) {
+                 outACT[i*layer->_Input2Height + j] = mulsum2_base(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), first);
+                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_75_25(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), second);
+            }
+        timer.Stop();
+        return timer.GetElapsedMicroSecs();
+    }
+    else if (sparsity == 25) {
+        timer.Start();
+        for (int i = 0; i < layer->_OutputFeature; i++)
+            for (int j = 0; j < layer->_Input2Height; j++)
+                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_75_25(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), layer->_Input2Width);
+        timer.Stop();
+        return timer.GetElapsedMicroSecs();
+    }
+    else if (sparsity < 50) {
+        sparsity -= 25;
+        INT64 second = layer->_Input2Width * (sparsity / 25);
+        INT64 first = layer->_Input2Width - second;
+        timer.Start();
+        for (int i = 0; i < layer->_OutputFeature; i++)
+            for (int j = 0; j < layer->_Input2Height; j++) {
+                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_75_25(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), first);
+                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_50_50(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), second);
+            }
+        timer.Stop();
+        return timer.GetElapsedMicroSecs();
+    }
+    else if (sparsity == 50) {
+        timer.Start();
+        for (int i = 0; i < layer->_OutputFeature; i++)
+            for (int j = 0; j < layer->_Input2Height; j++)
+                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_50_50(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), layer->_Input2Width);
+        timer.Stop();
+        return timer.GetElapsedMicroSecs();
+    }
+    else if (sparsity < 75) {
+        sparsity -= 50;
+        INT64 second = layer->_Input2Width * (sparsity / 25);
+        INT64 first = layer->_Input2Width - second;
+        timer.Start();
+        for (int i = 0; i < layer->_OutputFeature; i++)
+            for (int j = 0; j < layer->_Input2Height; j++) {
+                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_50_50(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), first);
+                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_25_75(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), second);
+            }
+        timer.Stop();
+        return timer.GetElapsedMicroSecs();
+    }
+    else if (sparsity == 75) {
+        timer.Start();
+        for (int i = 0; i < layer->_OutputFeature; i++)
+            for (int j = 0; j < layer->_Input2Height; j++)
+                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_25_75(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), layer->_Input2Width);
+        timer.Stop();
+        return timer.GetElapsedMicroSecs();
+    }
+    else if (sparsity < 100) {
+        sparsity -= 75;
+        INT64 second = layer->_Input2Width * (sparsity / 25);
+        INT64 first = layer->_Input2Width - second;
+        timer.Start();
+        for (int i = 0; i < layer->_OutputFeature; i++)
+            for (int j = 0; j < layer->_Input2Height; j++) {
+                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_25_75(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), first);
+                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_0_100(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), second);
+            }
+        timer.Stop();
+        return timer.GetElapsedMicroSecs();
+    }
+    else if (sparsity == 100) {
+        timer.Start();
+        for (int i = 0; i < layer->_OutputFeature; i++)
+            for (int j = 0; j < layer->_Input2Height; j++)
+                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_0_100(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), layer->_Input2Width);
+        timer.Stop();
+        return timer.GetElapsedMicroSecs();
+    }
+}
+
+
 #define NUM_DNN_UNIT_FLOP 2
 typedef enum DNNPass {DNN_FORWARD = 0, DNN_BACKWARD, DNN_WEIGHTUPDATE, NUM_DNN_PASS} DNNPass;
 const char *DNNPassName[NUM_DNN_PASS] = {"ForwardProp", "BackwardProp", "WeightUpdate"};
@@ -297,7 +405,12 @@ DWORD DNNModelThreadForward(ThreadLayerState *tl)
 			float *inpACT = inputActivation[l];
 			float *outACT = outputActivation[l];
 			Layer *layer = (tl->_LayerState + l);
-			CHiResTimer timer;
+
+                        double elapsedTime;
+                        elapsedTime = mulsum2_wrapper(layer, outACT, inpACT);
+                        
+			/*
+                        CHiResTimer timer;
 			timer.Start();
 			for (int i = 0; i < layer->_OutputFeature; i++)
 			{
@@ -307,7 +420,8 @@ DWORD DNNModelThreadForward(ThreadLayerState *tl)
 				}
 			}
 			timer.Stop();
-			tl->_FLOPTime[l] += timer.GetElapsedMicroSecs();
+                        */
+			tl->_FLOPTime[l] += elapsedTime; // timer.GetElapsedMicroSecs();
 			tl->_SampleCount[l]++;
 		}		
 	}
