@@ -297,7 +297,7 @@ double mulsum2_wrapper(Layer *layer, float *input, float* output) {
         for (int i = 0; i < layer->_OutputFeature; i++)
             for (int j = 0; j < layer->_Input2Height; j++) {
                  outACT[i*layer->_Input2Height + j] = mulsum2_base(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), first);
-                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_75_25(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), second);
+                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_75_25(inpACT+(j*layer->_Input2Width) + first, layer->_Weights+(i*layer->_Input2Width) + first, second);
             }
         timer.Stop();
         return timer.GetElapsedMicroSecs();
@@ -318,7 +318,7 @@ double mulsum2_wrapper(Layer *layer, float *input, float* output) {
         for (int i = 0; i < layer->_OutputFeature; i++)
             for (int j = 0; j < layer->_Input2Height; j++) {
                  outACT[i*layer->_Input2Height + j] = mulsum2_opt1_75_25(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), first);
-                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_50_50(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), second);
+                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_50_50(inpACT+(j*layer->_Input2Width) + first, layer->_Weights+(i*layer->_Input2Width) + first, second);
             }
         timer.Stop();
         return timer.GetElapsedMicroSecs();
@@ -339,7 +339,7 @@ double mulsum2_wrapper(Layer *layer, float *input, float* output) {
         for (int i = 0; i < layer->_OutputFeature; i++)
             for (int j = 0; j < layer->_Input2Height; j++) {
                  outACT[i*layer->_Input2Height + j] = mulsum2_opt1_50_50(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), first);
-                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_25_75(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), second);
+                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_25_75(inpACT+(j*layer->_Input2Width) + first, layer->_Weights+(i*layer->_Input2Width) + first, second);
             }
         timer.Stop();
         return timer.GetElapsedMicroSecs();
@@ -360,7 +360,7 @@ double mulsum2_wrapper(Layer *layer, float *input, float* output) {
         for (int i = 0; i < layer->_OutputFeature; i++)
             for (int j = 0; j < layer->_Input2Height; j++) {
                  outACT[i*layer->_Input2Height + j] = mulsum2_opt1_25_75(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), first);
-                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_0_100(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), second);
+                 outACT[i*layer->_Input2Height + j] = mulsum2_opt1_0_100(inpACT+(j*layer->_Input2Width) + first, layer->_Weights+(i*layer->_Input2Width) + first, second);
             }
         timer.Stop();
         return timer.GetElapsedMicroSecs();
