@@ -68,8 +68,8 @@ loop_1:
 	add		rdx,	16
 	dec		r9
 	je		loop_1_end
+	movups	xmm1,	xmmword ptr [rcx]
 	nop
-	movups	xmm2,	xmmword ptr [rdx]
 	nop
 	nop
 	add		rcx,	16
@@ -113,8 +113,8 @@ loop_1:
 	add		rdx,	16
 	dec		r9
 	je		loop_1_end
+	movups	xmm1,	xmmword ptr [rcx]
 	nop
-	movups	xmm2,	xmmword ptr [rdx]
 	nop
 	nop
 	add		rcx,	16
@@ -158,16 +158,16 @@ loop_1:
 	add		rdx,	16
 	dec		r9
 	je		loop_1_end
+	movups	xmm1,	xmmword ptr [rcx]
 	nop
-	movups	xmm2,	xmmword ptr [rdx]
 	nop
 	nop
 	add		rcx,	16
 	add		rdx,	16
 	dec		r9
 	je		loop_1_end
+	movups	xmm1,	xmmword ptr [rcx]
 	nop
-	movups	xmm2,	xmmword ptr [rdx]
 	nop
 	nop
 	add		rcx,	16
