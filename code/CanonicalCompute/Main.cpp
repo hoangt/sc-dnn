@@ -24,6 +24,16 @@ extern "C"
 	extern float mulsum3_opt1_25_75(const float *pf0, const float *pf1, float f2, INT64 count);
 	extern float mulsum3_opt1_0_100(const float *pf0, const float *pf1, float f2, INT64 count);
 
+	extern float mulsum2_opt2_75_25(const float *pf0, const float *pf1, INT64 count);
+	extern float mulsum2_opt2_50_50(const float *pf0, const float *pf1, INT64 count);
+	extern float mulsum2_opt2_25_75(const float *pf0, const float *pf1, INT64 count);
+	extern float mulsum2_opt2_0_100(const float *pf0, const float *pf1, INT64 count);
+
+	extern float mulsum3_opt2_75_25(const float *pf0, const float *pf1, float f2, INT64 count);
+	extern float mulsum3_opt2_50_50(const float *pf0, const float *pf1, float f2, INT64 count);
+	extern float mulsum3_opt2_25_75(const float *pf0, const float *pf1, float f2, INT64 count);
+	extern float mulsum3_opt2_0_100(const float *pf0, const float *pf1, float f2, INT64 count);
+
 }
     struct ThreadAffinityConfig {
         BOOL _enabled;
