@@ -4,6 +4,8 @@
 #include "HiResTimer.h"
 #include <vector>
 
+using namespace std;
+
 extern "C"
 {
 	extern float avx2_mulsum_2_mem(const float *pf0, const float *pf1, INT64 count);
@@ -146,7 +148,7 @@ typedef struct LayerConfig {
 	int _OutputFeature;
 	int _Input2Height;
 	int _Input2Width;
-        int _FeedForwardSparsity;
+    int _FeedForwardSparsity;
 } LayerConfig;
 
 LayerConfig W1_Model_KZ_1K[8] = {{96, 63*63, 11*11*3, 0}, {256, 28*28, 25*96, 0}, {384, 12*12, 9*256, 0}, {384, 100, 9*384, 0}, {256, 64, 9*384, 0}, {4096, 1, 4096, 0}, {4096, 1, 4096, 0}, {4096, 1, 1000, 0}};
@@ -196,6 +198,7 @@ bool g_ReplicateOutputLayer = true;
 bool g_DeltaWeightOpt = true;
 int g_StartLayer = 0;
 bool g_Training = true;
+int g_Sparsity = 0;
 
 typedef struct DNN {
 	Layer *_Layers;
@@ -279,14 +282,16 @@ typedef struct ThreadLayerState {
 	}
 } ThreadLayerState;
 
-double mulsum2_wrapper(Layer *layer, float *input, float* output) {
+double mulsum2_wrapper(Layer *layer, float *inpACT, float* outACT) {
     CHiResTimer timer;
     int sparsity = layer->_FeedForwardSparsity;
     if (sparsity == 0) {
         timer.Start();
-        for (int i = 0; i < layer->_OutputFeature; i++)
-            for (int j = 0; j < layer->_Input2Height; j++)
-                 outACT[i*layer->_Input2Height + j] = mulsum2_base(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), layer->_Input2Width);
+        for (int i = 0; i < layer->_OutputFeature; i++) {
+            for (int j = 0; j < layer->_Input2Height; j++) {
+				outACT[i*layer->_Input2Height + j] = mulsum2_base(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), layer->_Input2Width);
+			}
+		}
         timer.Stop();
         return timer.GetElapsedMicroSecs();
     }
@@ -373,6 +378,7 @@ double mulsum2_wrapper(Layer *layer, float *input, float* output) {
         timer.Stop();
         return timer.GetElapsedMicroSecs();
     }
+	return 0.0f;
 }
 
 
@@ -387,7 +393,7 @@ DWORD DNNModelThreadForward(ThreadLayerState *tl)
         const DWORD affinityMask = g_trainingThreadAffinity.AffinityMask(tl->_threadNum);
         SetThreadAffinityMask(GetCurrentThread(), affinityMask);
 	}
-
+	printf("ThreadForward: TID %d\n", tl->_threadNum);
 	float **inputActivation = new float *[tl->_numLayers];
 	float **outputActivation = new float *[tl->_numLayers];
 	for (int i = tl->_startLayer; i < tl->_numLayers; i++)
@@ -405,12 +411,11 @@ DWORD DNNModelThreadForward(ThreadLayerState *tl)
 			float *inpACT = inputActivation[l];
 			float *outACT = outputActivation[l];
 			Layer *layer = (tl->_LayerState + l);
-
-                        double elapsedTime;
-                        elapsedTime = mulsum2_wrapper(layer, outACT, inpACT);
-                        
-			/*
-                        CHiResTimer timer;
+            double elapsedTime;
+#if 0
+            elapsedTime = mulsum2_wrapper(layer, outACT, inpACT);
+#else                   
+			CHiResTimer timer;
 			timer.Start();
 			for (int i = 0; i < layer->_OutputFeature; i++)
 			{
@@ -420,8 +425,11 @@ DWORD DNNModelThreadForward(ThreadLayerState *tl)
 				}
 			}
 			timer.Stop();
-                        */
-			tl->_FLOPTime[l] += elapsedTime; // timer.GetElapsedMicroSecs();
+			elapsedTime = timer.GetElapsedMicroSecs();
+			elapsedTime = mulsum2_wrapper(layer, inpACT, outACT);
+
+#endif
+			tl->_FLOPTime[l] += elapsedTime; // 
 			tl->_SampleCount[l]++;
 		}		
 	}
@@ -641,7 +649,6 @@ void runDNNModelThreads (int numThreads, DNNPass dp)
 
 		tl[i].Init(i, DNNModel);
 	}
-	
 	for (int i = 0; i < numThreads; i++)
 	{
 		if (dp == DNN_FORWARD)
@@ -704,6 +711,7 @@ void runDNNModel(void)
 		runDNNModelThreads(g_ThreadCount, DNN_WEIGHTUPDATE);
 	}
 }
+
 ModelType ProcessModelParam(const char *modelString)
 {
 	for (int i = 0; i < ModelType::NUM_MODEL_TYPE; i++)
@@ -727,15 +735,27 @@ LayerConfig* ProcessParams(CParamParser& pparser)
 	g_StartLayer = (startLayer < ModelLayerCount[(int)g_ModelType]) ? startLayer : 0;
 	g_Training = pparser.IsParamExist(TEXT("classify")) ? false : true;
 	g_trainingThreadAffinity._enabled = pparser.IsParamExist(TEXT("affinity")) ? true : false;
+	g_Sparsity = pparser.IsParamExist(TEXT("sparsity")) ? pparser.ParamInt(TEXT("sparsity")) : 0;
 
-	printf("WorkerCount: %d \nThreadCount: %d \nModel: %s \nSampleCount: %I64d \nOutputLayer: %s \nDeltWeightOpt: %s\nMomentum: %s \nStartLayer: %d \nTask: %s \nAffinity: %s\n", 
+	printf("WorkerCount: %d \n" 
+		   "ThreadCount: %d \n"
+		   "Model: %s \n"
+		   "SampleCount: %I64d \n"
+		   "OutputLayer: %s \n"
+		   "DeltWeightOpt: %s\n"
+		   "Momentum: %s \n"
+		   "StartLayer: %d \n"
+		   "Task: %s \n"
+		   "Affinity: %s\n"
+		   "Sparsity: %d\n", 
 		g_WorkerCount, g_ThreadCount, ModelName[g_ModelType], g_SampleCount, 
 		(g_ReplicateOutputLayer ? "Replicated" : "Partitioned"), 
 		(g_DeltaWeightOpt ? "enabled" : "disabled"),
 		(g_DeltaWeightOpt ? "enabled" : "disabled"),
 		g_StartLayer,
 		(g_Training ? "Training" : "Classify"),
-		(g_trainingThreadAffinity._enabled ? "Enabled" : "Disabled"));
+		(g_trainingThreadAffinity._enabled ? "Enabled" : "Disabled"),
+		g_Sparsity);
 
 	return ModelConfig[g_ModelType][g_WorkerCount];
 }
@@ -752,6 +772,7 @@ int _tmain(int argc, TCHAR *argv[])
 		g_trainingThreadAffinity.Configure(g_ThreadCount);
 		g_trainingThreadAffinity.Print();
 	}
+	lc->_FeedForwardSparsity = g_Sparsity;
 	DNNModel.Init(ModelLayerCount[(int)g_ModelType], lc, g_WorkerCount, g_ReplicateOutputLayer);
 	DNNModel.Print(ModelName[(int)g_ModelType]);
 

@@ -13,6 +13,7 @@
 class CVoidStructArray
 {
 public:
+	
     CVoidStructArray(int iElemSize, int iInitSize = 0)
     {         
         _ASSERT(iElemSize > 0);
@@ -42,6 +43,7 @@ public:
                 _iSize = iInitSize;
         }
     } 
+	
     virtual ~CVoidStructArray() { LocalFree(_pb); }
 
     inline void *GetPtr(int iIndex)

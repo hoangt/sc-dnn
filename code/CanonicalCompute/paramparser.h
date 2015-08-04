@@ -122,6 +122,16 @@ public:
 		return _wtoi64(_hashMap.GetValue(key));
 	}
 
+	float ParamFloat(LPCTSTR pszKey)
+	{
+		UINT32 key = GenerateCrc32String(pszKey, lstrlen(pszKey));
+		if (!IsParamExist(pszKey))
+		{
+			return 0;
+		}
+		return (float)_wtof(_hashMap.GetValue(key));
+	}
+
 private:
 	CHashMap<UINT32, TCHAR> _hashMap;
 };
