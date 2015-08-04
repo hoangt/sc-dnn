@@ -4,6 +4,7 @@ mulsum2_opt1_75_25 PROC
 	xorps	xmm0,	xmm0
 	mov		r9,		r8
 	shr		r9,		2
+	and		r9,		-4 ; 16 bytes alignment
 	test	r9,		r9
 	jz		loop_1_end
 loop_1:
@@ -49,6 +50,7 @@ mulsum2_opt1_50_50 PROC
 	xorps	xmm0,	xmm0
 	mov		r9,		r8
 	shr		r9,		2
+	and		r9,		-4 ; 16 bytes alignment
 	test	r9,		r9
 	jz		loop_1_end
 loop_1:
@@ -94,6 +96,7 @@ mulsum2_opt1_25_75 PROC
 	xorps	xmm0,	xmm0
 	mov		r9,		r8
 	shr		r9,		2
+	and		r9,		-4 ; 16 bytes alignment
 	test	r9,		r9
 	jz		loop_1_end
 loop_1:
@@ -139,6 +142,7 @@ mulsum2_opt1_0_100 PROC
 	xorps	xmm0,	xmm0
 	mov		r9,		r8
 	shr		r9,		2
+	and		r9,		-4 ; 16 bytes alignment
 	test	r9,		r9
 	jz		loop_1_end
 loop_1:

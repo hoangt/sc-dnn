@@ -215,8 +215,6 @@ loop_1:
     jne   loop_1
 loop_1_end:
     ret   0
-mulsum3_opt1_50_50 ENDP
-
-
+mulsum3_opt1_0_100 ENDP
 
 END
