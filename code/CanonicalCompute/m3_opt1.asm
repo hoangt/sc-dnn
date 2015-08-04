@@ -12,8 +12,8 @@ mulsum3_opt1_75_25 PROC
     mov   r8, r9
     shr   r9, 2
     test  r9, r9
-    jz    loop_1_end
-loop_1:
+    jz    loop_11_end
+loop_11:
     movups xmm1, xmmword ptr [rdx]
     movups xmm3, xmmword ptr [rcx]
     mulps xmm1, xmm2
@@ -22,7 +22,7 @@ loop_1:
     add   rcx, 16
     add   rdx, 16
     dec   r9
-    je   loop_1_end
+    je   loop_11_end
     movups xmm1, xmmword ptr [rdx]
     nop
     nop
@@ -31,16 +31,7 @@ loop_1:
     add   rcx, 16
     add   rdx, 16
     dec   r9
-    je   loop_1_end
-    movups xmm1, xmmword ptr [rdx]
-    movups xmm3, xmmword ptr [rcx]
-    mulps xmm1, xmm2
-    addps xmm3, xmm1
-    movups xmmword ptr [rcx], xmm3
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
-    je   loop_1_end
+    je   loop_11_end
     movups xmm1, xmmword ptr [rdx]
     movups xmm3, xmmword ptr [rcx]
     mulps xmm1, xmm2
@@ -49,8 +40,17 @@ loop_1:
     add   rcx, 16
     add   rdx, 16
     dec   r9
-    jne   loop_1
-loop_1_end:
+    je   loop_11_end
+    movups xmm1, xmmword ptr [rdx]
+    movups xmm3, xmmword ptr [rcx]
+    mulps xmm1, xmm2
+    addps xmm3, xmm1
+    movups xmmword ptr [rcx], xmm3
+    add   rcx, 16
+    add   rdx, 16
+    dec   r9
+    jne   loop_11
+loop_11_end:
     ret   0
 mulsum3_opt1_75_25 ENDP
 
@@ -66,8 +66,8 @@ mulsum3_opt1_50_50 PROC
     mov   r8, r9
     shr   r9, 2
     test  r9, r9
-    jz    loop_1_end
-loop_1:
+    jz    loop_12_end
+loop_12:
     movups xmm1, xmmword ptr [rdx]
     movups xmm3, xmmword ptr [rcx]
     mulps xmm1, xmm2
@@ -76,7 +76,7 @@ loop_1:
     add   rcx, 16
     add   rdx, 16
     dec   r9
-    je   loop_1_end
+    je   loop_12_end
     movups xmm1, xmmword ptr [rdx]
     nop
     nop
@@ -85,7 +85,7 @@ loop_1:
     add   rcx, 16
     add   rdx, 16
     dec   r9
-    je   loop_1_end
+    je   loop_12_end
     movups xmm1, xmmword ptr [rdx]
     nop
     nop
@@ -94,7 +94,7 @@ loop_1:
     add   rcx, 16
     add   rdx, 16
     dec   r9
-    je   loop_1_end
+    je   loop_12_end
     movups xmm1, xmmword ptr [rdx]
     movups xmm3, xmmword ptr [rcx]
     mulps xmm1, xmm2
@@ -103,8 +103,8 @@ loop_1:
     add   rcx, 16
     add   rdx, 16
     dec   r9
-    jne   loop_1
-loop_1_end:
+    jne   loop_12
+loop_12_end:
     ret   0
 mulsum3_opt1_50_50 ENDP
 
@@ -120,8 +120,8 @@ mulsum3_opt1_25_75 PROC
     mov   r8, r9
     shr   r9, 2
     test  r9, r9
-    jz    loop_1_end
-loop_1:
+    jz    loop_13_end
+loop_13:
     movups xmm1, xmmword ptr [rdx]
     nop
     nop
@@ -130,7 +130,7 @@ loop_1:
     add   rcx, 16
     add   rdx, 16
     dec   r9
-    je   loop_1_end
+    je   loop_13_end
     movups xmm1, xmmword ptr [rdx]
     nop
     nop
@@ -139,7 +139,7 @@ loop_1:
     add   rcx, 16
     add   rdx, 16
     dec   r9
-    je   loop_1_end
+    je   loop_13_end
     movups xmm1, xmmword ptr [rdx]
     nop
     nop
@@ -148,7 +148,7 @@ loop_1:
     add   rcx, 16
     add   rdx, 16
     dec   r9
-    je   loop_1_end
+    je   loop_13_end
     movups xmm1, xmmword ptr [rdx]
     movups xmm3, xmmword ptr [rcx]
     mulps xmm1, xmm2
@@ -157,8 +157,8 @@ loop_1:
     add   rcx, 16
     add   rdx, 16
     dec   r9
-    jne   loop_1
-loop_1_end:
+    jne   loop_13
+loop_13_end:
     ret   0
 mulsum3_opt1_25_75 ENDP
 
@@ -175,8 +175,8 @@ mulsum3_opt1_0_100 PROC
     mov   r8, r9
     shr   r9, 2
     test  r9, r9
-    jz    loop_1_end
-loop_1:
+    jz    loop_14_end
+loop_14:
     movups xmm1, xmmword ptr [rdx]
     nop
     nop
@@ -185,7 +185,7 @@ loop_1:
     add   rcx, 16
     add   rdx, 16
     dec   r9
-    je   loop_1_end
+    je   loop_14_end
     movups xmm1, xmmword ptr [rdx]
     nop
     nop
@@ -194,7 +194,7 @@ loop_1:
     add   rcx, 16
     add   rdx, 16
     dec   r9
-    je   loop_1_end
+    je   loop_14_end
     movups xmm1, xmmword ptr [rdx]
     nop
     nop
@@ -203,7 +203,7 @@ loop_1:
     add   rcx, 16
     add   rdx, 16
     dec   r9
-    je   loop_1_end
+    je   loop_14_end
     movups xmm1, xmmword ptr [rdx]
     nop
     nop
@@ -212,8 +212,8 @@ loop_1:
     add   rcx, 16
     add   rdx, 16
     dec   r9
-    jne   loop_1
-loop_1_end:
+    jne   loop_14
+loop_14_end:
     ret   0
 mulsum3_opt1_0_100 ENDP
 
