@@ -159,3 +159,44 @@ void SetCanonicalConfig(int argc, char* argv[], CanonicalConfig& config)
 	}
 	delete [] tArgv;
 }
+
+DWORD WINAPI s_DNNModelThreadForward(LPVOID lp)
+{
+	return DNNModelThreadForward((ThreadLayerState *)lp);
+}
+
+DWORD WINAPI s_DNNModelThreadBackward(LPVOID lp)
+{
+	return DNNModelThreadBackward((ThreadLayerState *)lp);
+}
+
+DWORD WINAPI s_DNNModelThreadWeightUpdate(LPVOID lp)
+{
+	if (G_DELTA_WEIGHT_OPT)
+	{
+		return  DNNModelThreadDeltaWeightUpdate((ThreadLayerState *)lp);
+	}
+	return DNNModelThreadWeightUpdate((ThreadLayerState *)lp);
+}
+
+void DoModelCompute(int numThreads, ThreadLayerState *tl, DNNPass dp)
+{
+  HANDLE *helperThreads = new HANDLE[numThreads];
+
+	for (int i = 0; i < numThreads; i++)
+	{
+		if (dp == DNN_FORWARD)
+			helperThreads[i] = CreateThread(NULL, 0, s_DNNModelThreadForward, (LPVOID)(tl+i), 0, NULL);
+		else if (dp == DNN_BACKWARD)
+			helperThreads[i] = CreateThread(NULL, 0, s_DNNModelThreadBackward, (LPVOID)(tl+i), 0, NULL);
+		else 
+			helperThreads[i] = CreateThread(NULL, 0, s_DNNModelThreadWeightUpdate, (LPVOID)(tl+i), 0, NULL);
+	}
+	WaitForMultipleObjects(numThreads, helperThreads, TRUE, INFINITE);
+	
+	for (int i = 0; i < numThreads; i++)
+	{
+		CloseHandle(helperThreads[i]);
+	}
+	delete [] helperThreads;
+}

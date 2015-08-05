@@ -31,46 +31,6 @@ extern "C"
 	extern float mulsum3_opt2_0_100(const float *pf0, const float *pf1, float f2, INT64 count);
 
 }
- 
-
-typedef struct Layer {
-	int _OutputFeature;
-	int _Input2Height;
-	int _Input2Width;
-	float *_Weights;
-	int _InputSize;
-	int _OutputSize;
-	int _WeightSize;
-	int _Connections;
-        int _FeedForwardSparsity;
-    int _BackPropSparsity;
-    int _DeltaComputeSparsity;
-    int _WeightUpdateSparsity;
-    void Init (int of, int i2h, int i2w, int ffs, int bps, int dcs, int wus)
-	{		
-		_OutputFeature = of;
-		_Input2Height = i2h;
-		_Input2Width = i2w;
-		_Weights = new float[_OutputFeature * _Input2Width];
-		_InputSize = i2w * i2h;
-		_OutputSize = of * i2h;
-		_WeightSize = _OutputFeature * _Input2Width;
-		_Connections = of * i2h * i2w;
-                _FeedForwardSparsity = ffs;
-                _BackPropSparsity = bps;
-                _DeltaComputeSparsity = dcs;
-                _WeightUpdateSparsity = wus;
-	}
-} Layer;
-typedef struct LayerConfig {
-    int _OutputFeature;
-    int _Input2Height;
-    int _Input2Width;
-    int _FeedForwardSparsity;
-    int _BackPropSparsity;
-    int _DeltaComputeSparsity;
-    int _WeightUpdateSparsity;
-} LayerConfig;
 
 LayerConfig W1_Model_KZ_1K[8] = {{96, 63*63, 11*11*3, 0, 0, 0, 0}, {256, 28*28, 25*96, 0, 0, 0, 0}, {384, 12*12, 9*256, 0, 0, 0, 0}, {384, 100, 9*384, 0, 0, 0, 0}, {256, 64, 9*384, 0, 0, 0, 0}, {4096, 1, 4096, 0, 0, 0, 0}, {4096, 1, 4096, 0, 0, 0, 0}, {4096, 1, 1000, 0, 0, 0, 0}};
 
@@ -105,104 +65,9 @@ const char *ModelName[NUM_MODEL_TYPE] = {"NO MODEL", "MNIST", "IMG1K", "IMG22K",
 long long g_CurrentSamplePos;
 
 CanonicalConfig g_CanonicalConfig;
-#define G_THREAD_COUNT g_CanonicalConfig._threadCount
-#define G_SAMPLE_COUNT g_CanonicalConfig._sampleCount
-#define G_WORKER_COUNT g_CanonicalConfig._workerCount
-#define G_START_LAYER g_CanonicalConfig._startLayer
-#define G_MODEL_TYPE g_CanonicalConfig._modelType
-#define G_REPLICATED_OUTPUT_LAYER g_CanonicalConfig._replicatedOutputLayer
-#define G_THREAD_AFFINITY g_CanonicalConfig._affinity
-#define G_TRAINING g_CanonicalConfig._training
-#define G_DELTA_WEIGHT_OPT g_CanonicalConfig._deltaWeightOpt
-#define G_FORWARD_SPARSITY g_CanonicalConfig._feedFowardSparsity
-#define G_BACKPROP_SPARSITY g_CanonicalConfig._backPropSparsity
-#define G_DELTACOMPUTE_SPARSITY g_CanonicalConfig._deltaComputeSparsity
-#define G_WEIGHTUPDATE_SPARSITY g_CanonicalConfig._weightUpdateSparsity
 
-
-typedef struct DNN {
-	Layer *_Layers;
-	int _nLayers;
-	int _nWorkers;
-	bool *_Replicated;
-	int *_nThreads;
-	void Init (int nLayers, LayerConfig *lp, int nWorkers, bool replicate)
-	{
-		_nLayers = nLayers;
-		_Layers = new Layer[nLayers];
-		_Replicated = new bool[nLayers];
-		_nWorkers = nWorkers;
-		_nThreads = new int[nLayers];
-		for (int i = g_CanonicalConfig._startLayer; i < nLayers; i++)
-		{
-			if (i == (nLayers - 1))
-			{
-				_Replicated[i] = replicate;
-				_Layers[i].Init(lp[i]._OutputFeature, lp[i]._Input2Height, (replicate) ? lp[i]._Input2Width : lp[i]._Input2Width/nWorkers, lp[i]._FeedForwardSparsity,
-                                                lp[i]._BackPropSparsity, lp[i]._DeltaComputeSparsity, lp[i]._WeightUpdateSparsity);
-				_nThreads[i] = (replicate) ? ceil((float)G_THREAD_COUNT/nWorkers) : G_THREAD_COUNT;
-			}
-			else {
-				_Replicated[i] = false;
-				_Layers[i].Init(lp[i]._OutputFeature, lp[i]._Input2Height, lp[i]._Input2Width, lp[i]._FeedForwardSparsity,
-                                                lp[i]._BackPropSparsity, lp[i]._DeltaComputeSparsity, lp[i]._WeightUpdateSparsity);
-				_nThreads[i] = G_THREAD_COUNT;
-			}
-		}		
-	}
-	void Fini(void)
-	{
-		for (int i = G_START_LAYER; i < _nLayers; i++)
-		{
-			delete[] _Layers[i]._Weights;
-			_Layers[i]._Weights = NULL;
-		}
-		_nLayers = 0;		
-		delete [] _Layers;
-		_Layers = NULL;
-	}
-	void Print(const char *modelName)
-	{
-		for (int i = G_START_LAYER; i < _nLayers; i++)
-		{
-			printf("%s Config%dW \t Layer%d: \t %10d \t %10d \t %10d \t %10d\n", modelName, _nWorkers, i, _Layers[i]._OutputFeature, _Layers[i]._Input2Height, _Layers[i]._Input2Width, _Layers[i]._Connections);
-			printf("%s Archit%dW \t Layer%d: \t %10d \t %10d \t %10d \n", modelName, _nWorkers, i, _Layers[i]._InputSize, _Layers[i]._OutputFeature*_Layers[i]._Input2Width, _Layers[i]._OutputSize);
-		}
-		fflush(stdout);
-	}
-} DNN;
 DNN DNNModel;
-typedef struct ThreadLayerState {
-	Layer *_LayerState;
-	double* _FLOPTime;
-	int *_SampleCount;
-	int _numLayers;
-	int _threadNum;
-	int _startLayer;
-	void Init (int tNum, DNN& model)
-	{
-		_threadNum = tNum;
-		_LayerState = model._Layers;
-		_FLOPTime = new double[model._nLayers];
-		_SampleCount = new int[model._nLayers];
-		for (int i = 0; i < model._nLayers; i++)
-		{
-			_FLOPTime[i] = 0;
-			_SampleCount[i] = 0;
-		}
-		_startLayer = G_START_LAYER;
-		_numLayers = model._nLayers;	
-		MY_ASSERT(_startLayer < _numLayers);
-	}
-	void Fini (void)
-	{
-		if (_FLOPTime != NULL) 
-		{
-			delete [] _FLOPTime;
-			_FLOPTime = NULL;
-		}
-	}
-} ThreadLayerState;
+
 
 #define FEED_FORWARD_CALL(mulsum_func) \
     START_TIMER(timer);                                                      \
@@ -258,9 +123,8 @@ double mulsum2_wrapper(Layer *layer, float *inpACT, float* outACT) {
 	return ELAPSED_USEC_TIME(timer);
 }
 
-
 #define NUM_DNN_UNIT_FLOP 2
-typedef enum DNNPass {DNN_FORWARD = 0, DNN_BACKWARD, DNN_WEIGHTUPDATE, NUM_DNN_PASS} DNNPass;
+
 const char *DNNPassName[NUM_DNN_PASS] = {"ForwardProp", "BackwardProp", "WeightUpdate"};
 DWORD DNNModelThreadForward(ThreadLayerState *tl)
 {	
@@ -286,7 +150,7 @@ DWORD DNNModelThreadForward(ThreadLayerState *tl)
 #ifdef USE_SPARSE_KERNELS 
             elapsedTime = mulsum2_wrapper(layer, inpACT, outACT);  
 #else
-           DECLARE_TIMER(timer);
+	                DECLARE_TIMER(timer);
 			START_TIMER(timer);
 			for (int i = 0; i < layer->_OutputFeature; i++)
 			{
@@ -311,10 +175,6 @@ DWORD DNNModelThreadForward(ThreadLayerState *tl)
 	delete []inputActivation;
 	delete []outputActivation;
 	return 0;
-}
-DWORD WINAPI s_DNNModelThreadForward(LPVOID lp)
-{
-	return DNNModelThreadForward((ThreadLayerState *)lp);
 }
 
 #define MULSUM3_GEN_WRAPPER(wrapper1,wrapper2)                  \
@@ -404,7 +264,7 @@ DWORD DNNModelThreadBackward(ThreadLayerState *tl)
 #ifdef USE_SPARSE_KERNELS
             elapsedTime = BackPropWrapper(layer, inpACT, outACT);
 #else
-			CHiResTimer timer;
+	                DECLARE_TIMER(timer);
 			START_TIMER(timer);
 			for (int i = 0; i < layer->_OutputFeature; i++)
 			{
@@ -430,11 +290,6 @@ DWORD DNNModelThreadBackward(ThreadLayerState *tl)
 	delete []outputActivation;
 	return 0;
 }
-DWORD WINAPI s_DNNModelThreadBackward(LPVOID lp)
-{
-	return DNNModelThreadBackward((ThreadLayerState *)lp);
-}
-
 
 #define DELTA_COMPUTE_WRAPPER(mulsum3_func)                                 \
     START_TIMER(timer);                                                      \
@@ -515,7 +370,7 @@ DWORD DNNModelThreadDeltaWeightUpdate(ThreadLayerState *tl)
 			float *inpACT = inputActivation[l];
 			float *outACT = outputActivation[l];
 			Layer *layer = (tl->_LayerState + l);
-			CHiResTimer timer;
+			DECLARE_TIMER(timer);
             double elapsedTime;
 
             // momemtum computation
@@ -602,7 +457,7 @@ DWORD DNNModelThreadWeightUpdate(ThreadLayerState *tl)
 			float *inpACT = inputActivation[l];
 			float *outACT = outputActivation[l];
 			Layer *layer = (tl->_LayerState + l);
-			CHiResTimer timer;
+			DECLARE_TIMER(timer);
 			START_TIMER(timer);
 			if (layer->_Input2Height == 1)
 			{
@@ -635,18 +490,9 @@ DWORD DNNModelThreadWeightUpdate(ThreadLayerState *tl)
 	delete []outputActivation;
 	return 0;
 }
-DWORD WINAPI s_DNNModelThreadWeightUpdate(LPVOID lp)
-{
-	if (G_DELTA_WEIGHT_OPT)
-	{
-		return  DNNModelThreadDeltaWeightUpdate((ThreadLayerState *)lp);
-	}
-	return DNNModelThreadWeightUpdate((ThreadLayerState *)lp);
-}
 
 void runDNNModelThreads (int numThreads, DNNPass dp)
 {
-	HANDLE *helperThreads = new HANDLE[numThreads];
 	ThreadLayerState *tl = new ThreadLayerState[numThreads];
 	g_CurrentSamplePos = -1;
 	for (int i = 0; i < numThreads; i++)
@@ -654,21 +500,9 @@ void runDNNModelThreads (int numThreads, DNNPass dp)
 
 		tl[i].Init(i, DNNModel);
 	}
-	for (int i = 0; i < numThreads; i++)
-	{
-		if (dp == DNN_FORWARD)
-			helperThreads[i] = CreateThread(NULL, 0, s_DNNModelThreadForward, (LPVOID)(tl+i), 0, NULL);
-		else if (dp == DNN_BACKWARD)
-			helperThreads[i] = CreateThread(NULL, 0, s_DNNModelThreadBackward, (LPVOID)(tl+i), 0, NULL);
-		else 
-			helperThreads[i] = CreateThread(NULL, 0, s_DNNModelThreadWeightUpdate, (LPVOID)(tl+i), 0, NULL);
-	}
-	WaitForMultipleObjects(numThreads, helperThreads, TRUE, INFINITE);
-	
-	for (int i = 0; i < numThreads; i++)
-	{
-		CloseHandle(helperThreads[i]);
-	}
+
+	DoModelCompute(numThreads, tl, dp);
+
 	int *sampleCount = new int[DNNModel._nLayers];
 	double *averageSampleTime = new double[DNNModel._nLayers];
 	for (int i = G_START_LAYER; i < DNNModel._nLayers; i++)
@@ -693,7 +527,7 @@ void runDNNModelThreads (int numThreads, DNNPass dp)
 		INT64 nTotalFlops = (DNNModel._Replicated[i] == true) ? ((INT64)DNNModel._Layers[i]._Connections * NUM_DNN_UNIT_FLOP) :((INT64)DNNModel._Layers[i]._Connections * NUM_DNN_UNIT_FLOP * DNNModel._nWorkers);
 		//INT64 nTotalFlops = (INT64)DNNModel._Layers[i]._Connections * NUM_DNN_UNIT_FLOP;
 		double avgGFLOPs = (averageSampleTime[i] > 0.0f) ? nTotalFlops/(averageSampleTime[i] * 1e3) : 0.0f;
-		printf("%10d %10d %10.2f %10.6f %I64d\n", i, DNNModel._nThreads[i], avgGFLOPs, averageSampleTime[i]/(1E3), nTotalFlops);
+		printf("%10d %10d %10.2f %10.6f %lld\n", i, DNNModel._nThreads[i], avgGFLOPs, averageSampleTime[i]/(1E3), nTotalFlops);
 	}
 	fflush(stdout);
 	for (int i = 0; i < numThreads; i++)
@@ -702,7 +536,6 @@ void runDNNModelThreads (int numThreads, DNNPass dp)
 	}
 	delete [] sampleCount;
 	delete [] averageSampleTime;
-	delete [] helperThreads;
 	delete [] tl;
 }
 
@@ -719,19 +552,20 @@ void runDNNModel(void)
 
 ModelType ProcessModelParam(const char *modelString)
 {
-	for (int i = 0; i < ModelType::NUM_MODEL_TYPE; i++)
+	for (int i = 0; i < NUM_MODEL_TYPE; i++)
 	{
-		if (_strcmpi(modelString, ModelName[i]) == 0) 
+		if (CASE_INSENSITIVE_STRCMP(modelString, ModelName[i]) == 0) 
 		{
 			return (ModelType)i;
 		}
 	}
-	return ModelType::NO_MODEL;
+	return NO_MODEL;
 }
 
 int main(int argc, char *argv[])
 {	
 	g_CanonicalConfig.Init();
+#if 0
 	SetCanonicalConfig(argc, argv, g_CanonicalConfig);
 	g_CanonicalConfig.Print();
 	LayerConfig* lc = ModelConfig[g_CanonicalConfig._modelType][g_CanonicalConfig._workerCount];
@@ -747,6 +581,6 @@ int main(int argc, char *argv[])
 	DNNModel.Print(ModelName[(int)G_MODEL_TYPE]);
 	runDNNModel();
 	DNNModel.Fini();
-	
+#endif
 	return 0;
 }
