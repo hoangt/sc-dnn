@@ -1,4 +1,6 @@
 #pragma once
+#include "stdafx.h"
+
 extern const UINT32 s_CrcTable[256];
 
 inline UINT32 UPDC32(BYTE octet, UINT32 crc)
