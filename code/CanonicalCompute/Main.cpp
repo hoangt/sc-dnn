@@ -565,7 +565,7 @@ ModelType ProcessModelParam(const char *modelString)
 int main(int argc, char *argv[])
 {	
 	g_CanonicalConfig.Init();
-#if 0
+#ifdef WINDOWS_BUILD // Remove this condition once the rest of the code works with Linux build
 	SetCanonicalConfig(argc, argv, g_CanonicalConfig);
 	g_CanonicalConfig.Print();
 	LayerConfig* lc = ModelConfig[g_CanonicalConfig._modelType][g_CanonicalConfig._workerCount];
