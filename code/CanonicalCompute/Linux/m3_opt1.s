@@ -1,220 +1,211 @@
-.code
+.text
 
-mulsum3_opt1_75_25 PROC
-    xorps xmm3, xmm3
+.globl mulsum3_opt1_75_25
+mulsum3_opt1_75_25:
+	movss %xmm2, -0x10(%rsp)
+	movss %xmm2, -0xc(%rsp)
+	movss %xmm2, -0x8(%rsp)
+	movss %xmm2, -0x4(%rsp)
+	movups -0x10(%rsp), %xmm2
 
-    movss dword ptr[rsp-10h], xmm2
-    movss dword ptr[rsp-0ch], xmm2
-    movss dword ptr[rsp-08h], xmm2
-    movss dword ptr[rsp-04h], xmm2
-    movups xmm2, dword ptr[rsp-10h]
-
-    mov   r8, r9
-    shr   r9, 2
-    test  r9, r9
+    mov   %r9, %r8
+    shr   $0x2, %r9
+    test  %r9,	%r9
     jz    loop_11_end
 loop_11:
-    movups xmm1, xmmword ptr [rdx]
-    movups xmm3, xmmword ptr [rcx]
-    mulps xmm1, xmm2
-    addps xmm3, xmm1
-    movups xmmword ptr [rcx], xmm3
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
+	movups	(%rdx),	%xmm1
+	movups	(%rcx), %xmm3
+	mulps	%xmm2,	%xmm1
+	addps	%xmm1,	%xmm3
+	movups	%xmm3,	(%rcx)
+    add		$0x10,	%rcx
+    add		$0x10,	%rdx
+    dec		%r9
     je   loop_11_end
-    movups xmm1, xmmword ptr [rdx]
+	movups	(%rdx),	%xmm1
     nop
     nop
     nop
     nop
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
+    add		$0x10,	%rcx
+    add		$0x10,	%rdx
+    dec		%r9
     je   loop_11_end
-    movups xmm1, xmmword ptr [rdx]
-    movups xmm3, xmmword ptr [rcx]
-    mulps xmm1, xmm2
-    addps xmm3, xmm1
-    movups xmmword ptr [rcx], xmm3
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
+	movups	(%rdx),	%xmm1
+	movups	(%rcx), %xmm3
+	mulps	%xmm2,	%xmm1
+	addps	%xmm1,	%xmm3
+	movups	%xmm3,	(%rcx)
+    add		$0x10,	%rcx
+    add		$0x10,	%rdx
+    dec		%r9
     je   loop_11_end
-    movups xmm1, xmmword ptr [rdx]
-    movups xmm3, xmmword ptr [rcx]
-    mulps xmm1, xmm2
-    addps xmm3, xmm1
-    movups xmmword ptr [rcx], xmm3
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
+	movups	(%rdx),	%xmm1
+	movups	(%rcx), %xmm3
+	mulps	%xmm2,	%xmm1
+	addps	%xmm1,	%xmm3
+	movups	%xmm3,	(%rcx)
+    add		$0x10,	%rcx
+    add		$0x10,	%rdx
+    dec		%r9
     jne   loop_11
 loop_11_end:
-    ret   0
-mulsum3_opt1_75_25 ENDP
+    retq
 
-mulsum3_opt1_50_50 PROC
-    xorps xmm3, xmm3
+.globl mulsum3_opt1_50_50
+mulsum3_opt1_50_50:
+	movss %xmm2, -0x10(%rsp)
+	movss %xmm2, -0xc(%rsp)
+	movss %xmm2, -0x8(%rsp)
+	movss %xmm2, -0x4(%rsp)
+	movups -0x10(%rsp), %xmm2
 
-    movss dword ptr[rsp-10h], xmm2
-    movss dword ptr[rsp-0ch], xmm2
-    movss dword ptr[rsp-08h], xmm2
-    movss dword ptr[rsp-04h], xmm2
-    movups xmm2, dword ptr[rsp-10h]
-
-    mov   r8, r9
-    shr   r9, 2
-    test  r9, r9
+    mov   %r9, %r8
+    shr   $0x2, %r9
+    test  %r9,	%r9
     jz    loop_12_end
 loop_12:
-    movups xmm1, xmmword ptr [rdx]
-    movups xmm3, xmmword ptr [rcx]
-    mulps xmm1, xmm2
-    addps xmm3, xmm1
-    movups xmmword ptr [rcx], xmm3
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
+	movups	(%rdx),	%xmm1
+	movups	(%rcx), %xmm3
+	mulps	%xmm2,	%xmm1
+	addps	%xmm1,	%xmm3
+	movups	%xmm3,	(%rcx)
+    add		$0x10,	%rcx
+    add		$0x10,	%rdx
+    dec		%r9
     je   loop_12_end
-    movups xmm1, xmmword ptr [rdx]
+	movups	(%rdx),	%xmm1
     nop
     nop
     nop
     nop
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
+    add		$0x10,	%rcx
+    add		$0x10,	%rdx
+    dec		%r9
     je   loop_12_end
-    movups xmm1, xmmword ptr [rdx]
+	movups	(%rdx),	%xmm1
     nop
     nop
     nop
     nop
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
+    add		$0x10,	%rcx
+    add		$0x10,	%rdx
+    dec		%r9
     je   loop_12_end
-    movups xmm1, xmmword ptr [rdx]
-    movups xmm3, xmmword ptr [rcx]
-    mulps xmm1, xmm2
-    addps xmm3, xmm1
-    movups xmmword ptr [rcx], xmm3
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
+	movups	(%rdx),	%xmm1
+	movups	(%rcx), %xmm3
+	mulps	%xmm2,	%xmm1
+	addps	%xmm1,	%xmm3
+	movups	%xmm3,	(%rcx)
+    add		$0x10,	%rcx
+    add		$0x10,	%rdx
+    dec		%r9
     jne   loop_12
 loop_12_end:
-    ret   0
-mulsum3_opt1_50_50 ENDP
+    retq
 
-mulsum3_opt1_25_75 PROC
-    xorps xmm3, xmm3
 
-    movss dword ptr[rsp-10h], xmm2
-    movss dword ptr[rsp-0ch], xmm2
-    movss dword ptr[rsp-08h], xmm2
-    movss dword ptr[rsp-04h], xmm2
-    movups xmm2, dword ptr[rsp-10h]
+.globl mulsum3_opt1_25_75
+mulsum3_opt1_25_75:
+	movss %xmm2, -0x10(%rsp)
+	movss %xmm2, -0xc(%rsp)
+	movss %xmm2, -0x8(%rsp)
+	movss %xmm2, -0x4(%rsp)
+	movups -0x10(%rsp), %xmm2
 
-    mov   r8, r9
-    shr   r9, 2
-    test  r9, r9
+    mov   %r9, %r8
+    shr   $0x2, %r9
+    test  %r9,	%r9
     jz    loop_13_end
 loop_13:
-    movups xmm1, xmmword ptr [rdx]
+	movups	(%rdx),	%xmm1
     nop
     nop
     nop
     nop
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
+    add		$0x10,	%rcx
+    add		$0x10,	%rdx
+    dec		%r9
     je   loop_13_end
-    movups xmm1, xmmword ptr [rdx]
+	movups	(%rdx),	%xmm1
     nop
     nop
     nop
     nop
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
+    add		$0x10,	%rcx
+    add		$0x10,	%rdx
+    dec		%r9
     je   loop_13_end
-    movups xmm1, xmmword ptr [rdx]
+	movups	(%rdx),	%xmm1
     nop
     nop
     nop
     nop
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
+    add		$0x10,	%rcx
+    add		$0x10,	%rdx
+    dec		%r9
     je   loop_13_end
-    movups xmm1, xmmword ptr [rdx]
-    movups xmm3, xmmword ptr [rcx]
-    mulps xmm1, xmm2
-    addps xmm3, xmm1
-    movups xmmword ptr [rcx], xmm3
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
+	movups	(%rdx),	%xmm1
+	movups	(%rcx), %xmm3
+	mulps	%xmm2,	%xmm1
+	addps	%xmm1,	%xmm3
+	movups	%xmm3,	(%rcx)
+    add		$0x10,	%rcx
+    add		$0x10,	%rdx
+    dec		%r9
     jne   loop_13
 loop_13_end:
-    ret   0
-mulsum3_opt1_25_75 ENDP
+    retq
 
 
-mulsum3_opt1_0_100 PROC
-    xorps xmm3, xmm3
+.globl mulsum3_opt1_0_100 
+mulsum3_opt1_0_100:
+	movss %xmm2, -0x10(%rsp)
+	movss %xmm2, -0xc(%rsp)
+	movss %xmm2, -0x8(%rsp)
+	movss %xmm2, -0x4(%rsp)
+	movups -0x10(%rsp), %xmm2
 
-    movss dword ptr[rsp-10h], xmm2
-    movss dword ptr[rsp-0ch], xmm2
-    movss dword ptr[rsp-08h], xmm2
-    movss dword ptr[rsp-04h], xmm2
-    movups xmm2, dword ptr[rsp-10h]
-
-    mov   r8, r9
-    shr   r9, 2
-    test  r9, r9
+    mov   %r9, %r8
+    shr   $0x2, %r9
+    test  %r9,	%r9
     jz    loop_14_end
 loop_14:
-    movups xmm1, xmmword ptr [rdx]
+	movups	(%rdx),	%xmm1
     nop
     nop
     nop
     nop
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
+    add		$0x10,	%rcx
+    add		$0x10,	%rdx
+    dec		%r9
     je   loop_14_end
-    movups xmm1, xmmword ptr [rdx]
+	movups	(%rdx),	%xmm1
     nop
     nop
     nop
     nop
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
+    add		$0x10,	%rcx
+    add		$0x10,	%rdx
+    dec		%r9
     je   loop_14_end
-    movups xmm1, xmmword ptr [rdx]
+	movups	(%rdx),	%xmm1
     nop
     nop
     nop
     nop
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
+    add		$0x10,	%rcx
+    add		$0x10,	%rdx
+    dec		%r9
     je   loop_14_end
-    movups xmm1, xmmword ptr [rdx]
+	movups	(%rdx),	%xmm1
     nop
     nop
     nop
     nop
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
+    add		$0x10,	%rcx
+    add		$0x10,	%rdx
+    dec		%r9
     jne   loop_14
 loop_14_end:
-    ret   0
-mulsum3_opt1_0_100 ENDP
-
-END
+    retq

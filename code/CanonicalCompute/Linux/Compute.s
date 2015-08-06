@@ -1,113 +1,113 @@
-.code
+.text
 
-;
-; extern float  mulsum_2(const float *pf0, const float *pf1, INT64 count);
-;
-;	for(INT64 i = 0; i < counut; i++);
-;	{
-;       sum += pf0[i] * pf1[i];
-;   }
-;   return sum;
-;
-avx2_mulsum_2_mem PROC
-	xorps	xmm0,	xmm0
-	mov		r9,		r8
-	shr		r9,		2
-	test	r9,		r9
+#
+# extern float  mulsum_2(const float *pf0, const float *pf1, INT64 count);
+#
+#	for(INT64 i = 0; i < counut; i++);
+#	{
+#       sum += pf0[i] * pf1[i];
+#   }
+#   return sum;
+#
+.globl avx2_mulsum_2_mem
+avx2_mulsum_2_mem:
+	xorps	%xmm0,	%xmm0
+	mov	%r8,	%r9
+	shr	$0x2,	%r9
+	test	%r9,	%r9
 	jz		loop_1_end
 loop_1:
-	movups	xmm1,	xmmword ptr [rcx]
-	movups	xmm2,	xmmword ptr [rdx]
-	mulps	xmm1,	xmm2
-	addps	xmm0,	xmm1
-	add		rcx,	16
-	add		rdx,	16
-	dec		r9
+	movups	(%rcx), %xmm1
+	movups	(%rdx), %xmm2
+	mulps	%xmm2,	%xmm1
+	addps	%xmm1,	%xmm0
+	add	16,	%rcx
+	add	16,	%rdx
+	dec	%r9
 	jne		loop_1
 loop_1_end:
-	haddps	xmm0,	xmm0
-	haddps	xmm0,	xmm0
-	ret 0
-avx2_mulsum_2_mem	ENDP
+	haddps	%xmm0,	%xmm0
+	haddps	%xmm0,	%xmm0
+	retq 
 
 
-avx2_mulsum_3_mem PROC
-; extern void  avx2_mulsum_3_mem(const float *pf0, const float *pf1, float f2, INT64 count);
-;
-;	for(INT64 i = 0; i < counut; i++);
-;	{
-;       pf0[i] += pf1[i] * f2;
-;   }
+# extern void  avx2_mulsum_3_mem(const float *pf0, const float *pf1, float f2, INT64 count);
+#
+#	for(INT64 i = 0; i < counut; i++);
+#	{
+#       pf0[i] += pf1[i] * f2;
+#   }
 
-; rcx pf0
-; rdx pf1
-; xmm2 f2
-; r9  count
-    xorps xmm3, xmm3
+# rcx pf0
+# rdx pf1
+# xmm2 f2
+# r9  count
 
-    movss dword ptr[rsp-10h], xmm2
-    movss dword ptr[rsp-0ch], xmm2
-    movss dword ptr[rsp-08h], xmm2
-    movss dword ptr[rsp-04h], xmm2
-    movups xmm2, dword ptr[rsp-10h]
+.globl avx2_mulsum_3_mem
+avx2_mulsum_3_mem:
+	movss %xmm2, -0x10(%rsp)
+	movss %xmm2, -0xc(%rsp)
+	movss %xmm2, -0x8(%rsp)
+	movss %xmm2, -0x4(%rsp)
+	movups -0x10(%rsp), %xmm2
 
-    mov   r8, r9
-    shr   r9, 2
-    test  r9, r9
+    mov   %r9, %r8
+    shr   $0x2, %r9
+    test  %r9,	%r9
     jz    loop_1_end
 loop_1:
-    movups xmm1, xmmword ptr [rdx]
-    movups xmm3, xmmword ptr [rcx]
-    mulps xmm1, xmm2
-    addps xmm3, xmm1
-    movups xmmword ptr [rcx], xmm3
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
+	movups	(%rdx),	%xmm1
+	movups	(%rcx), %xmm3
+	mulps	%xmm2,	%xmm1
+	addps	%xmm1,	%xmm3
+	movups	%xmm3,	(%rcx)
+    add		$0x10,	%rcx
+    add		$0x10,	%rdx
+    dec		%r9
     jne   loop_1
 loop_1_end:
-    ret   0
-avx2_mulsum_3_mem ENDP
+    retq
 
-;
-; extern float  fmemcpy(const float *pfSrc, float *pfDst, INT64 count);
-;
-; void fmemcpy(const float *pfSrc, float *pfDst, INT64 count);
-; {
-;     for (INT64 i = 0; i < length; i++)
-;     {
-;         *pfDst++ = *pfSrc++;
-;     }
-; }
-avx2_fmemcpy PROC
-; rcx pfSrc
-; rdx pfDst
-; r8 count
-    mov   r9, r8
-    shr   r9, 2
-    test  r9, r9
+#
+# extern float  fmemcpy(const float *pfSrc, float *pfDst, INT64 count);
+#
+# void fmemcpy(const float *pfSrc, float *pfDst, INT64 count);
+# {
+#     for (INT64 i = 0; i < length; i++)
+#     {
+#         *pfDst++ = *pfSrc++;
+#     }
+# }
+# rcx pfSrc
+# rdx pfDst
+# r8 count
+
+.globl avx2_fmemcpy
+avx2_fmemcpy:
+    mov   %r8,	%r9
+    shr   $0x2, %r9
+    test  %r9,	%r9
     jz    loop_1_end
 loop_1:
-    movups xmm0, xmmword ptr [rcx]
-    movups xmmword ptr [rdx], xmm0
-    add   rcx, 16
-    add   rdx, 16
-    dec   r9
+	movups	(%rcx),	%xmm0
+	movups	%xmm0, (%rdx)
+    add   $0x10,	%rcx
+    add   $0x10,	%rdx
+    dec   %r9
     jne   loop_1
 loop_1_end:
-    and   r8, 3
-    test  r8, r8
+    and   $0x3,	%r8
+    test  %r8,	%r8
     jz    loop_2_end
 loop_2:
-    movss xmm0, dword ptr [rcx]
-    movss dword ptr [rdx], xmm0
-    add   rcx, 4
-    add   rdx, 4
-    dec   r8
+	movss (%rcx),	%xmm0
+	movss %xmm0,	(%rdx)
+    add   $0x4,		%rcx
+    add   $0x4,		%rdx
+    dec   %r8
     jne   loop_2
 loop_2_end:
-    ret   0
-avx2_fmemcpy ENDP
+    retq
 
 
 END
