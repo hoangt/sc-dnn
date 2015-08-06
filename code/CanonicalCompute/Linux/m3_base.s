@@ -7,10 +7,10 @@
 #       pf0[i] += pf1[i] * f2;
 #  }
 
-; rcx pf0
-; rdx pf1
-; xmm2 f2
-; r9  count
+# rcx pf0
+# rdx pf1
+# xmm2 f2
+# r9  count
 
 .globl mulsum3_base
 mulsum3_base:

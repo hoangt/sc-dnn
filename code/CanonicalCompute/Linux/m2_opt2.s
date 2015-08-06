@@ -4,7 +4,7 @@
 mulsum2_opt2_75_25:
 	xorps	%xmm0,	%xmm0
 	mov	%r8,	%r9
-	shr	$0x4,	%r9 ; cache line count
+	shr	$0x4,	%r9 # cache line count
 	test	%r9,	%r9
 	jz		loop_11_end
 loop_11:
@@ -67,7 +67,7 @@ loop_13_end:
 mulsum2_opt2_50_50:
 	xorps	%xmm0,	%xmm0
 	mov	%r8,	%r9
-	shr	$0x4,	%r9 ; cache line count
+	shr	$0x4,	%r9 # cache line count
 	test	%r9,	%r9
 	jz		loop_21_end
 loop_21:
@@ -135,7 +135,7 @@ loop_23_end:
 mulsum2_opt2_25_75:
 	xorps	%xmm0,	%xmm0
 	mov	%r8,	%r9
-	shr	$0x4,	%r9 ; cache line count
+	shr	$0x4,	%r9 # cache line count
 	test	%r9,	%r9
 	jz		loop_31_end
 loop_31:
@@ -208,7 +208,7 @@ loop_33_end:
 mulsum2_opt2_0_100:
 	xorps	%xmm0,	%xmm0
 	mov	%r8,	%r9
-	shr	$0x4,	%r9 ; cache line count
+	shr	$0x4,	%r9 # cache line count
 	test	%r9,	%r9
 	jz		loop_41_end
 loop_41:

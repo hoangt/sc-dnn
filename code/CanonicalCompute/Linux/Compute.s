@@ -55,7 +55,7 @@ avx2_mulsum_3_mem:
     shr   $0x2, %r9
     test  %r9,	%r9
     jz    loop_1_end
-loop_1:
+loop_12:
 	movups	(%rdx),	%xmm1
 	movups	(%rcx), %xmm3
 	mulps	%xmm2,	%xmm1
@@ -64,8 +64,8 @@ loop_1:
     add		$0x10,	%rcx
     add		$0x10,	%rdx
     dec		%r9
-    jne   loop_1
-loop_1_end:
+    jne   loop_12
+loop_12_end:
     retq
 
 #
@@ -88,26 +88,24 @@ avx2_fmemcpy:
     shr   $0x2, %r9
     test  %r9,	%r9
     jz    loop_1_end
-loop_1:
+loop_13:
 	movups	(%rcx),	%xmm0
 	movups	%xmm0, (%rdx)
     add   $0x10,	%rcx
     add   $0x10,	%rdx
     dec   %r9
-    jne   loop_1
-loop_1_end:
+    jne   loop_13
+loop_13_end:
     and   $0x3,	%r8
     test  %r8,	%r8
-    jz    loop_2_end
-loop_2:
+    jz    loop_23_end
+loop_23:
 	movss (%rcx),	%xmm0
 	movss %xmm0,	(%rdx)
     add   $0x4,		%rcx
     add   $0x4,		%rdx
     dec   %r8
-    jne   loop_2
-loop_2_end:
-    retq
+    jne   loop_23
+loop_23_end:
+	retq
 
-
-END

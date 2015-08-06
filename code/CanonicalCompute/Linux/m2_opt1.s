@@ -7,7 +7,7 @@ mulsum2_opt1_75_25:
 	shr	$0x2,	%r9
 	and	-4,	%r9 # 16 bytes alignment
 	test	%r9,	%r9
-	jz		loop_1_end
+	jz		loop_11_end
 loop_11:
 	movups	(%rcx), %xmm1
 	movups	(%rdx), %xmm2
@@ -46,7 +46,8 @@ loop_11_end:
 	haddps	%xmm0,	%xmm0
 	retq 
 
-mulsum2_opt1_50_50 PROC
+.globl mulsum2_opt1_50_50
+mulsum2_opt1_50_50:		
 	xorps	%xmm0,	%xmm0
 	mov	%r8,	%r9
 	shr	$0x2,	%r9

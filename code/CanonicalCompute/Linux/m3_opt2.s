@@ -9,7 +9,7 @@ mulsum3_opt2_75_25:
 	movups -0x10(%rsp), %xmm2
 
 	mov	%r8,	%r9
-	shr	$0x4,	%r9 ; cache line count
+	shr	$0x4,	%r9 # cache line count
 	test	%r9,	%r9
     jz    loop_11_end
 loop_11:
@@ -80,7 +80,7 @@ mulsum3_opt2_50_50:
 	movups -0x10(%rsp), %xmm2
 
 	mov	%r8,	%r9
-	shr	$0x4,	%r9 ; cache line count
+	shr	$0x4,	%r9 # cache line count
 	test	%r9,	%r9
     jz    loop_21_end
 loop_21:
@@ -156,7 +156,7 @@ mulsum3_opt2_25_75:
 	movups -0x10(%rsp), %xmm2
 
 	mov	%r8,	%r9
-	shr	$0x4,	%r9 ; cache line count
+	shr	$0x4,	%r9 # cache line count
 	test	%r9,	%r9
     jz    loop_31_end
 loop_31:
@@ -237,36 +237,36 @@ mulsum3_opt2_0_100:
 	movups -0x10(%rsp), %xmm2
 
 	mov	%r8,	%r9
-	shr	$0x4,	%r9 ; cache line count
+	shr	$0x4,	%r9 # cache line count
 	test	%r9,	%r9
-    jz    loop_31_end
-loop_31:
+    jz    loop_41_end
+loop_41:
 	xorps	%xmm1,	%xmm1
 	add		64,		%rcx
 	add		64,		%rdx
 	dec		%r9
-    jz loop_31_end
+    jz loop_41_end
 	xorps	%xmm1,	%xmm1
 	add		64,		%rcx
 	add		64,		%rdx
 	dec		%r9
-    jz loop_31_end
+    jz loop_41_end
 	xorps	%xmm1,	%xmm1
 	add		64,		%rcx
 	add		64,		%rdx
 	dec		%r9
-    jz loop_31_end
+    jz loop_41_end
 	xorps	%xmm1,	%xmm1
 	add		64,		%rcx
 	add		64,		%rdx
 	dec		%r9
-    jne loop_31
-loop_31_end:
+    jne loop_41
+loop_41_end:
     mov	%r8, %r9
     and	15,	 %r9
     test	%r9, %r9
-    jz loop_33_end
-loop_33:        
+    jz loop_43_end
+loop_43:        
 	movups	(%rdx),	%xmm1
 	movups	(%rcx), %xmm3
 	mulps	%xmm2,	%xmm1
@@ -275,6 +275,6 @@ loop_33:
     add		$0x10,	%rcx
     add		$0x10,	%rdx
     dec		%r9
-    jne loop_33
-loop_33_end:    
+    jne loop_43
+loop_43_end:    
     retq
