@@ -132,18 +132,19 @@ void ProcessParams(CParamParser& pparser, CanonicalConfig& config)
 	config._backPropSparsity = pparser.IsParamExist(TEXT("backpropsparsity")) ? pparser.ParamInt(TEXT("backpropsparsity")) : DEFAULT_SPARSITY;
 	config._deltaComputeSparsity = pparser.IsParamExist(TEXT("deltacomputesparsity")) ? pparser.ParamInt(TEXT("deltacomputesparsity")) : DEFAULT_SPARSITY;
 	config._weightUpdateSparsity = pparser.IsParamExist(TEXT("weightupdatesparsity")) ? pparser.ParamInt(TEXT("weightupdatesparsity")) : DEFAULT_SPARSITY;
+	config._useSparseKernels = pparser.IsParamExist(TEXT("sparsekernels")) ? true : false;
 }
 
 void SetCanonicalConfig(int argc, char* argv[], CanonicalConfig& config)
 {
-	int tArgLen = argc - 1;
+	int tArgLen = argc;
 	TCHAR** tArgv = new TCHAR*[tArgLen];
 	for (int i = 0; i < tArgLen; i++)
 	{
-		size_t size = strlen(argv[i+1]) + 1;
+		size_t size = strlen(argv[i]) + 1;
 		tArgv[i] = new TCHAR[size];
 		size_t convertedChars = 0;
-		mbstowcs_s(&convertedChars, tArgv[i], size, argv[i+1], _TRUNCATE);
+		mbstowcs_s(&convertedChars, tArgv[i], size, argv[i], _TRUNCATE);
 	}
 
 	CParamParser pparser (tArgLen, tArgv);

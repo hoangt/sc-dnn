@@ -147,33 +147,33 @@ mulsum2_opt1_0_100 PROC
 	jz		loop_14_end
 loop_14:
 	movups	xmm1,	xmmword ptr [rcx]
-	nop
-	nop
-	nop
+ 	nop
+ 	nop
+ 	nop
 	add		rcx,	16
 	add		rdx,	16
 	dec		r9
 	je		loop_14_end
 	movups	xmm1,	xmmword ptr [rcx]
-	nop
-	nop
-	nop
+ 	nop
+ 	nop
+ 	nop
 	add		rcx,	16
 	add		rdx,	16
 	dec		r9
 	je		loop_14_end
 	movups	xmm1,	xmmword ptr [rcx]
-	nop
-	nop
-	nop
+ 	nop
+ 	nop
+ 	nop
 	add		rcx,	16
 	add		rdx,	16
 	dec		r9
 	je		loop_14_end
 	movups	xmm1,	xmmword ptr [rcx]
-	nop
-	nop
-	nop
+ 	nop
+ 	nop
+ 	nop
 	add		rcx,	16
 	add		rdx,	16
 	dec		r9

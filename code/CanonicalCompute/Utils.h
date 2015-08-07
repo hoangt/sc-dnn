@@ -1,5 +1,4 @@
-//#define WINDOWS_BUILD 1
-#define USE_SPARSE_KERNELS 1
+#define WINDOWS_BUILD 1
 
 #ifdef WINDOWS_BUILD
 
@@ -79,6 +78,7 @@ typedef struct Layer {
   int _OutputFeature;
   int _Input2Height;
   int _Input2Width;
+  int _AlignedInput2Width;
   float *_Weights;
   int _InputSize;
   int _OutputSize;
@@ -148,6 +148,7 @@ struct CanonicalConfig {
   bool _deltaWeightOpt;
   bool _training;
   bool _affinity;
+  bool _useSparseKernels;
   
   void Init();
   void Print();

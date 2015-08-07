@@ -15,6 +15,7 @@ void CanonicalConfig::Init()
   _deltaWeightOpt = true;
   _training = true;
   _affinity = true;
+  _useSparseKernels = false;
 }
 
 void CanonicalConfig::Print()
@@ -29,6 +30,7 @@ void CanonicalConfig::Print()
 	 "StartLayer: %d \n"
 	 "Task: %s \n"
 	 "Affinity: %s\n"
+	 "SparseKernels: %s\n"
 	 "FeedForwardSparsity: %d\n" 
 	 "BackPropSparsity: %d\n"
 	 "DeltaComputeSparsity: %d\n"
@@ -43,6 +45,7 @@ void CanonicalConfig::Print()
 	 _startLayer,
 	 (_training ? "Training" : "Classify"),
 	 (_affinity ? "Enabled" : "Disabled"),
+	 (_useSparseKernels ? "Enabled" : "Disabled"),
 	 _feedFowardSparsity,
 	 _backPropSparsity,
 	 _deltaComputeSparsity,
@@ -64,7 +67,7 @@ void DNN::Init (int nLayers, LayerConfig *lp, int nWorkers, bool replicate)
 	  _Replicated[i] = replicate;
 	  _Layers[i].Init(lp[i]._OutputFeature, lp[i]._Input2Height, (replicate) ? lp[i]._Input2Width : lp[i]._Input2Width/nWorkers, lp[i]._FeedForwardSparsity,
 			  lp[i]._BackPropSparsity, lp[i]._DeltaComputeSparsity, lp[i]._WeightUpdateSparsity);
-	  _nThreads[i] = (replicate) ? ceil((float)G_THREAD_COUNT/nWorkers) : G_THREAD_COUNT;
+	  _nThreads[i] = (replicate) ? (int)(ceil((float)G_THREAD_COUNT/nWorkers)) : G_THREAD_COUNT;
 	}
       else {
 	_Replicated[i] = false;
@@ -102,7 +105,7 @@ void Layer::Init (int of, int i2h, int i2w, int ffs, int bps, int dcs, int wus)
   _OutputFeature = of;
   _Input2Height = i2h;
   _Input2Width = i2w;
-  _Weights = new float[_OutputFeature * _Input2Width];
+  _Weights = new float[_OutputFeature * i2w];
   _InputSize = i2w * i2h;
   _OutputSize = of * i2h;
   _WeightSize = _OutputFeature * _Input2Width;
