@@ -1,6 +1,27 @@
-//#define WINDOWS_BUILD 1
+#ifdef LINUX_BUILD
 
-#ifdef WINDOWS_BUILD
+#include "assert.h"
+#include "stdio.h"
+#include "math.h"
+#include "string.h"
+#include "LinuxUtils.h"
+
+#define MY_ASSERT assert
+#define DECLARE_TIMER(t)      MyTimer t
+#define START_TIMER(t)        (t.StartTimer())
+#define STOP_TIMER(t)         (t.StopTimer())
+#define ELAPSED_USEC_TIME(t)  (t.ElapsedUsecTime())
+#define ATOMIC_INCREMENT64(v) (__atomic_fetch_add(&v, 1, __ATOMIC_SEQ_CST))
+#define CASE_INSENSITIVE_STRCMP(a,b) strcasecmp(a,b)
+
+typedef long long INT64;
+typedef unsigned int DWORD;
+
+enum WorkerCount {ZERO_WORKER = 0, ONE_WORKER, TWO_WORKER, THREE_WORKER, FOUR_WORKER, NUM_WORKER_COUNT};
+enum ModelType {NO_MODEL = 0, MNIST_MODEL = 1, IMAGENET_1K_MODEL, IMAGENET_22K_MODEL, CIFAR_10_MODEL, IMAGENETKZ_1K_MODEL, NUM_MODEL_TYPE};
+enum DNNPass {DNN_FORWARD = 0, DNN_BACKWARD, DNN_WEIGHTUPDATE, NUM_DNN_PASS};
+
+#else // WINDOWS_BUILD 
 
 #include "stdafx.h"
 #include "paramparser.h"
@@ -19,29 +40,6 @@ typedef enum WorkerCount {ZERO_WORKER = 0, ONE_WORKER, TWO_WORKER, THREE_WORKER,
 typedef enum ModelType {NO_MODEL = 0, MNIST_MODEL = 1, IMAGENET_1K_MODEL, IMAGENET_22K_MODEL, CIFAR_10_MODEL, IMAGENETKZ_1K_MODEL, NUM_MODEL_TYPE} ModelType;
 typedef enum DNNPass {DNN_FORWARD = 0, DNN_BACKWARD, DNN_WEIGHTUPDATE, NUM_DNN_PASS} DNNPass;
 
-#else
-
-#include "assert.h"
-#include "stdio.h"
-#include "math.h"
-#include "string.h"
-
-#define MY_ASSERT assert
-#define DECLARE_TIMER(t)      (0)
-#define START_TIMER(t)        (0)
-#define STOP_TIMER(t)         (0)
-#define ELAPSED_USEC_TIME(t)  (0)
-#define ATOMIC_INCREMENT64(v) (0)
-#define CASE_INSENSITIVE_STRCMP(a,b) strcasecmp(a,b)
-
-typedef long long INT64;
-typedef unsigned int DWORD;
-
-enum WorkerCount {ZERO_WORKER = 0, ONE_WORKER, TWO_WORKER, THREE_WORKER, FOUR_WORKER, NUM_WORKER_COUNT};
-enum ModelType {NO_MODEL = 0, MNIST_MODEL = 1, IMAGENET_1K_MODEL, IMAGENET_22K_MODEL, CIFAR_10_MODEL, IMAGENETKZ_1K_MODEL, NUM_MODEL_TYPE};
-enum DNNPass {DNN_FORWARD = 0, DNN_BACKWARD, DNN_WEIGHTUPDATE, NUM_DNN_PASS};
-//typedef enum DNNPass DNNPass;
-
 #endif
 
 struct CanonicalConfig;
@@ -59,8 +57,8 @@ extern CanonicalConfig g_CanonicalConfig;
 #define G_THREAD_AFFINITY g_CanonicalConfig._affinity
 #define G_TRAINING g_CanonicalConfig._training
 #define G_DELTA_WEIGHT_OPT g_CanonicalConfig._deltaWeightOpt
-#define G_FORWARD_SPARSITY g_CanonicalConfig._feedFowardSparsity
-#define G_BACKPROP_SPARSITY g_CanonicalConfig._backPropSparsity
+#define G_FORWARD_SPARSITY g_CanonicalConfig._forwardSparsity
+#define G_BACKPROP_SPARSITY g_CanonicalConfig._backwardSparsity
 #define G_DELTACOMPUTE_SPARSITY g_CanonicalConfig._deltaComputeSparsity
 #define G_WEIGHTUPDATE_SPARSITY g_CanonicalConfig._weightUpdateSparsity
  
@@ -139,8 +137,8 @@ struct CanonicalConfig {
   int _sampleCount;
   int _workerCount;
   int _startLayer;
-  int _feedFowardSparsity;
-  int _backPropSparsity;
+  int _forwardSparsity;
+  int _backwardSparsity;
   int _deltaComputeSparsity;
   int _weightUpdateSparsity;
   ModelType _modelType;

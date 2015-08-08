@@ -6,8 +6,8 @@ void CanonicalConfig::Init()
   _sampleCount = DEFAULT_SAMPLE_COUNT;
   _workerCount = DEFAULT_WORKER_COUNT;
   _startLayer = DEFAULT_START_LAYER;
-  _feedFowardSparsity = DEFAULT_SPARSITY;
-  _backPropSparsity = DEFAULT_SPARSITY;
+  _forwardSparsity = DEFAULT_SPARSITY;
+  _backwardSparsity = DEFAULT_SPARSITY;
   _deltaComputeSparsity = DEFAULT_SPARSITY;
   _weightUpdateSparsity = DEFAULT_SPARSITY;
   _modelType = DEFAULT_MODEL_TYPE;
@@ -46,8 +46,8 @@ void CanonicalConfig::Print()
 	 (_training ? "Training" : "Classify"),
 	 (_affinity ? "Enabled" : "Disabled"),
 	 (_useSparseKernels ? "Enabled" : "Disabled"),
-	 _feedFowardSparsity,
-	 _backPropSparsity,
+	 _forwardSparsity,
+	 _backwardSparsity,
 	 _deltaComputeSparsity,
 	 _weightUpdateSparsity
 	 );		

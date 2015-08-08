@@ -283,7 +283,10 @@ DWORD DNNModelThreadBackward(ThreadLayerState *tl)
 				{
 					for (int j = 0; j < layer->_Input2Height; j++)
 					{
-						avx2_mulsum_3_mem(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), outACT[i*layer->_Input2Height + j], layer->_Input2Width); 
+						avx2_mulsum_3_mem(inpACT+(j*layer->_Input2Width), 
+								  layer->_Weights+(i*layer->_Input2Width), 
+								  outACT[i*layer->_Input2Height + j], 
+								  layer->_Input2Width); 
 					}
 				}
 				STOP_TIMER(timer);
@@ -593,15 +596,15 @@ ModelType ProcessModelParam(const char *modelString)
 int main(int argc, char *argv[])
 {	
 	g_CanonicalConfig.Init();
-#ifdef WINDOWS_BUILD // Remove this condition once the rest of the code works with Linux build
+
 	SetCanonicalConfig(argc, argv, g_CanonicalConfig);
 	g_CanonicalConfig.Print();
 	LayerConfig* lc = ModelConfig[g_CanonicalConfig._modelType][g_CanonicalConfig._workerCount];
 	
 	if (lc == NULL) return 0;
 
-	lc->_FeedForwardSparsity = g_CanonicalConfig._feedFowardSparsity;
-	lc->_BackPropSparsity = g_CanonicalConfig._backPropSparsity;
+	lc->_FeedForwardSparsity = g_CanonicalConfig._forwardSparsity;
+	lc->_BackPropSparsity = g_CanonicalConfig._backwardSparsity;
 	lc->_DeltaComputeSparsity = g_CanonicalConfig._deltaComputeSparsity;
 	lc->_WeightUpdateSparsity = g_CanonicalConfig._weightUpdateSparsity;
 
@@ -609,6 +612,6 @@ int main(int argc, char *argv[])
 	DNNModel.Print(ModelName[(int)G_MODEL_TYPE]);
 	runDNNModel();
 	DNNModel.Fini();
-#endif
+
 	return 0;
 }
