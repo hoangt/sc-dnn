@@ -7,10 +7,10 @@
 #       pf0[i] += pf1[i] * f2;
 #  }
 
-# rcx pf0
-# rdx pf1
+# rdi pf0
+# rsi pf1
 # xmm2 f2
-# r9  count
+# rdx  count
 
 .globl mulsum3_base
 mulsum3_base:
@@ -20,46 +20,46 @@ mulsum3_base:
 	movss %xmm2, -0x4(%rsp)
 	movups -0x10(%rsp), %xmm2
 
-    mov   %r9, %r8
-    shr   $0x2, %r9
-    test  %r9,	%r9
+    mov   %rdx, %r8
+    shr   $0x2, %rdx
+    test  %rdx,	%rdx
     jz    loop_1_end
 loop_1:
-	movups	(%rdx),	%xmm1
-	movups	(%rcx), %xmm3
+	movups	(%rsi),	%xmm1
+	movups	(%rdi), %xmm3
 	mulps	%xmm2,	%xmm1
 	addps	%xmm1,	%xmm3
-	movups	%xmm3,	(%rcx)
-    add		$0x10,	%rcx
-    add		$0x10,	%rdx
-    dec		%r9
+	movups	%xmm3,	(%rdi)
+    add		$0x10,	%rdi
+    add		$0x10,	%rsi
+    dec		%rdx
     je   loop_1_end
-	movups	(%rdx),	%xmm1
-	movups	(%rcx), %xmm3
+	movups	(%rsi),	%xmm1
+	movups	(%rdi), %xmm3
 	mulps	%xmm2,	%xmm1
 	addps	%xmm1,	%xmm3
-	movups	%xmm3,	(%rcx)
-    add		$0x10,	%rcx
-    add		$0x10,	%rdx
-    dec		%r9
+	movups	%xmm3,	(%rdi)
+    add		$0x10,	%rdi
+    add		$0x10,	%rsi
+    dec		%rdx
     je   loop_1_end
-	movups	(%rdx),	%xmm1
-	movups	(%rcx), %xmm3
+	movups	(%rsi),	%xmm1
+	movups	(%rdi), %xmm3
 	mulps	%xmm2,	%xmm1
 	addps	%xmm1,	%xmm3
-	movups	%xmm3,	(%rcx)
-    add		$0x10,	%rcx
-    add		$0x10,	%rdx
-    dec		%r9
+	movups	%xmm3,	(%rdi)
+    add		$0x10,	%rdi
+    add		$0x10,	%rsi
+    dec		%rdx
     je   loop_1_end
-	movups	(%rdx),	%xmm1
-	movups	(%rcx), %xmm3
+	movups	(%rsi),	%xmm1
+	movups	(%rdi), %xmm3
 	mulps	%xmm2,	%xmm1
 	addps	%xmm1,	%xmm3
-	movups	%xmm3,	(%rcx)
-    add		$0x10,	%rcx
-    add		$0x10,	%rdx
-    dec		%r9
+	movups	%xmm3,	(%rdi)
+    add		$0x10,	%rdi
+    add		$0x10,	%rsi
+    dec		%rdx
     jne   loop_1
 loop_1_end:
     retq

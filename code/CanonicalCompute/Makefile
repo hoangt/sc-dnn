@@ -1,4 +1,4 @@
-OBJECTS = CanonicalCompute DebugCanonicalCompute M5CanonicalCompute
+OBJECTS = CanonicalCompute CanonicalComputeOpt1 CanonicalComputeOpt2 DebugCanonicalCompute M5CanonicalCompute
 CC = g++
 CFLAGS = -O3 -static -Os -DLINUX_BUILD -pthread -march=x86-64
 DEBUG_CFLAGS = -g3 -static -Os -DLINUX_BUILD -pthread -march=x86-64
@@ -9,6 +9,12 @@ all: $(OBJECTS)
 
 CanonicalCompute: $(SOURCE)
 	$(CC) $(CFLAGS) $(SOURCE) -o $@ 
+
+CanonicalComputeOpt1: $(SOURCE)
+	$(CC) -DENABLED_OPT1 $(CFLAGS) $(SOURCE) -o $@ 
+
+CanonicalComputeOpt2: $(SOURCE)
+	$(CC) -DENABLED_OPT2 $(CFLAGS) $(SOURCE) -o $@ 
 
 M5CanonicalCompute: $(SOURCE)
 	$(CC) $(M5_CFLAGS) $(SOURCE) -o $@ 

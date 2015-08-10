@@ -59,11 +59,11 @@ avx2_mulsum_3_mem:
 	test  %r9,  %r9
 	jz    loop_1_end
 loop_12:
-	movups	(%rdi),	%xmm1
-	movups	(%rsi), %xmm3
+	movups	(%rsi),	%xmm1
+	movups	(%rdi), %xmm3
 	mulps	%xmm2,	%xmm1
 	addps	%xmm1,	%xmm3
-	movups	%xmm3,	(%rsi)
+	movups	%xmm3,	(%rdi)
         add	$0x10,	%rdi
 	add	$0x10,	%rsi
         dec	%r9
