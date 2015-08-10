@@ -423,108 +423,109 @@ double WeightUpdateWrapperOpt2(Layer *layer, float *deltaWeights) {
 
 DWORD DNNModelThreadDeltaWeightUpdate(ThreadLayerState *tl)
 {
-	SetTrainingThreadAffinity(tl->_threadNum);
+    SetTrainingThreadAffinity(tl->_threadNum);
 
-	float **inputActivation = new float *[tl->_numLayers];
-	float **outputActivation = new float *[tl->_numLayers];
-	float **deltaWeights = new  float *[tl->_numLayers];
-	float **weightMomentum = new  float *[tl->_numLayers];
-
-	for (int i = tl->_startLayer; i < tl->_numLayers; i++)
+    float **inputActivation = new float *[tl->_numLayers];
+    float **outputActivation = new float *[tl->_numLayers];
+    float **deltaWeights = new  float *[tl->_numLayers];
+    float **weightMomentum = new  float *[tl->_numLayers];
+    
+    for (int i = tl->_startLayer; i < tl->_numLayers; i++)
 	{
-		inputActivation[i] = new float[tl->_LayerState[i]._InputSize];
-		outputActivation[i] = new float[tl->_LayerState[i]._OutputSize];
-		deltaWeights[i] = new float[tl->_LayerState[i]._WeightSize];
-		weightMomentum[i] = new float[tl->_LayerState[i]._WeightSize];
+            inputActivation[i] = new float[tl->_LayerState[i]._InputSize];
+            outputActivation[i] = new float[tl->_LayerState[i]._OutputSize];
+            deltaWeights[i] = new float[tl->_LayerState[i]._WeightSize];
+            weightMomentum[i] = new float[tl->_LayerState[i]._WeightSize];
 	}
-	while (true)
+    while (true)
 	{
-		INT64 sampleId = ATOMIC_INCREMENT64(g_CurrentSamplePos);
-		if (sampleId >= G_SAMPLE_COUNT) break;
-		int numLayers = ((sampleId % G_WORKER_COUNT) == 0) ? tl->_numLayers : tl->_numLayers-1;
-		for (int l = tl->_startLayer; l < numLayers; l++)
+            INT64 sampleId = ATOMIC_INCREMENT64(g_CurrentSamplePos);
+            if (sampleId >= G_SAMPLE_COUNT) break;
+            int numLayers = ((sampleId % G_WORKER_COUNT) == 0) ? tl->_numLayers : tl->_numLayers-1;
+            for (int l = tl->_startLayer; l < numLayers; l++)
 		{
-			float *inpACT = inputActivation[l];
-			float *outACT = outputActivation[l];
-			Layer *layer = (tl->_LayerState + l);
-			DECLARE_TIMER(timer);
-            double elapsedTime;
+                    float *inpACT = inputActivation[l];
+                    float *outACT = outputActivation[l];
+                    Layer *layer = (tl->_LayerState + l);
+                    DECLARE_TIMER(timer);
+                    double elapsedTime;
 
-            // momemtum computation
-			START_TIMER(timer);
-			avx2_mulsum_3_mem(deltaWeights[l], weightMomentum[l], 1.0f, tl->_LayerState[l]._WeightSize);
-            STOP_TIMER(timer);
-			tl->_FLOPTime[l] += ELAPSED_USEC_TIME(timer);
+                    // momemtum computation
+                    START_TIMER(timer);
+                    avx2_mulsum_3_mem(deltaWeights[l], weightMomentum[l], 1.0f, tl->_LayerState[l]._WeightSize);
+                    STOP_TIMER(timer);
+                    tl->_FLOPTime[l] += ELAPSED_USEC_TIME(timer);
 
-            // deltaweight computation
-			if (layer->_Input2Height == 1)
+                    // deltaweight computation
+                    if (layer->_Input2Height == 1)
 			{
-				if (g_CanonicalConfig._useSparseKernels)
+                            if (g_CanonicalConfig._useSparseKernels)
 				{
 				}
-				else 
+                            else 
 				{
-					START_TIMER(timer);
-					for (int i = 0; i < layer->_OutputFeature; i++)
-						avx2_mulsum_3_mem(deltaWeights[l]+(i*layer->_Input2Width), inpACT, outACT[i], layer->_Input2Width); 
-					STOP_TIMER(timer);
-					elapsedTime = ELAPSED_USEC_TIME(timer);
+                                    START_TIMER(timer);
+                                    for (int i = 0; i < layer->_OutputFeature; i++)
+                                        avx2_mulsum_3_mem(deltaWeights[l]+(i*layer->_Input2Width), inpACT, outACT[i], layer->_Input2Width); 
+                                    STOP_TIMER(timer);
+                                    elapsedTime = ELAPSED_USEC_TIME(timer);
 				}
-				tl->_FLOPTime[l] += elapsedTime;
+                            tl->_FLOPTime[l] += elapsedTime;
 			}
-			else 
+                    else 
 			{
 #ifdef ENABLED_OPT1
-					elapsedTime = DeltaComputeWrapperOpt1(layer, deltaWeights[l], inpACT, outACT);
+                            elapsedTime = DeltaComputeWrapperOpt1(layer, deltaWeights[l], inpACT, outACT);
 #elif defined ENABLED_OPT2
-					elapsedTime = DeltaComputeWrapperOpt2(layer, deltaWeights[l], inpACT, outACT);
+                            elapsedTime = DeltaComputeWrapperOpt2(layer, deltaWeights[l], inpACT, outACT);
 #else
-					START_TIMER(timer);
-					for (int i = 0; i < layer->_OutputFeature; i++)
-						for (int j = 0; j < layer->_Input2Height; j++)
-							avx2_mulsum_3_mem(deltaWeights[l]+(i*layer->_Input2Width), inpACT+(j*layer->_Input2Width), outACT[i*layer->_Input2Height + j], layer->_Input2Width); 
-					STOP_TIMER(timer);
-					elapsedTime = ELAPSED_USEC_TIME(timer);
+                            START_TIMER(timer);
+                            for (int i = 0; i < layer->_OutputFeature; i++)
+                                for (int j = 0; j < layer->_Input2Height; j++)
+                                    avx2_mulsum_3_mem(deltaWeights[l]+(i*layer->_Input2Width), inpACT+(j*layer->_Input2Width), outACT[i*layer->_Input2Height + j], layer->_Input2Width); 
+                            STOP_TIMER(timer);
+                            elapsedTime = ELAPSED_USEC_TIME(timer);
 #endif
-
-				tl->_FLOPTime[l] += elapsedTime;
                             
-				// weight update
+                            tl->_FLOPTime[l] += elapsedTime;
+                            
+                            // weight update
 #ifdef ENABLED_OPT1
-					elapsedTime = WeightUpdateWrapperOpt1(layer, deltaWeights[l]);
+                            elapsedTime = WeightUpdateWrapperOpt1(layer, deltaWeights[l]);
 #elif defined ENABLED_OPT2
-					elapsedTime = WeightUpdateWrapperOpt2(layer, deltaWeights[l]);
+                            elapsedTime = WeightUpdateWrapperOpt2(layer, deltaWeights[l]);
 #else
-					START_TIMER(timer);
-					avx2_mulsum_3_mem(layer->_Weights, deltaWeights[l], 1.0f, layer->_WeightSize);
-					STOP_TIMER(timer);
-					elapsedTime = ELAPSED_USEC_TIME(timer);
+                            START_TIMER(timer);
+                            avx2_mulsum_3_mem(layer->_Weights, deltaWeights[l], 1.0f, layer->_WeightSize);
+                            STOP_TIMER(timer);
+                            elapsedTime = ELAPSED_USEC_TIME(timer);
 #endif
-				tl->_FLOPTime[l] += elapsedTime;
+                            tl->_FLOPTime[l] += elapsedTime;
 			}
-
-            // weight copy
-            START_TIMER(timer);
-			avx2_fmemcpy(weightMomentum[l], deltaWeights[l], tl->_LayerState[l]._WeightSize);
-			STOP_TIMER(timer);
-
-			tl->_FLOPTime[l] += ELAPSED_USEC_TIME(timer);
-			tl->_SampleCount[l]++;
+                    
+                    // weight copy
+                    START_TIMER(timer);
+                    avx2_fmemcpy(weightMomentum[l], deltaWeights[l], tl->_LayerState[l]._WeightSize);
+                    STOP_TIMER(timer);
+                    
+                    tl->_FLOPTime[l] += ELAPSED_USEC_TIME(timer);
+                    tl->_SampleCount[l]++;
 		}
 	}
-	for (int i = tl->_startLayer; i < tl->_numLayers; i++)
+    for (int i = tl->_startLayer; i < tl->_numLayers; i++)
 	{
-		delete [] inputActivation[i];
-		delete [] outputActivation[i];
-		delete [] deltaWeights[i];
+            delete [] inputActivation[i];
+            delete [] outputActivation[i];
+            delete [] deltaWeights[i];
+            delete [] weightMomentum[i];
 	}
-	delete []inputActivation;
-	delete []outputActivation;
-	delete [] deltaWeights;
-	delete [] weightMomentum;
-	return 0;
+    delete []inputActivation;
+    delete []outputActivation;
+    delete [] deltaWeights;
+    delete [] weightMomentum;
+    return 0;
 }
-
+                    
 DWORD DNNModelThreadWeightUpdate(ThreadLayerState *tl)
 {
 	SetTrainingThreadAffinity(tl->_threadNum);
