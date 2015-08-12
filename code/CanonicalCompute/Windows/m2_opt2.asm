@@ -256,11 +256,7 @@ loop_43_end:
 mulsum2_opt2_0_100	ENDP
 
 mulsum2_opt2_nop PROC
-; 	xorps	xmm0,	xmm0
-;	mov		r9,		r8
-;	haddps	xmm0,	xmm0
 	ret 0
 mulsum2_opt2_nop	ENDP
-
 
 END

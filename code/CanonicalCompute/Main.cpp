@@ -29,7 +29,8 @@ extern "C"
 	extern float mulsum2_opt2_50_50(const float *pf0, const float *pf1, INT64 count);
 	extern float mulsum2_opt2_25_75(const float *pf0, const float *pf1, INT64 count);
 	extern float mulsum2_opt2_0_100(const float *pf0, const float *pf1, INT64 count);
-	extern float mulsum2_opt2_nop(const float *pf0, const float *pf1, INT64 count);
+	extern float mulsum2_opt2_nop();
+	extern float mulsum2_opt3_DenseSparse(const float *pf0, const float *pf1, INT64 denseCount, INT64 sparseCount);
 
 	extern float mulsum3_opt2_75_25(const float *pf0, const float *pf1, float f2, INT64 count);
 	extern float mulsum3_opt2_50_50(const float *pf0, const float *pf1, float f2, INT64 count);
@@ -81,6 +82,13 @@ DNN DNNModel;
         for (int j = 0; j < layer->_Input2Height; j++);                  \
 	STOP_TIMER(timer);
 
+#define FEED_FORWARD_NOP_CALL(mulsum_func) \
+    START_TIMER(timer);                                                      \
+    for (int i = 0; i < layer->_OutputFeature; i++)                     \
+        for (int j = 0; j < layer->_Input2Height; j++)                  \
+			mulsum_func();												\
+	STOP_TIMER(timer);
+
 #define FEED_FORWARD_CALL(mulsum_func) \
     START_TIMER(timer);                                                      \
     for (int i = 0; i < layer->_OutputFeature; i++)                     \
@@ -98,6 +106,17 @@ DNN DNNModel;
             outACT[i*layer->_Input2Height + j] = m2func2(inpACT+(j*layer->_Input2Width) + first, layer->_Weights+(i*layer->_Input2Width) + first, second); \
         }                                                               \
     STOP_TIMER(timer);
+
+#define FEED_FORWARD_OPT3_CALL(m2func) \
+	INT64 sparseSize = (INT64)((layer->_Input2Width * sparsity) / 100.0); \
+	INT64 denseSize = layer->_Input2Width - sparseSize;					\
+    START_TIMER(timer);                                                      \
+    for (int i = 0; i < layer->_OutputFeature; i++)                     \
+        for (int j = 0; j < layer->_Input2Height; j++) {                \
+            outACT[i*layer->_Input2Height + j] = m2func(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), denseSize, sparseSize); \
+        }                                                               \
+    STOP_TIMER(timer);
+
 
 #define FEED_FORWARD_OPT3_CALL_2(m2func1, m2func2) \
 	INT64 sparseSize = (INT64)((layer->_Input2Width * sparsity) / 100.0); \
@@ -147,7 +166,8 @@ double mulsum2_opt1_wrapper(Layer *layer, float *inpACT, float* outACT) {
 	return ELAPSED_USEC_TIME(timer);
 }
 
-double mulsum2_opt2_wrapper(Layer *layer, float *inpACT, float* outACT) {
+double mulsum2_opt2_wrapper(Layer *layer, float *inpACT, float* outACT) 
+{
    DECLARE_TIMER(timer);
     int sparsity = layer->_FeedForwardSparsity;
     if (sparsity == 0) {
@@ -181,7 +201,7 @@ double mulsum2_opt2_wrapper(Layer *layer, float *inpACT, float* outACT) {
         FEED_FORWARD_CALL(mulsum2_opt2_0_100);
     }
 	else if (sparsity == 101) {
-		FEED_FORWARD_CALL(mulsum2_opt2_nop);
+		FEED_FORWARD_NOP_CALL(mulsum2_opt2_nop);
 	}
 	else if (sparsity == 102) {
 		FEED_FORWARD_NOP(mulsum2_opt2_nop);
@@ -197,20 +217,22 @@ double mulsum2_opt2_wrapper(Layer *layer, float *inpACT, float* outACT) {
 	return ELAPSED_USEC_TIME(timer);
 }
 
-double mulsum2_opt3_wrapper(Layer *layer, float *inpACT, float* outACT) {
+double mulsum2_opt3_wrapper(Layer *layer, float *inpACT, float* outACT) 
+{
    DECLARE_TIMER(timer);
     int sparsity = layer->_FeedForwardSparsity;
     if (sparsity == 0) {
         FEED_FORWARD_CALL(mulsum2_base);
     }
     else if (sparsity <= 100) {
-        FEED_FORWARD_OPT3_CALL_2(mulsum2_base, mulsum2_opt2_0_100);
+        //FEED_FORWARD_OPT3_CALL_2(mulsum2_base, mulsum2_opt2_0_100);
+		FEED_FORWARD_OPT3_CALL(mulsum2_opt3_DenseSparse);
     }
 	else if (sparsity == 101) {
-		FEED_FORWARD_CALL(mulsum2_opt2_nop);
+		FEED_FORWARD_NOP_CALL(mulsum2_opt2_nop);
 	}
 	else if (sparsity == 102) {
-		FEED_FORWARD_NOP(mulsum2_opt2_nop);
+		FEED_FORWARD_NOP_CALL(mulsum2_opt2_nop);
 	}
 	else if (sparsity == 103) {
 		START_TIMER(timer);
@@ -223,6 +245,18 @@ double mulsum2_opt3_wrapper(Layer *layer, float *inpACT, float* outACT) {
 	return ELAPSED_USEC_TIME(timer);
 }
 
+double FeedForwardBaseline(Layer *layer, float *inpACT, float* outACT) 
+{
+	DECLARE_TIMER(timer);
+	START_TIMER(timer);
+	for (int i = 0; i < layer->_OutputFeature; i++) {
+		for (int j = 0; j < layer->_Input2Height; j++) {
+			outACT[i*layer->_Input2Height + j] = mulsum2_base(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), layer->_Input2Width);
+		}
+	}
+	STOP_TIMER(timer);
+	return ELAPSED_USEC_TIME(timer);
+}
 
 #define NUM_DNN_UNIT_FLOP 2
 
@@ -258,15 +292,7 @@ DWORD DNNModelThreadForward(ThreadLayerState *tl)
 				elapsedTime = mulsum2_opt3_wrapper(layer, inpACT, outACT);
 			}
 			else {
-				DECLARE_TIMER(timer);
-				START_TIMER(timer);
-				for (int i = 0; i < layer->_OutputFeature; i++) {
-					for (int j = 0; j < layer->_Input2Height; j++) {
-						outACT[i*layer->_Input2Height + j] = mulsum2_base(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), layer->_Input2Width);
-					}
-				}
-				STOP_TIMER(timer);
-				elapsedTime = ELAPSED_USEC_TIME(timer);
+				elapsedTime = FeedForwardBaseline(layer, inpACT, outACT);
 			}
 			tl->_FLOPTime[l] += elapsedTime;  
 			tl->_SampleCount[l]++;
@@ -393,6 +419,28 @@ double BackPropWrapperOpt3(Layer* layer, float* inpACT, float *outACT)
 	return ELAPSED_USEC_TIME(timer);
 }
 
+double BackPropBaseline(Layer* layer, float* inpACT, float *outACT)
+{
+	DECLARE_TIMER(timer);
+	START_TIMER(timer);
+	for (int i = 0; i < layer->_OutputFeature; i++)
+		{
+			for (int j = 0; j < layer->_Input2Height; j++)
+				{
+					int signalIndex = i*layer->_Input2Height + j;
+					float signal = outACT[signalIndex];
+					if (signalIndex >= layer->_minDenseSignalIndex) {
+						avx2_mulsum_3_mem(inpACT+(j*layer->_Input2Width), 
+											layer->_Weights+(i*layer->_Input2Width), 
+											signal, 
+											layer->_Input2Width); 
+					}
+				}
+		}
+	STOP_TIMER(timer);
+	return ELAPSED_USEC_TIME(timer);
+}
+
 DWORD DNNModelThreadBackward(ThreadLayerState *tl)
 {
 	SetTrainingThreadAffinity(tl->_threadNum);
@@ -422,25 +470,11 @@ DWORD DNNModelThreadBackward(ThreadLayerState *tl)
 			else if (G_SPARSE_KERNEL_VERSION(2)) {
 					elapsedTime = BackPropWrapperOpt2(layer, inpACT, outACT);
 			}
+			else if (G_SPARSE_KERNEL_VERSION(3)) {
+				elapsedTime = BackPropWrapperOpt3(layer, inpACT, outACT);
+			}
 			else {
-                    DECLARE_TIMER(timer);
-                    START_TIMER(timer);
-                    for (int i = 0; i < layer->_OutputFeature; i++)
-                        {
-                            for (int j = 0; j < layer->_Input2Height; j++)
-                                {
-									int signalIndex = i*layer->_Input2Height + j;
-									float signal = outACT[signalIndex];
-									if (signalIndex >= layer->_minDenseSignalIndex) {
-										avx2_mulsum_3_mem(inpACT+(j*layer->_Input2Width), 
-											                layer->_Weights+(i*layer->_Input2Width), 
-												            signal, 
-													        layer->_Input2Width); 
-									}
-                                }
-                        }
-                    STOP_TIMER(timer);
-                    elapsedTime = ELAPSED_USEC_TIME(timer);
+				elapsedTime = BackPropBaseline(layer, inpACT, outACT);
 			}
                         
             tl->_FLOPTime[l] += elapsedTime; 
@@ -495,6 +529,16 @@ double DeltaComputeWrapperOpt2(Layer *layer, float *deltaWeights, float *inpACT,
 }
 
 
+double DeltaComputeWrapperOpt3(Layer *layer, float *deltaWeights, float *inpACT, float *outACT) {
+   DECLARE_TIMER(timer);
+   int sparsity = layer->_FeedForwardSparsity;
+
+    MULSUM3_GEN_WRAPPER(DELTA_COMPUTE_WRAPPER, DELTA_COMPUTE_WRAPPER_2, opt2)
+    
+    return ELAPSED_USEC_TIME(timer);
+}
+
+
 #define WEIGHT_UPDATE_WRAPPER(mulsum3_func)                             \
     START_TIMER(timer);                                                      \
     mulsum3_func(layer->_Weights, deltaWeights, 1.0f, layer->_WeightSize); \
@@ -526,7 +570,130 @@ double WeightUpdateWrapperOpt2(Layer *layer, float *deltaWeights) {
     return ELAPSED_USEC_TIME(timer);
 }
         
+double DeltaWeightComputeOpt3_2D(Layer* layer, float* deltaWeights, float* inpACT, float* outACT)
+{
+	DECLARE_TIMER(timer);
+	START_TIMER(timer);
+	for (int i = 0; i < layer->_OutputFeature; i++) {
+		if (i < layer->_minSparseSignalWordIndex) {
+			if ((i & 16) == 15) {
+				mulsum3_opt2_zerosigw(deltaWeights+(i*layer->_Input2Width), inpACT, 0.0, layer->_Input2Width);
+			}
+		}
+		else 
+		{
+			if (i < layer->_minDenseSignalIndex) {
+				if (i % 16 == 15) {
+				mulsum3_opt2_zerosigw(deltaWeights+(i*layer->_Input2Width), inpACT, 0.0, layer->_Input2Width);
+				}
+			}
+			else {
+				avx2_mulsum_3_mem(deltaWeights+(i*layer->_Input2Width), inpACT, outACT[i], layer->_Input2Width); 
+			}
+		}
+	}
+	STOP_TIMER(timer);
+	return ELAPSED_USEC_TIME(timer);
+}
 
+double DeltaWeightComputeOpt3_3D(Layer* layer, float* deltaWeights, float* inpACT, float* outACT)
+{
+	DECLARE_TIMER(timer);
+	START_TIMER(timer);
+
+	for (int i = 0; i < layer->_OutputFeature; i++)
+    {
+        for (int j = 0; j < layer->_Input2Height; j++)
+            {
+				// Assume sparse signal cachelines occur first, followed by sparse signal words, and finally dense signal words
+				int signalIndex = i*layer->_Input2Height + j;
+				if (signalIndex < layer->_minSparseSignalWordIndex) {
+					if (signalIndex % 16 == 15) {
+						mulsum3_opt2_zerosigw(deltaWeights+(i*layer->_Input2Width),
+										inpACT+(j*layer->_Input2Width), 
+										0.0f, 
+										layer->_Input2Width); 
+					}
+				}
+				else 
+				{
+					if (signalIndex < layer->_minDenseSignalIndex) {
+						if (signalIndex % 16 == 15) {
+							mulsum3_opt2_zerosigw(deltaWeights+(i*layer->_Input2Width),
+										inpACT+(j*layer->_Input2Width), 
+										0.0f, 
+										layer->_Input2Width); 
+						}
+					}
+				else {
+					float signal = outACT[signalIndex];
+					avx2_mulsum_3_mem(deltaWeights+(i*layer->_Input2Width), 
+									inpACT+(j*layer->_Input2Width), 
+									signal, 
+									layer->_Input2Width); 
+					}
+				}
+			}
+        }
+
+	STOP_TIMER(timer);
+	return ELAPSED_USEC_TIME(timer);
+}
+
+double WeightUpdateWrapperOpt3(Layer *layer, float *deltaWeights) {
+   DECLARE_TIMER(timer);
+    int sparsity = layer->_WeightUpdateSparsity;
+
+    MULSUM3_GEN_WRAPPER(WEIGHT_UPDATE_WRAPPER,WEIGHT_UPDATE_WRAPPER_2, opt2)
+
+    return ELAPSED_USEC_TIME(timer);
+}
+
+double DeltaWeightComputeBaseline_2D(Layer* layer, float* deltaWeights, float* inpACT, float* outACT)
+{
+	DECLARE_TIMER(timer);
+	START_TIMER(timer);
+	for (int i = 0; i < layer->_OutputFeature; i++) {
+		float signal = outACT[i];
+		if (i < layer->_minDenseSignalIndex) {
+			mulsum2_opt2_nop();
+		}
+		else {
+			avx2_mulsum_3_mem(deltaWeights+(i*layer->_Input2Width), inpACT, signal, layer->_Input2Width); 
+		}
+	}
+	STOP_TIMER(timer);
+	return ELAPSED_USEC_TIME(timer);
+}
+
+double DeltaWeightComputeBaseline_3D(Layer* layer, float* deltaWeights, float* inpACT, float* outACT)
+{
+	DECLARE_TIMER(timer);
+	START_TIMER(timer);
+	for (int i = 0; i < layer->_OutputFeature; i++) {
+		for (int j = 0; j < layer->_Input2Height; j++) {
+			int signalIndex = i*layer->_Input2Height + j;
+			float signal = outACT[signalIndex];
+			if (signalIndex < layer->_minDenseSignalIndex) {
+				mulsum2_opt2_nop();
+			}
+			else {
+				avx2_mulsum_3_mem(deltaWeights+(i*layer->_Input2Width), inpACT+(j*layer->_Input2Width), signal, layer->_Input2Width); 
+			}
+		}
+	}
+	STOP_TIMER(timer);
+	return ELAPSED_USEC_TIME(timer);
+}
+
+double WeightUpdateBaseline(Layer *layer, float *deltaWeights) 
+{
+	DECLARE_TIMER(timer);
+	START_TIMER(timer);
+    avx2_mulsum_3_mem(layer->_Weights, deltaWeights, 1.0f, layer->_WeightSize);
+    STOP_TIMER(timer);
+    return ELAPSED_USEC_TIME(timer);
+}
 
 DWORD DNNModelThreadDeltaWeightUpdate(ThreadLayerState *tl)
 {
@@ -535,101 +702,91 @@ DWORD DNNModelThreadDeltaWeightUpdate(ThreadLayerState *tl)
     float **inputActivation = new float *[tl->_numLayers];
     float **outputActivation = new float *[tl->_numLayers];
     float **deltaWeights = new  float *[tl->_numLayers];
-    float **weightMomentum = new  float *[tl->_numLayers];
+    //float **weightMomentum = new  float *[tl->_numLayers];
     
     for (int i = tl->_startLayer; i < tl->_numLayers; i++)
 	{
             inputActivation[i] = new float[tl->_LayerState[i]._InputSize];
             outputActivation[i] = new float[tl->_LayerState[i]._OutputSize];
             deltaWeights[i] = new float[tl->_LayerState[i]._WeightSize];
-            weightMomentum[i] = new float[tl->_LayerState[i]._WeightSize];
+            //weightMomentum[i] = new float[tl->_LayerState[i]._WeightSize];
 	}
     while (true)
 	{
             INT64 sampleId = ATOMIC_INCREMENT64(g_CurrentSamplePos);
             if (sampleId >= G_SAMPLE_COUNT) break;
             int numLayers = ((sampleId % G_WORKER_COUNT) == 0) ? tl->_numLayers : tl->_numLayers-1;
-            for (int l = tl->_startLayer; l < numLayers; l++)
-		{
-                    float *inpACT = inputActivation[l];
-                    float *outACT = outputActivation[l];
-                    Layer *layer = (tl->_LayerState + l);
-                    DECLARE_TIMER(timer);
-                    double elapsedTime;
+            for (int l = tl->_startLayer; l < numLayers; l++) {
+                float *inpACT = inputActivation[l];
+                float *outACT = outputActivation[l];
+                Layer *layer = (tl->_LayerState + l);
+                double elapsedTime;
 
                     // momemtum computation
-                    START_TIMER(timer);
-                    avx2_mulsum_3_mem(deltaWeights[l], weightMomentum[l], 1.0f, tl->_LayerState[l]._WeightSize);
-                    STOP_TIMER(timer);
-                    tl->_FLOPTime[l] += ELAPSED_USEC_TIME(timer);
+                    //START_TIMER(timer);
+                    //avx2_mulsum_3_mem(deltaWeights[l], weightMomentum[l], 1.0f, tl->_LayerState[l]._WeightSize);
+                    //STOP_TIMER(timer);
+                    //tl->_FLOPTime[l] += ELAPSED_USEC_TIME(timer);
 
                     // deltaweight computation
-                    if (layer->_Input2Height == 1)
-			{
-				if (G_SPARSE_KERNEL_VERSION(1))
-				{
+                if (layer->_Input2Height == 1) {
+					if (G_SPARSE_KERNEL_VERSION(2)) {
+						elapsedTime = DeltaWeightComputeOpt3_2D(layer, deltaWeights[l], inpACT, outACT);
+					}
+					else if (G_SPARSE_KERNEL_VERSION(3)) {
+						elapsedTime = DeltaWeightComputeOpt3_2D(layer, deltaWeights[l], inpACT, outACT);
+					}
+					else {
+						elapsedTime = DeltaWeightComputeBaseline_2D(layer, deltaWeights[l], inpACT, outACT); 
+					}
+					tl->_FLOPTime[l] += elapsedTime;
 				}
-                else 
-				{
-                    START_TIMER(timer);
-                    for (int i = 0; i < layer->_OutputFeature; i++)
-                        avx2_mulsum_3_mem(deltaWeights[l]+(i*layer->_Input2Width), inpACT, outACT[i], layer->_Input2Width); 
-                    STOP_TIMER(timer);
-                    elapsedTime = ELAPSED_USEC_TIME(timer);
+				else {
+					if (G_SPARSE_KERNEL_VERSION(2)) {
+						elapsedTime = DeltaWeightComputeOpt3_3D(layer, deltaWeights[l], inpACT, outACT);
+					}
+					else if (G_SPARSE_KERNEL_VERSION(3)) {
+						elapsedTime = DeltaWeightComputeOpt3_3D(layer, deltaWeights[l], inpACT, outACT);
+					}
+					else {
+						elapsedTime = DeltaWeightComputeBaseline_3D(layer, deltaWeights[l], inpACT, outACT); 
+					}  
+                    tl->_FLOPTime[l] += elapsedTime;
+            	}
+
+                // weight update
+				if (G_SPARSE_KERNEL_VERSION(2)) {
+					elapsedTime = WeightUpdateWrapperOpt3(layer, deltaWeights[l]);
 				}
-                            tl->_FLOPTime[l] += elapsedTime;
-			}
-                    else 
-			{
-#ifdef ENABLED_OPT1
-                            elapsedTime = DeltaComputeWrapperOpt1(layer, deltaWeights[l], inpACT, outACT);
-#elif defined ENABLED_OPT2
-                            elapsedTime = DeltaComputeWrapperOpt2(layer, deltaWeights[l], inpACT, outACT);
-#else
-                            START_TIMER(timer);
-                            for (int i = 0; i < layer->_OutputFeature; i++)
-                                for (int j = 0; j < layer->_Input2Height; j++)
-                                    avx2_mulsum_3_mem(deltaWeights[l]+(i*layer->_Input2Width), inpACT+(j*layer->_Input2Width), outACT[i*layer->_Input2Height + j], layer->_Input2Width); 
-                            STOP_TIMER(timer);
-                            elapsedTime = ELAPSED_USEC_TIME(timer);
-#endif
-                            
-                            tl->_FLOPTime[l] += elapsedTime;
-                            
-                            // weight update
-#ifdef ENABLED_OPT1
-                            elapsedTime = WeightUpdateWrapperOpt1(layer, deltaWeights[l]);
-#elif defined ENABLED_OPT2
-                            elapsedTime = WeightUpdateWrapperOpt2(layer, deltaWeights[l]);
-#else
-                            START_TIMER(timer);
-                            avx2_mulsum_3_mem(layer->_Weights, deltaWeights[l], 1.0f, layer->_WeightSize);
-                            STOP_TIMER(timer);
-                            elapsedTime = ELAPSED_USEC_TIME(timer);
-#endif
-                            tl->_FLOPTime[l] += elapsedTime;
-			}
-                    
-                    // weight copy
-                    START_TIMER(timer);
-                    avx2_fmemcpy(weightMomentum[l], deltaWeights[l], tl->_LayerState[l]._WeightSize);
-                    STOP_TIMER(timer);
-                    
-                    tl->_FLOPTime[l] += ELAPSED_USEC_TIME(timer);
-                    tl->_SampleCount[l]++;
+				else if (G_SPARSE_KERNEL_VERSION(3)) {
+					elapsedTime = WeightUpdateWrapperOpt3(layer, deltaWeights[l]);
+				}
+				else {
+					elapsedTime = WeightUpdateBaseline(layer, deltaWeights[l]);
+				}
+				tl->_FLOPTime[l] += elapsedTime;
+
+                // weight copy
+                //START_TIMER(timer);
+                //avx2_fmemcpy(weightMomentum[l], deltaWeights[l], tl->_LayerState[l]._WeightSize);
+                //STOP_TIMER(timer);             
+                //tl->_FLOPTime[l] += ELAPSED_USEC_TIME(timer);
+
+                tl->_SampleCount[l]++;
 		}
 	}
+
     for (int i = tl->_startLayer; i < tl->_numLayers; i++)
 	{
             delete [] inputActivation[i];
             delete [] outputActivation[i];
             delete [] deltaWeights[i];
-            delete [] weightMomentum[i];
+            //delete [] weightMomentum[i];
 	}
     delete []inputActivation;
     delete []outputActivation;
     delete [] deltaWeights;
-    delete [] weightMomentum;
+    //delete [] weightMomentum;
     return 0;
 }
                     

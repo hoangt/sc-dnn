@@ -11,6 +11,7 @@
 ; xmm2 f2
 ; r9  count
 
+; 25% sparsity in activation (rdx)
 mulsum3_opt2_75_25 PROC
     xorps xmm3, xmm3
 
@@ -68,6 +69,7 @@ loop_12:
 loop_11_end:
     mov r9, r8
     and r9, 15
+	shr r9, 2
     test r9, r9
     jz loop_13_end
 loop_13:        
@@ -84,6 +86,7 @@ loop_13_end:
     ret   0
 mulsum3_opt2_75_25 ENDP
 
+; 50% sparsity in activation (rdx)
 mulsum3_opt2_50_50 PROC
     xorps xmm3, xmm3
 
@@ -146,6 +149,7 @@ loop_22:
 loop_21_end:
     mov r9, r8
     and r9, 15
+	shr r9,	2
     test r9, r9
     jz loop_23_end
 loop_23:        
@@ -162,6 +166,7 @@ loop_23_end:
     ret   0
 mulsum3_opt2_50_50 ENDP
 
+; 75% sparsity in activation (rdx)
 mulsum3_opt2_25_75 PROC
     xorps xmm3, xmm3
 
@@ -229,6 +234,7 @@ loop_32:
 loop_31_end:
     mov r9, r8
     and r9, 15
+	shr	r9, 2
     test r9, r9
     jz loop_33_end
 loop_33:        
@@ -245,6 +251,7 @@ loop_33_end:
     ret   0
 mulsum3_opt2_25_75 ENDP
 
+; 100% sparsity in activation (rdx)
 mulsum3_opt2_0_100 PROC
     xorps xmm3, xmm3
 
@@ -282,14 +289,10 @@ loop_31:
 loop_31_end:
     mov r9, r8
     and r9, 15
+	shr r9, 2
     test r9, r9
     jz loop_33_end
 loop_33:        
-    movups xmm1, xmmword ptr [rdx]
-    movups xmm3, xmmword ptr [rcx]
-    mulps xmm1, xmm2
-    addps xmm3, xmm1
-    movups xmmword ptr [rcx], xmm3
     add   rcx, 16
     add   rdx, 16
     dec   r9
@@ -301,13 +304,13 @@ mulsum3_opt2_0_100 ENDP
 
 mulsum3_opt2_zerosigw PROC
 ;	Mimic loop exit compensation code for liveouts
-    shl		r8,		2			; multiply count by 4
-	add		rdx,	r8
-	add		rcx,	r8
+    shl		r9,		2			; multiply count by 4
+	add		rdx,	r9
+	add		rcx,	r9
 
-    movups	xmm3,	xmmword ptr -4[rcx]
-    xorps	xmm1,	xmm1
-	xor		r8,		r8
+	movups	xmm3,	xmmword ptr -4[rcx]
+	xorps	xmm1,	xmm1
+	xor		r9,		r9
 	ret 0
 mulsum3_opt2_zerosigw ENDP
 
