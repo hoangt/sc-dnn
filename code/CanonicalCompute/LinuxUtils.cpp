@@ -91,7 +91,7 @@ void SetCanonicalConfig(int argc, char* argv[], CanonicalConfig& config)
       config._weightUpdateSparsity = atoi(optarg);
       break;
     case 'k':
-      config._useSparseKernels = true;
+        config._sparseKernelVersion = atoi(optarg);
       break;
     default:
       printf("%c: **No Match**\n", c);

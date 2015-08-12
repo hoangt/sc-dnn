@@ -124,7 +124,7 @@ void Layer::Init (int of, int i2h, int i2w, int ffs, int bps, int dcs, int wus, 
   // Assume sparse signal cachelines come, followed by sparse signal wordds, and finally dense signal words
   _minDenseSignalIndex = (G_ZERO_SIGNAL_OPT == false) ? 0 : (int)(bps * of * i2h * 0.01); 
   _minSparseSignalWordIndex = (G_ZERO_SIGNAL_OPT == false) ? 0 : (int)(scls * of * i2h * 0.01);
-  Assert (_minSparseSignalWordIndex <= _minDenseSignalIndex);
+  MY_ASSERT (_minSparseSignalWordIndex <= _minDenseSignalIndex);
 }
 
 void ThreadLayerState::Init (int tNum, DNN& model)

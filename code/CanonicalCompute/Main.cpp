@@ -192,7 +192,7 @@ double mulsum2_opt2_wrapper(Layer *layer, float *inpACT, float* outACT) {
 	}
 	else {
 		printf("INVALID SPARSITY %d\n", sparsity);
-		Assert(false);
+		MY_ASSERT(false);
 	}
 	return ELAPSED_USEC_TIME(timer);
 }
@@ -218,7 +218,7 @@ double mulsum2_opt3_wrapper(Layer *layer, float *inpACT, float* outACT) {
 	}
 	else {
 		printf("INVALID SPARSITY %d\n", sparsity);
-		Assert(false);
+		MY_ASSERT(false);
 	}
 	return ELAPSED_USEC_TIME(timer);
 }

@@ -283,3 +283,14 @@ loop_43:
 loop_43_end:    
 	retq    
         
+
+	.globl mulsum3_opt2_zerosigw
+mulsum3_opt2_zerosigw:
+        shl $0x2, %rdx
+        add %rdx, %rsi
+        add %rdx, %rdi
+        xorps %xmm2, %xmm2
+        movups -0x4(%rdi), %xmm3
+        xor %rdx, %rdx
+        retq
+        
