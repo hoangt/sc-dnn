@@ -132,6 +132,8 @@ void ProcessParams(CParamParser& pparser, CanonicalConfig& config)
 	config._deltaComputeSparsity = pparser.IsParamExist(TEXT("deltacomputesparsity")) ? pparser.ParamInt(TEXT("deltacomputesparsity")) : DEFAULT_SPARSITY;
 	config._weightUpdateSparsity = pparser.IsParamExist(TEXT("weightupdatesparsity")) ? pparser.ParamInt(TEXT("weightupdatesparsity")) : DEFAULT_SPARSITY;
 	config._sparseKernelVersion = pparser.IsParamExist(TEXT("sparsekernels")) ? pparser.ParamInt(TEXT("sparsekernels")) : 0;
+	config._zeroSignalOpt = pparser.IsParamExist(TEXT("zerosignalopt")) ? true : false;
+	config._signalCacheLineSparsity = pparser.IsParamExist(TEXT("signalcachelinesparsity")) ? pparser.ParamInt(TEXT("signalcachelinesparsity")) : DEFAULT_SPARSITY;
 }
 
 void SetCanonicalConfig(int argc, char* argv[], CanonicalConfig& config)

@@ -10,12 +10,14 @@ void CanonicalConfig::Init()
   _backwardSparsity = DEFAULT_SPARSITY;
   _deltaComputeSparsity = DEFAULT_SPARSITY;
   _weightUpdateSparsity = DEFAULT_SPARSITY;
+  _signalCacheLineSparsity = DEFAULT_SPARSITY;
   _modelType = DEFAULT_MODEL_TYPE;
   _replicatedOutputLayer = true;
   _deltaWeightOpt = true;
   _training = true;
   _affinity = true;
   _sparseKernelVersion = 0;
+  _zeroSignalOpt = false;
 }
 
 void CanonicalConfig::Print()
@@ -30,11 +32,13 @@ void CanonicalConfig::Print()
 	 "StartLayer: %d \n"
 	 "Task: %s \n"
 	 "Affinity: %s\n"
+	 "ZeroSignalOpt: %s\n"
 	 "SparseKernelsVersion: %d\n"
 	 "FeedForwardSparsity: %d\n" 
 	 "BackPropSparsity: %d\n"
 	 "DeltaComputeSparsity: %d\n"
-	 "WeightUpdateSparsity: %d\n",
+	 "WeightUpdateSparsity: %d\n"
+	 "SignalCacheLineSparsity: %d\n",
 	 _workerCount,
 	 _threadCount,
 	 ModelName[_modelType], 
@@ -45,11 +49,13 @@ void CanonicalConfig::Print()
 	 _startLayer,
 	 (_training ? "Training" : "Classify"),
 	 (_affinity ? "Enabled" : "Disabled"),
+	 (_zeroSignalOpt ? "Enabled" : "Disabled"),
 	 (_sparseKernelVersion),
 	 _forwardSparsity,
 	 _backwardSparsity,
 	 _deltaComputeSparsity,
-	 _weightUpdateSparsity
+	 _weightUpdateSparsity,
+	 _signalCacheLineSparsity
 	 );
 	fflush(stdout);
 }
@@ -66,14 +72,14 @@ void DNN::Init (int nLayers, LayerConfig *lp, int nWorkers, bool replicate)
       if (i == (nLayers - 1))
 	{
 	  _Replicated[i] = replicate;
-	  _Layers[i].Init(lp[i]._OutputFeature, lp[i]._Input2Height, (replicate) ? lp[i]._Input2Width : lp[i]._Input2Width/nWorkers, lp[0]._FeedForwardSparsity,
-			  lp[i]._BackPropSparsity, lp[i]._DeltaComputeSparsity, lp[i]._WeightUpdateSparsity);
+	  _Layers[i].Init(lp[i]._OutputFeature, lp[i]._Input2Height, (replicate) ? lp[i]._Input2Width : lp[i]._Input2Width/nWorkers, lp[i]._FeedForwardSparsity,
+		  lp[i]._BackPropSparsity, lp[i]._DeltaComputeSparsity, lp[i]._WeightUpdateSparsity, lp[i]._SignalCacheLineSparsity);
 	  _nThreads[i] = (replicate) ? (int)(ceil((float)G_THREAD_COUNT/nWorkers)) : G_THREAD_COUNT;
 	}
       else {
 	_Replicated[i] = false;
 	_Layers[i].Init(lp[i]._OutputFeature, lp[i]._Input2Height, lp[i]._Input2Width, lp[i]._FeedForwardSparsity,
-			lp[i]._BackPropSparsity, lp[i]._DeltaComputeSparsity, lp[i]._WeightUpdateSparsity);
+		lp[i]._BackPropSparsity, lp[i]._DeltaComputeSparsity, lp[i]._WeightUpdateSparsity, lp[i]._SignalCacheLineSparsity);
 	_nThreads[i] = G_THREAD_COUNT;
       }
     }		
@@ -101,7 +107,7 @@ void DNN::Print(const char *modelName)
   fflush(stdout);
 }
 
-void Layer::Init (int of, int i2h, int i2w, int ffs, int bps, int dcs, int wus)
+void Layer::Init (int of, int i2h, int i2w, int ffs, int bps, int dcs, int wus, int scls)
 {		
   _OutputFeature = of;
   _Input2Height = i2h;
@@ -115,6 +121,10 @@ void Layer::Init (int of, int i2h, int i2w, int ffs, int bps, int dcs, int wus)
   _BackPropSparsity = bps;
   _DeltaComputeSparsity = dcs;
   _WeightUpdateSparsity = wus;
+  // Assume sparse signal cachelines come, followed by sparse signal wordds, and finally dense signal words
+  _minDenseSignalIndex = (G_ZERO_SIGNAL_OPT == false) ? 0 : (int)(bps * of * i2h * 0.01); 
+  _minSparseSignalWordIndex = (G_ZERO_SIGNAL_OPT == false) ? 0 : (int)(scls * of * i2h * 0.01);
+  Assert (_minSparseSignalWordIndex <= _minDenseSignalIndex);
 }
 
 void ThreadLayerState::Init (int tNum, DNN& model)

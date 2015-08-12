@@ -62,7 +62,9 @@ extern CanonicalConfig g_CanonicalConfig;
 #define G_DELTACOMPUTE_SPARSITY g_CanonicalConfig._deltaComputeSparsity
 #define G_WEIGHTUPDATE_SPARSITY g_CanonicalConfig._weightUpdateSparsity
 #define G_SPARSE_KERNEL_VERSION(v) (g_CanonicalConfig._sparseKernelVersion == v)
- 
+#define G_ZERO_SIGNAL_OPT g_CanonicalConfig._zeroSignalOpt 
+#define G_SIGNAL_CACHELINE_SPARSITY g_CanonicalConfig._signalCacheLineSparsity
+
 typedef struct LayerConfig {
     int _OutputFeature;
     int _Input2Height;
@@ -71,13 +73,15 @@ typedef struct LayerConfig {
     int _BackPropSparsity;
     int _DeltaComputeSparsity;
     int _WeightUpdateSparsity;
+	int _SignalCacheLineSparsity;
 
-	void InitSparsity(int forward, int backward, int deltaWeight, int weightUpdate)
+	void InitSparsity(int forward, int backward, int deltaWeight, int weightUpdate, int signalCacheLine)
 	{
 		_FeedForwardSparsity = forward;
 		_BackPropSparsity = backward;
 		_DeltaComputeSparsity = deltaWeight;
 		_WeightUpdateSparsity = weightUpdate;
+		_SignalCacheLineSparsity = signalCacheLine;
 	}
 } LayerConfig;
 
@@ -96,7 +100,10 @@ typedef struct Layer {
   int _DeltaComputeSparsity;
   int _WeightUpdateSparsity;
 
-  void Init (int of, int i2h, int i2w, int ffs, int bps, int dcs, int wus);
+  int _minDenseSignalIndex;
+  int _minSparseSignalWordIndex;
+
+  void Init (int of, int i2h, int i2w, int ffs, int bps, int dcs, int wus, int scls);
 } Layer;
 
 typedef struct DNN {
@@ -150,12 +157,14 @@ struct CanonicalConfig {
   int _backwardSparsity;
   int _deltaComputeSparsity;
   int _weightUpdateSparsity;
+  int _signalCacheLineSparsity;
   ModelType _modelType;
   bool _replicatedOutputLayer;
   bool _deltaWeightOpt;
   bool _training;
   bool _affinity;
   int _sparseKernelVersion;
+  bool _zeroSignalOpt;
   
   void Init();
   void Print();

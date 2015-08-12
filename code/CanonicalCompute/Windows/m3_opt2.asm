@@ -1,4 +1,15 @@
 .code
+; extern void  avx2_mulsum_3_mem(const float *pf0, const float *pf1, float f2, INT64 count);
+;
+;	for(INT64 i = 0; i < counut; i++);
+;	{
+;       pf0[i] += pf1[i] * f2;
+;   }
+
+; rcx pf0
+; rdx pf1
+; xmm2 f2
+; r9  count
 
 mulsum3_opt2_75_25 PROC
     xorps xmm3, xmm3
@@ -287,5 +298,17 @@ loop_33_end:
     ret   0
 mulsum3_opt2_0_100 ENDP
 
+
+mulsum3_opt2_zerosigw PROC
+;	Mimic loop exit compensation code for liveouts
+    shl		r8,		2			; multiply count by 4
+	add		rdx,	r8
+	add		rcx,	r8
+
+    movups	xmm3,	xmmword ptr -4[rcx]
+    xorps	xmm1,	xmm1
+	xor		r8,		r8
+	ret 0
+mulsum3_opt2_zerosigw ENDP
 
 END

@@ -35,6 +35,7 @@ extern "C"
 	extern float mulsum3_opt2_50_50(const float *pf0, const float *pf1, float f2, INT64 count);
 	extern float mulsum3_opt2_25_75(const float *pf0, const float *pf1, float f2, INT64 count);
 	extern float mulsum3_opt2_0_100(const float *pf0, const float *pf1, float f2, INT64 count);
+	extern float mulsum3_opt2_zerosigw(const float *pf0, const float *pf1, float f2, INT64 count);
 
 }
 
@@ -202,28 +203,7 @@ double mulsum2_opt3_wrapper(Layer *layer, float *inpACT, float* outACT) {
     if (sparsity == 0) {
         FEED_FORWARD_CALL(mulsum2_base);
     }
-    else if (sparsity < 25) {
-        FEED_FORWARD_OPT3_CALL_2(mulsum2_base, mulsum2_opt2_0_100);
-    }
-    else if (sparsity == 25) {
-        FEED_FORWARD_OPT3_CALL_2(mulsum2_base, mulsum2_opt2_0_100);
-    }
-    else if (sparsity < 50) {
-        FEED_FORWARD_OPT3_CALL_2(mulsum2_base, mulsum2_opt2_0_100);
-    }
-    else if (sparsity == 50) {
-        FEED_FORWARD_OPT3_CALL_2(mulsum2_base, mulsum2_opt2_0_100);
-    }
-    else if (sparsity < 75) {
-        FEED_FORWARD_OPT3_CALL_2(mulsum2_base, mulsum2_opt2_0_100);
-    }
-    else if (sparsity == 75) {
-        FEED_FORWARD_OPT3_CALL_2(mulsum2_base, mulsum2_opt2_0_100);
-    }
-    else if (sparsity < 100) {
-        FEED_FORWARD_OPT3_CALL_2(mulsum2_base, mulsum2_opt2_0_100);
-    }
-    else if (sparsity == 100) {
+    else if (sparsity <= 100) {
         FEED_FORWARD_OPT3_CALL_2(mulsum2_base, mulsum2_opt2_0_100);
     }
 	else if (sparsity == 101) {
@@ -374,6 +354,45 @@ double BackPropWrapperOpt2(Layer *layer, float *inpACT, float *outACT) {
     return ELAPSED_USEC_TIME(timer);
 }
 
+double BackPropWrapperOpt3(Layer* layer, float* inpACT, float *outACT)
+{
+	DECLARE_TIMER(timer);
+	START_TIMER(timer);
+
+	for (int i = 0; i < layer->_OutputFeature; i++)
+    {
+        for (int j = 0; j < layer->_Input2Height; j++)
+            {
+				// Assume sparse signal cachelines occur first, followed by sparse signal words, and finally dense signal words
+				int signalIndex = i*layer->_Input2Height + j;
+				if (signalIndex < layer->_minSparseSignalWordIndex) {
+					if (signalIndex % 16 == 15) {
+						mulsum3_opt2_zerosigw(inpACT+(j*layer->_Input2Width), 
+										layer->_Weights+(i*layer->_Input2Width), 
+										0.0f, 
+										layer->_Input2Width); 
+					}
+				}
+				else if (signalIndex < layer->_minDenseSignalIndex) {
+						mulsum3_opt2_zerosigw(inpACT+(j*layer->_Input2Width), 
+										layer->_Weights+(i*layer->_Input2Width), 
+										0.0f, 
+										layer->_Input2Width); 					
+				}
+				else {
+					float signal = outACT[signalIndex];
+					avx2_mulsum_3_mem(inpACT+(j*layer->_Input2Width), 
+										layer->_Weights+(i*layer->_Input2Width), 
+										signal, 
+										layer->_Input2Width); 
+				}
+			}
+        }
+
+	STOP_TIMER(timer);
+	return ELAPSED_USEC_TIME(timer);
+}
+
 DWORD DNNModelThreadBackward(ThreadLayerState *tl)
 {
 	SetTrainingThreadAffinity(tl->_threadNum);
@@ -410,10 +429,14 @@ DWORD DNNModelThreadBackward(ThreadLayerState *tl)
                         {
                             for (int j = 0; j < layer->_Input2Height; j++)
                                 {
-                                    avx2_mulsum_3_mem(inpACT+(j*layer->_Input2Width), 
-                                                        layer->_Weights+(i*layer->_Input2Width), 
-                                                        outACT[i*layer->_Input2Height + j], 
-                                                        layer->_Input2Width); 
+									int signalIndex = i*layer->_Input2Height + j;
+									float signal = outACT[signalIndex];
+									if (signalIndex >= layer->_minDenseSignalIndex) {
+										avx2_mulsum_3_mem(inpACT+(j*layer->_Input2Width), 
+											                layer->_Weights+(i*layer->_Input2Width), 
+												            signal, 
+													        layer->_Input2Width); 
+									}
                                 }
                         }
                     STOP_TIMER(timer);
@@ -714,14 +737,17 @@ double runDNNModelThreads (int numThreads, DNNPass dp)
 		tl[i].Fini();
 	}
 	delete [] tl;
-	
-	return ELAPSED_USEC_TIME(computeTimer);
+
+	double elapsedTime = ELAPSED_USEC_TIME(computeTimer);
+	std::cout<<"Pass run time: " << elapsedTime/(1E06) << "secs" << endl;
+	return elapsedTime;
 }
 
 double runDNNModel(void)
 {
 	printf("%-10s %-10s %-10s %-10s %-10s\n", "Layers", "Threads", "GFLOP/s", "MSec", "FLOPs");
-	double elapsedTime = runDNNModelThreads(G_THREAD_COUNT, DNN_FORWARD);
+	double elapsedTime = 0;	
+	 elapsedTime = runDNNModelThreads(G_THREAD_COUNT, DNN_FORWARD);
 	if (G_TRAINING)
 	{
 		elapsedTime += runDNNModelThreads(G_THREAD_COUNT, DNN_BACKWARD);
@@ -747,18 +773,18 @@ int main(int argc, char *argv[])
 	g_CanonicalConfig.Init();
 
 	SetCanonicalConfig(argc, argv, g_CanonicalConfig);
-	//g_CanonicalConfig.Print();
+	g_CanonicalConfig.Print();
 	LayerConfig* lc = ModelConfig[g_CanonicalConfig._modelType][g_CanonicalConfig._workerCount];
 	
 	if (lc == NULL) return 0;
 
 	for (int i = 0; i < ModelLayerCount[(int)G_MODEL_TYPE]; i++)
 	{
-		lc[i].InitSparsity(G_FORWARD_SPARSITY, G_BACKPROP_SPARSITY, G_DELTACOMPUTE_SPARSITY, G_WEIGHTUPDATE_SPARSITY);
+		lc[i].InitSparsity(G_FORWARD_SPARSITY, G_BACKPROP_SPARSITY, G_DELTACOMPUTE_SPARSITY, G_WEIGHTUPDATE_SPARSITY, G_SIGNAL_CACHELINE_SPARSITY);
 	}
 
 	DNNModel.Init(ModelLayerCount[(int)G_MODEL_TYPE], lc, G_WORKER_COUNT, G_REPLICATED_OUTPUT_LAYER);
-	//DNNModel.Print(ModelName[(int)G_MODEL_TYPE]);
+	DNNModel.Print(ModelName[(int)G_MODEL_TYPE]);
 
 	double runTime = runDNNModel();
 
