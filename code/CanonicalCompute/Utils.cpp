@@ -15,7 +15,7 @@ void CanonicalConfig::Init()
   _deltaWeightOpt = true;
   _training = true;
   _affinity = true;
-  _useSparseKernels = false;
+  _sparseKernelVersion = 0;
 }
 
 void CanonicalConfig::Print()
@@ -30,7 +30,7 @@ void CanonicalConfig::Print()
 	 "StartLayer: %d \n"
 	 "Task: %s \n"
 	 "Affinity: %s\n"
-	 "SparseKernels: %s\n"
+	 "SparseKernelsVersion: %d\n"
 	 "FeedForwardSparsity: %d\n" 
 	 "BackPropSparsity: %d\n"
 	 "DeltaComputeSparsity: %d\n"
@@ -45,12 +45,13 @@ void CanonicalConfig::Print()
 	 _startLayer,
 	 (_training ? "Training" : "Classify"),
 	 (_affinity ? "Enabled" : "Disabled"),
-	 (_useSparseKernels ? "Enabled" : "Disabled"),
+	 (_sparseKernelVersion),
 	 _forwardSparsity,
 	 _backwardSparsity,
 	 _deltaComputeSparsity,
 	 _weightUpdateSparsity
-	 );		
+	 );
+	fflush(stdout);
 }
 
 void DNN::Init (int nLayers, LayerConfig *lp, int nWorkers, bool replicate)
@@ -65,7 +66,7 @@ void DNN::Init (int nLayers, LayerConfig *lp, int nWorkers, bool replicate)
       if (i == (nLayers - 1))
 	{
 	  _Replicated[i] = replicate;
-	  _Layers[i].Init(lp[i]._OutputFeature, lp[i]._Input2Height, (replicate) ? lp[i]._Input2Width : lp[i]._Input2Width/nWorkers, lp[i]._FeedForwardSparsity,
+	  _Layers[i].Init(lp[i]._OutputFeature, lp[i]._Input2Height, (replicate) ? lp[i]._Input2Width : lp[i]._Input2Width/nWorkers, lp[0]._FeedForwardSparsity,
 			  lp[i]._BackPropSparsity, lp[i]._DeltaComputeSparsity, lp[i]._WeightUpdateSparsity);
 	  _nThreads[i] = (replicate) ? (int)(ceil((float)G_THREAD_COUNT/nWorkers)) : G_THREAD_COUNT;
 	}

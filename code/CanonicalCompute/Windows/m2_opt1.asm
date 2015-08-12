@@ -1,5 +1,6 @@
 .code
 
+; 25% sparsity in activation (rcx)
 mulsum2_opt1_75_25 PROC
 	xorps	xmm0,	xmm0
 	mov		r9,		r8
@@ -46,6 +47,7 @@ loop_11_end:
 	ret 0
 mulsum2_opt1_75_25	ENDP
 
+; 50% sparsity in activation (rcx)
 mulsum2_opt1_50_50 PROC
 	xorps	xmm0,	xmm0
 	mov		r9,		r8
@@ -92,6 +94,7 @@ loop_12_end:
 	ret 0
 mulsum2_opt1_50_50	ENDP
 
+; 75% sparsity in activation (rcx)
 mulsum2_opt1_25_75 PROC
 	xorps	xmm0,	xmm0
 	mov		r9,		r8
@@ -138,6 +141,7 @@ loop_13_end:
 	ret 0
 mulsum2_opt1_25_75	ENDP
 
+; 100% sparsity in activation (rcx)
 mulsum2_opt1_0_100 PROC
 	xorps	xmm0,	xmm0
 	mov		r9,		r8

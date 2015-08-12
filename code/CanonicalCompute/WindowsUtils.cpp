@@ -127,11 +127,11 @@ void ProcessParams(CParamParser& pparser, CanonicalConfig& config)
 	config._startLayer = (startLayer < ModelLayerCount[(int)config._modelType]) ? startLayer : DEFAULT_START_LAYER;
 	config._training = pparser.IsParamExist(TEXT("classify")) ? false : true;
 	config._affinity = pparser.IsParamExist(TEXT("affinity")) ? true : false;
-	config._feedForwardSparsity = pparser.IsParamExist(TEXT("forwardsparsity")) ? pparser.ParamInt(TEXT("forwardsparsity")) : DEFAULT_SPARSITY;
+	config._forwardSparsity = pparser.IsParamExist(TEXT("forwardsparsity")) ? pparser.ParamInt(TEXT("forwardsparsity")) : DEFAULT_SPARSITY;
 	config._backwardSparsity = pparser.IsParamExist(TEXT("backpropsparsity")) ? pparser.ParamInt(TEXT("backpropsparsity")) : DEFAULT_SPARSITY;
 	config._deltaComputeSparsity = pparser.IsParamExist(TEXT("deltacomputesparsity")) ? pparser.ParamInt(TEXT("deltacomputesparsity")) : DEFAULT_SPARSITY;
 	config._weightUpdateSparsity = pparser.IsParamExist(TEXT("weightupdatesparsity")) ? pparser.ParamInt(TEXT("weightupdatesparsity")) : DEFAULT_SPARSITY;
-	config._useSparseKernels = pparser.IsParamExist(TEXT("sparsekernels")) ? true : false;
+	config._sparseKernelVersion = pparser.IsParamExist(TEXT("sparsekernels")) ? pparser.ParamInt(TEXT("sparsekernels")) : 0;
 }
 
 void SetCanonicalConfig(int argc, char* argv[], CanonicalConfig& config)

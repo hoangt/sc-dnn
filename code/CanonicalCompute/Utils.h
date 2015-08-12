@@ -61,6 +61,7 @@ extern CanonicalConfig g_CanonicalConfig;
 #define G_BACKPROP_SPARSITY g_CanonicalConfig._backwardSparsity
 #define G_DELTACOMPUTE_SPARSITY g_CanonicalConfig._deltaComputeSparsity
 #define G_WEIGHTUPDATE_SPARSITY g_CanonicalConfig._weightUpdateSparsity
+#define G_SPARSE_KERNEL_VERSION(v) (g_CanonicalConfig._sparseKernelVersion == v)
  
 typedef struct LayerConfig {
     int _OutputFeature;
@@ -70,6 +71,14 @@ typedef struct LayerConfig {
     int _BackPropSparsity;
     int _DeltaComputeSparsity;
     int _WeightUpdateSparsity;
+
+	void InitSparsity(int forward, int backward, int deltaWeight, int weightUpdate)
+	{
+		_FeedForwardSparsity = forward;
+		_BackPropSparsity = backward;
+		_DeltaComputeSparsity = deltaWeight;
+		_WeightUpdateSparsity = weightUpdate;
+	}
 } LayerConfig;
 
 typedef struct Layer {
@@ -146,7 +155,7 @@ struct CanonicalConfig {
   bool _deltaWeightOpt;
   bool _training;
   bool _affinity;
-  bool _useSparseKernels;
+  int _sparseKernelVersion;
   
   void Init();
   void Print();
