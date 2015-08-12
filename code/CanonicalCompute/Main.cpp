@@ -5,12 +5,6 @@ using namespace std;
 
 extern "C"
 {
-	extern float align_mulsum_2_mem(const float *pf0, const float *pf1, INT64 count);
-	extern void align_mulsum_3_mem(const float *pf0, const float *pf1, float f2, INT64 count);
-	extern void align_fmemcpy(const float *pfSrc, float *pDst,  INT64 length);
-
-	extern float avx2_mulsum_2_mem(const float *pf0, const float *pf1, INT64 count);
-	extern void avx2_mulsum_3_mem(const float *pf0, const float *pf1, float f2, INT64 count);
 	extern void avx2_fmemcpy(const float *pfSrc, float *pDst,  INT64 length);
 
 	extern float mulsum2_base(const float *pf0, const float *pf1, INT64 count);
@@ -407,7 +401,7 @@ double BackPropWrapperOpt3(Layer* layer, float* inpACT, float *outACT)
 				}
 				else {
 					float signal = outACT[signalIndex];
-					avx2_mulsum_3_mem(inpACT+(j*layer->_Input2Width), 
+					mulsum3_base(inpACT+(j*layer->_Input2Width), 
 										layer->_Weights+(i*layer->_Input2Width), 
 										signal, 
 										layer->_Input2Width); 
@@ -430,7 +424,7 @@ double BackPropBaseline(Layer* layer, float* inpACT, float *outACT)
 					int signalIndex = i*layer->_Input2Height + j;
 					float signal = outACT[signalIndex];
 					if (signalIndex >= layer->_minDenseSignalIndex) {
-						avx2_mulsum_3_mem(inpACT+(j*layer->_Input2Width), 
+						mulsum3_base(inpACT+(j*layer->_Input2Width), 
 											layer->_Weights+(i*layer->_Input2Width), 
 											signal, 
 											layer->_Input2Width); 
@@ -588,7 +582,7 @@ double DeltaWeightComputeOpt3_2D(Layer* layer, float* deltaWeights, float* inpAC
 				}
 			}
 			else {
-				avx2_mulsum_3_mem(deltaWeights+(i*layer->_Input2Width), inpACT, outACT[i], layer->_Input2Width); 
+				mulsum3_base(deltaWeights+(i*layer->_Input2Width), inpACT, outACT[i], layer->_Input2Width); 
 			}
 		}
 	}
@@ -627,10 +621,10 @@ double DeltaWeightComputeOpt3_3D(Layer* layer, float* deltaWeights, float* inpAC
 					}
 				else {
 					float signal = outACT[signalIndex];
-					avx2_mulsum_3_mem(deltaWeights+(i*layer->_Input2Width), 
-									inpACT+(j*layer->_Input2Width), 
-									signal, 
-									layer->_Input2Width); 
+					mulsum3_base(deltaWeights+(i*layer->_Input2Width), 
+								inpACT+(j*layer->_Input2Width), 
+								signal, 
+								layer->_Input2Width); 
 					}
 				}
 			}
@@ -659,7 +653,7 @@ double DeltaWeightComputeBaseline_2D(Layer* layer, float* deltaWeights, float* i
 			mulsum2_opt2_nop();
 		}
 		else {
-			avx2_mulsum_3_mem(deltaWeights+(i*layer->_Input2Width), inpACT, signal, layer->_Input2Width); 
+			mulsum3_base(deltaWeights+(i*layer->_Input2Width), inpACT, signal, layer->_Input2Width); 
 		}
 	}
 	STOP_TIMER(timer);
@@ -678,7 +672,7 @@ double DeltaWeightComputeBaseline_3D(Layer* layer, float* deltaWeights, float* i
 				mulsum2_opt2_nop();
 			}
 			else {
-				avx2_mulsum_3_mem(deltaWeights+(i*layer->_Input2Width), inpACT+(j*layer->_Input2Width), signal, layer->_Input2Width); 
+				mulsum3_base(deltaWeights+(i*layer->_Input2Width), inpACT+(j*layer->_Input2Width), signal, layer->_Input2Width); 
 			}
 		}
 	}
@@ -690,7 +684,7 @@ double WeightUpdateBaseline(Layer *layer, float *deltaWeights)
 {
 	DECLARE_TIMER(timer);
 	START_TIMER(timer);
-    avx2_mulsum_3_mem(layer->_Weights, deltaWeights, 1.0f, layer->_WeightSize);
+    mulsum3_base(layer->_Weights, deltaWeights, 1.0f, layer->_WeightSize);
     STOP_TIMER(timer);
     return ELAPSED_USEC_TIME(timer);
 }
@@ -817,7 +811,7 @@ DWORD DNNModelThreadWeightUpdate(ThreadLayerState *tl)
 			{
 				for (int i = 0; i < layer->_OutputFeature; i++)
 				{
-					avx2_mulsum_3_mem(layer->_Weights+(i*layer->_Input2Width), inpACT, outACT[i], layer->_Input2Width); 
+					mulsum3_base(layer->_Weights+(i*layer->_Input2Width), inpACT, outACT[i], layer->_Input2Width); 
 				}
 			}
 			else 
@@ -826,7 +820,7 @@ DWORD DNNModelThreadWeightUpdate(ThreadLayerState *tl)
 				{
 					for (int j = 0; j < layer->_Input2Height; j++)
 					{									
-						avx2_mulsum_3_mem(layer->_Weights+(i*layer->_Input2Width), inpACT+(j*layer->_Input2Width), outACT[i*layer->_Input2Height + j], layer->_Input2Width); 
+						mulsum3_base(layer->_Weights+(i*layer->_Input2Width), inpACT+(j*layer->_Input2Width), outACT[i*layer->_Input2Height + j], layer->_Input2Width); 
 					}
 				}
 			}
