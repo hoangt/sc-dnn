@@ -47,6 +47,7 @@ loop_12:
 loop_11_end:
      mov	%rdx, %r9
      and	$0xF,	 %r9
+     shr $0x2, %r9
      test	%r9, %r9
      jz loop_13_end
 loop_13:        
@@ -115,6 +116,7 @@ loop_22:
 loop_21_end:
      mov	%rdx, %r9
      and	$0xF,	 %r9
+     shr $0x2, %r9
      test	%r9, %r9
     jz loop_23_end
 loop_23:        
@@ -188,6 +190,7 @@ loop_32:
 loop_31_end:
     mov		%rdx,	%r9
     and		$0xF,		%r9
+     shr $0x2, %r9
     test	%r9,	%r9
     jz loop_33_end
 loop_33:        
@@ -235,6 +238,7 @@ loop_41:
 loop_41_end:
     mov		%rdx,	%r9
     and		$0xF,		%r9
+     shr $0x2, %r9
     test	%r9,	%r9
      jz loop_43_end
 loop_43:        
@@ -250,3 +254,8 @@ loop_43_end:
 	haddps	%xmm0,	%xmm0
 	haddps	%xmm0,	%xmm0
 	retq 
+
+.globl mulsum2_opt2_nop
+mulsum2_opt2_nop:
+        retq
+        
