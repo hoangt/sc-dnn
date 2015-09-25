@@ -30,7 +30,9 @@ extern "C"
 	extern float mulsum3_opt2_50_50(const float *pf0, const float *pf1, float f2, INT64 count);
 	extern float mulsum3_opt2_25_75(const float *pf0, const float *pf1, float f2, INT64 count);
 	extern float mulsum3_opt2_0_100(const float *pf0, const float *pf1, float f2, INT64 count);
-	extern float mulsum3_opt2_zerosigw(const float *pf0, const float *pf1, float f2, INT64 count);
+
+	extern float mulsum3_opt3_DenseSparse(const float *pf0, const float *pf1, float f2, INT64 denseCount, INT64 sparseCount);
+	extern float mulsum3_opt3_zerosigw(const float *pf0, const float *pf1, float f2, INT64 count);
 
 }
 
@@ -70,7 +72,7 @@ CanonicalConfig g_CanonicalConfig;
 
 DNN DNNModel;
 
-#define FEED_FORWARD_NOP(mulsum_func) \
+#define FEED_FORWARD_NOP() \
     START_TIMER(timer);                                                      \
     for (int i = 0; i < layer->_OutputFeature; i++)                     \
         for (int j = 0; j < layer->_Input2Height; j++);                  \
@@ -198,7 +200,7 @@ double mulsum2_opt2_wrapper(Layer *layer, float *inpACT, float* outACT)
 		FEED_FORWARD_NOP_CALL(mulsum2_opt2_nop);
 	}
 	else if (sparsity == 102) {
-		FEED_FORWARD_NOP(mulsum2_opt2_nop);
+		FEED_FORWARD_NOP();
 	}
 	else if (sparsity == 103) {
 		START_TIMER(timer);
@@ -214,27 +216,34 @@ double mulsum2_opt2_wrapper(Layer *layer, float *inpACT, float* outACT)
 double mulsum2_opt3_wrapper(Layer *layer, float *inpACT, float* outACT) 
 {
    DECLARE_TIMER(timer);
-    int sparsity = layer->_FeedForwardSparsity;
-    if (sparsity == 0) {
-        FEED_FORWARD_CALL(mulsum2_base);
-    }
-    else if (sparsity <= 100) {
-        //FEED_FORWARD_OPT3_CALL_2(mulsum2_base, mulsum2_opt2_0_100);
-		FEED_FORWARD_OPT3_CALL(mulsum2_opt3_DenseSparse);
-    }
+   int sparsity = layer->_FeedForwardSparsity;
+   if (sparsity == 0) {
+	   START_TIMER(timer);
+		for (int i = 0; i < layer->_OutputFeature; i++) {
+			for (int j = 0; j < layer->_Input2Height; j++) {
+				outACT[i*layer->_Input2Height + j] = mulsum2_base(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), layer->_Input2Width);
+			}
+		}
+	   STOP_TIMER(timer);
+   }
+   else if (sparsity <= 100) {
+	   START_TIMER(timer);
+		for (int i = 0; i < layer->_OutputFeature; i++) {
+			for (int j = 0; j < layer->_Input2Height; j++) {
+				outACT[i*layer->_Input2Height + j] = mulsum2_opt3_DenseSparse(inpACT+(j*layer->_Input2Width), layer->_Weights+(i*layer->_Input2Width), layer->_DenseInput2Width, layer->_SparseInput2Width);
+			}
+		}
+	   STOP_TIMER(timer);
+   }
 	else if (sparsity == 101) {
 		FEED_FORWARD_NOP_CALL(mulsum2_opt2_nop);
 	}
 	else if (sparsity == 102) {
-		FEED_FORWARD_NOP_CALL(mulsum2_opt2_nop);
+		FEED_FORWARD_NOP();
 	}
 	else if (sparsity == 103) {
 		START_TIMER(timer);
 		STOP_TIMER(timer);
-	}
-	else {
-		printf("INVALID SPARSITY %d\n", sparsity);
-		MY_ASSERT(false);
 	}
 	return ELAPSED_USEC_TIME(timer);
 }
@@ -387,14 +396,14 @@ double BackPropWrapperOpt3(Layer* layer, float* inpACT, float *outACT)
 				int signalIndex = i*layer->_Input2Height + j;
 				if (signalIndex < layer->_minSparseSignalWordIndex) {
 					if (signalIndex % 16 == 15) {
-						mulsum3_opt2_zerosigw(inpACT+(j*layer->_Input2Width), 
+						mulsum3_opt3_zerosigw(inpACT+(j*layer->_Input2Width), 
 										layer->_Weights+(i*layer->_Input2Width), 
 										0.0f, 
 										layer->_Input2Width); 
 					}
 				}
 				else if (signalIndex < layer->_minDenseSignalIndex) {
-						mulsum3_opt2_zerosigw(inpACT+(j*layer->_Input2Width), 
+						mulsum3_opt3_zerosigw(inpACT+(j*layer->_Input2Width), 
 										layer->_Weights+(i*layer->_Input2Width), 
 										0.0f, 
 										layer->_Input2Width); 					
@@ -428,6 +437,9 @@ double BackPropBaseline(Layer* layer, float* inpACT, float *outACT)
 											layer->_Weights+(i*layer->_Input2Width), 
 											signal, 
 											layer->_Input2Width); 
+					}
+					else {
+						mulsum2_opt2_nop();
 					}
 				}
 		}
@@ -571,18 +583,18 @@ double DeltaWeightComputeOpt3_2D(Layer* layer, float* deltaWeights, float* inpAC
 	for (int i = 0; i < layer->_OutputFeature; i++) {
 		if (i < layer->_minSparseSignalWordIndex) {
 			if ((i & 16) == 15) {
-				mulsum3_opt2_zerosigw(deltaWeights+(i*layer->_Input2Width), inpACT, 0.0, layer->_Input2Width);
+				mulsum3_opt3_zerosigw(deltaWeights+(i*layer->_Input2Width), inpACT, 0.0, layer->_Input2Width);
 			}
 		}
 		else 
 		{
 			if (i < layer->_minDenseSignalIndex) {
 				if (i % 16 == 15) {
-				mulsum3_opt2_zerosigw(deltaWeights+(i*layer->_Input2Width), inpACT, 0.0, layer->_Input2Width);
+				mulsum3_opt3_zerosigw(deltaWeights+(i*layer->_Input2Width), inpACT, 0.0, layer->_Input2Width);
 				}
 			}
 			else {
-				mulsum3_base(deltaWeights+(i*layer->_Input2Width), inpACT, outACT[i], layer->_Input2Width); 
+				mulsum3_opt3_DenseSparse(deltaWeights+(i*layer->_Input2Width), inpACT, outACT[i], layer->_DenseInput2Width, layer->_SparseInput2Width); 
 			}
 		}
 	}
@@ -603,7 +615,7 @@ double DeltaWeightComputeOpt3_3D(Layer* layer, float* deltaWeights, float* inpAC
 				int signalIndex = i*layer->_Input2Height + j;
 				if (signalIndex < layer->_minSparseSignalWordIndex) {
 					if (signalIndex % 16 == 15) {
-						mulsum3_opt2_zerosigw(deltaWeights+(i*layer->_Input2Width),
+						mulsum3_opt3_zerosigw(deltaWeights+(i*layer->_Input2Width),
 										inpACT+(j*layer->_Input2Width), 
 										0.0f, 
 										layer->_Input2Width); 
@@ -613,7 +625,7 @@ double DeltaWeightComputeOpt3_3D(Layer* layer, float* deltaWeights, float* inpAC
 				{
 					if (signalIndex < layer->_minDenseSignalIndex) {
 						if (signalIndex % 16 == 15) {
-							mulsum3_opt2_zerosigw(deltaWeights+(i*layer->_Input2Width),
+							mulsum3_opt3_zerosigw(deltaWeights+(i*layer->_Input2Width),
 										inpACT+(j*layer->_Input2Width), 
 										0.0f, 
 										layer->_Input2Width); 
@@ -621,10 +633,11 @@ double DeltaWeightComputeOpt3_3D(Layer* layer, float* deltaWeights, float* inpAC
 					}
 				else {
 					float signal = outACT[signalIndex];
-					mulsum3_base(deltaWeights+(i*layer->_Input2Width), 
+					mulsum3_opt3_DenseSparse(deltaWeights+(i*layer->_Input2Width), 
 								inpACT+(j*layer->_Input2Width), 
 								signal, 
-								layer->_Input2Width); 
+								layer->_DenseInput2Width,
+								layer->_SparseInput2Width); 
 					}
 				}
 			}
@@ -748,7 +761,8 @@ DWORD DNNModelThreadDeltaWeightUpdate(ThreadLayerState *tl)
                     tl->_FLOPTime[l] += elapsedTime;
             	}
 
-                // weight update
+#if 0
+				// weight update
 				if (G_SPARSE_KERNEL_VERSION(2)) {
 					elapsedTime = WeightUpdateWrapperOpt3(layer, deltaWeights[l]);
 				}
@@ -759,7 +773,7 @@ DWORD DNNModelThreadDeltaWeightUpdate(ThreadLayerState *tl)
 					elapsedTime = WeightUpdateBaseline(layer, deltaWeights[l]);
 				}
 				tl->_FLOPTime[l] += elapsedTime;
-
+#endif
                 // weight copy
                 //START_TIMER(timer);
                 //avx2_fmemcpy(weightMomentum[l], deltaWeights[l], tl->_LayerState[l]._WeightSize);
@@ -935,7 +949,7 @@ int main(int argc, char *argv[])
 	}
 
 	DNNModel.Init(ModelLayerCount[(int)G_MODEL_TYPE], lc, G_WORKER_COUNT, G_REPLICATED_OUTPUT_LAYER);
-	DNNModel.Print(ModelName[(int)G_MODEL_TYPE]);
+	//DNNModel.Print(ModelName[(int)G_MODEL_TYPE]);
 
 	double runTime = runDNNModel();
 

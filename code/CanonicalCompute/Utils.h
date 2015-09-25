@@ -102,6 +102,8 @@ typedef struct Layer {
 
   int _minDenseSignalIndex;
   int _minSparseSignalWordIndex;
+  int _SparseInput2Width;
+  int _DenseInput2Width;
 
   void Init (int of, int i2h, int i2w, int ffs, int bps, int dcs, int wus, int scls);
 } Layer;

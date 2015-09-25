@@ -301,17 +301,4 @@ loop_33_end:
     ret   0
 mulsum3_opt2_0_100 ENDP
 
-
-mulsum3_opt2_zerosigw PROC
-;	Mimic loop exit compensation code for liveouts
-    shl		r9,		2			; multiply count by 4
-	add		rdx,	r9
-	add		rcx,	r9
-
-	movups	xmm3,	xmmword ptr -4[rcx]
-	xorps	xmm1,	xmm1
-	xor		r9,		r9
-	ret 0
-mulsum3_opt2_zerosigw ENDP
-
 END

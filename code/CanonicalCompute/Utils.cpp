@@ -125,6 +125,9 @@ void Layer::Init (int of, int i2h, int i2w, int ffs, int bps, int dcs, int wus, 
   _minDenseSignalIndex = (G_ZERO_SIGNAL_OPT == false) ? 0 : (int)(bps * of * i2h * 0.01); 
   _minSparseSignalWordIndex = (G_ZERO_SIGNAL_OPT == false) ? 0 : (int)(scls * of * i2h * 0.01);
   MY_ASSERT (_minSparseSignalWordIndex <= _minDenseSignalIndex);
+  _SparseInput2Width = ffs * i2w * 0.01;
+  _DenseInput2Width = i2w - _SparseInput2Width;
+  MY_ASSERT((_SparseInput2Width +_DenseInput2Width) == _Input2Width);
 }
 
 void ThreadLayerState::Init (int tNum, DNN& model)
