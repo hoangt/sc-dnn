@@ -1,0 +1,39 @@
+\section{Evaluation}
+\label{sec:eval}
+We now evaluate the effectiveness of our processor and memory system optimizations for DNN training.  We conduct our evaluations along $3$ dimensions: (i) the impact on single thread performance (\ref{subsec:perf_single_thread}), (ii) the impact on multi-threading scalability in a server (\ref{subsec:perf_multi_thread}), and (iii)  the impact on model parallelism performance (\ref{subsec:perf_model_parallel}).  
+
+ \subsection{Methodology}
+ \label{subsec:eval_method}
+ 
+\paragraph{Image Recognition Task:}
+Although we expect our optimizatons to be effective in general for training with gradient descent methods, we focus on image recognition because it represents an important class of AI problems for which significant accuracy improvements have being achieved through gradient descent training~\cite{Krizhevsky12, Le12, Dean12, Chilimbi14, He15}. Specifically, we measure the impact of our optimizations on the training of high quality DNN models on $3$ common image recognition workloads: (i) {\it MNIST}~\cite{Lecun98}, (ii) {\it CIFAR-10}~\cite{KrizhevskyThesis}, and (iii) {\it ImageNet}~\cite{imagenet09}. We describe each benchmark and correspodinging DNN in more details below. 
+ 
+\begin{itemize}
+\item MNIST: The task is to classify $28$x$28$ grayscale images of handwritten digits into $10$ categories. The DNN is relatively small, containing about $2.5$ million connections in $5$ layers: $2$ convolutional layers with pooling, $2$ fully connected layers, and a $10$-way output layer~\cite{Chilimbi14}.
+
+\item CIFAR-10: The task is to classify $32$x$32$ color images into $10$ categories.  The DNN is moderately-sized, containing about $28.5$ million connections in $5$  layers: $2$ convolutional layers with pooling, $2$ fully connected layers, and a $10$-way output layer~\cite{Krizhevsky12}.
+
+\item ImageNet:  The task is to classify $256$x$256$ color images from  a dataset of about $15$ million images into a number of categories.  There are $2$ standard versions of this benchmark: (i) classifying $1.2$ million images into $1000$ categories (a.k.a., {\it ImageNet-1K}), and (ii) classifying the entire data set into $22000$ categories (a.k.a. {\it ImageNet-22K}. We used the largest ImageNet task (i.e., {\it ImageNet-22K}), which is to classify $256$x$256$ color images into $22,000$ categories.  This DNN is extremely large, containing over $2$ billion connections in $8$ layers: $5$ convolutional layers with pooling, $2$ linear layers, and a $22,000$-way output layer~\cite{Chilimbi14}. 
+\end{itemize}
+           
+ \paragraph{Comparison to Software Approach:}
+ We compare our approach to a software optimization that dynamically checks training data for zeroes in order to skip multiply and addition operations (\ref{subsec:sparse_code_oppor}).  This software approach is more effective for training than using sparse representations of matrices and/or vectors~\cite{IntelSparseMatrix} due to the dynamic nature of data sparsity in training.  To mitigate the software check overheads, we apply this optimization only it situations that can yield significant benefits (e.g., skip inner loop execution).
+
+\paragraph{Simulation-based Approach:} 
+We conduct our performance experiments in a simulation enviroment, which allows us to easily prototype our proposed memory system extensions (Section~\ref{sec:design}).  We use a modified version of Memsim~\cite{memsim,eaf}, a multi-core simulator that models out-of-order cores coupled with a DDR3-1066~\cite{ddr3} DRAM  simulator. All systems use a three-level cache hierarchy with a  uniform 64B cache line size. We do not enforce inclusion in any level of the hierarchy. We use the state-of-the-art DRRIP cache replacement policy~\cite{rrip} for the last-level cache. All our evaluated systems use an aggressive multi-stream  prefetcher~\cite{fdp} similar to the one implemented in IBM Power~6~\cite{power6-prefetcher}.
+ 
+\subsection{Single Thread Performance}
+\label{subsec:perf_single_thread}
+
+Here we show that our techniques improve single thread training performance by reducing the number of computations performed per training example.
+
+\subsection{Multi-threaded Performance}
+\label{subsec:perf_multi_thread}
+
+Here we show improved scalability by reducing the cache capacity and bandwidth pressure. 
+
+
+\subsection{Model-parallelism Performance}
+\label{subsec:perf_model_parallel}
+
+Here we show improved scalability of model-parallelism because the reduced cache capacity and bandwidth pressure allows bigger models to fit on a machine. 
