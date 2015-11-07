@@ -1,0 +1,573 @@
+Running with PassOpt = 
+ThreadAffinityConfig(Enabled): HyperThreading:Enabled LogicalProcessor:12 PhysicalProcessor:6
+Model: MNIST 
+Pass: ALL 
+KernelVersion: UNROLL
+FeedForwardSparsity: 30
+BackPropSparsity: 83
+SignalCacheLineSparsity: 81
+WeightUpdateSparsity: 5
+DeltaCacheLineSparsity: 0
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp:  0.17 msecs
+         0          1       6.01   0.069990 420500
+         1          1      18.53   0.065312 1210000
+         2          1      24.68   0.023338 576000
+         3          1      25.23   0.012684 320000
+         4          1       6.34   0.001263 8000
+Pass_run_time: 107.834secs
+BackwardProp:  0.18 msecs
+         0          1       4.68   0.089864 420500
+         1          1      21.84   0.055413 1210000
+         2          1      24.67   0.023344 576000
+         3          1      25.28   0.012660 320000
+         4          1       2.59   0.003086 8000
+Pass_run_time: 37.8916secs
+WeightUpdate:  0.21 msecs
+         0          1       5.06   0.083068 420500
+         1          1      23.84   0.050749 1210000
+         2          1      11.95   0.048215 576000
+         3          1      12.09   0.026465 320000
+         4          1       2.52   0.003169 8000
+Pass_run_time: 131.859secs
+Total_run_time: 277.585secs
+ThreadAffinityConfig(Enabled): HyperThreading:Enabled LogicalProcessor:12 PhysicalProcessor:6
+Model: MNIST 
+Pass: ALL 
+KernelVersion: SPARSE
+FeedForwardSparsity: 30
+BackPropSparsity: 83
+SignalCacheLineSparsity: 81
+WeightUpdateSparsity: 5
+DeltaCacheLineSparsity: 0
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp:  0.17 msecs
+         0          1       5.75   0.073098 420500
+         1          1      22.57   0.053613 1210000
+         2          1      21.96   0.026224 576000
+         3          1      21.91   0.014607 320000
+         4          1       5.49   0.001456 8000
+Pass_run_time: 108.203secs
+BackwardProp:  0.06 msecs
+         0          1      11.48   0.036644 420500
+         1          1      84.84   0.014262 1210000
+         2          1      90.82   0.006342 576000
+         3          1      89.43   0.003578 320000
+         4          1       5.30   0.001510 8000
+Pass_run_time: 25.5959secs
+WeightUpdate:  0.09 msecs
+         0          1      14.76   0.028488 420500
+         1          1      89.08   0.013583 1210000
+         2          1      19.09   0.030174 576000
+         3          1      19.58   0.016340 320000
+         4          1       4.86   0.001647 8000
+Pass_run_time: 120.266secs
+Total_run_time: 254.066secs
+ThreadAffinityConfig(Enabled): HyperThreading:Enabled LogicalProcessor:12 PhysicalProcessor:6
+Model: MNIST 
+Pass: ALL 
+KernelVersion: OPT_SW
+FeedForwardSparsity: 30
+BackPropSparsity: 83
+SignalCacheLineSparsity: 81
+WeightUpdateSparsity: 5
+DeltaCacheLineSparsity: 0
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp:  0.15 msecs
+         0          1       6.00   0.070076 420500
+         1          1      27.12   0.044609 1210000
+         2          1      24.71   0.023313 576000
+         3          1      25.30   0.012646 320000
+         4          1       6.33   0.001263 8000
+Pass_run_time: 105.776secs
+BackwardProp:  0.06 msecs
+         0          1      11.48   0.036616 420500
+         1          1      85.50   0.014153 1210000
+         2          1      90.88   0.006338 576000
+         3          1      89.46   0.003577 320000
+         4          1       5.32   0.001503 8000
+Pass_run_time: 25.4821secs
+WeightUpdate:  0.09 msecs
+         0          1      14.84   0.028331 420500
+         1          1      85.21   0.014200 1210000
+         2          1      19.25   0.029921 576000
+         3          1      19.89   0.016086 320000
+         4          1       4.96   0.001613 8000
+Pass_run_time: 119.539secs
+Total_run_time: 250.797secs
+ThreadAffinityConfig(Enabled): HyperThreading:Enabled LogicalProcessor:12 PhysicalProcessor:6
+Model: MNIST 
+Pass: ALL 
+KernelVersion: HARDWARE
+FeedForwardSparsity: 30
+BackPropSparsity: 83
+SignalCacheLineSparsity: 81
+WeightUpdateSparsity: 5
+DeltaCacheLineSparsity: 0
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp:  0.15 msecs
+         0          1       6.04   0.069625 420500
+         1          1      23.50   0.051490 1210000
+         2          1      31.87   0.018075 576000
+         3          1      32.95   0.009713 320000
+         4          1       6.30   0.001269 8000
+Pass_run_time: 105.785secs
+BackwardProp:  0.05 msecs
+         0          1      13.69   0.030720 420500
+         1          1     107.08   0.011300 1210000
+         2          1     127.21   0.004528 576000
+         3          1     126.79   0.002524 320000
+         4          1       5.88   0.001361 8000
+Pass_run_time: 24.3363secs
+WeightUpdate:  0.09 msecs
+         0          1      13.86   0.030338 420500
+         1          1      93.01   0.013010 1210000
+         2          1      20.01   0.028782 576000
+         3          1      20.60   0.015536 320000
+         4          1       4.52   0.001770 8000
+Pass_run_time: 119.862secs
+Total_run_time: 249.983secs
+ThreadAffinityConfig(Enabled): HyperThreading:Enabled LogicalProcessor:12 PhysicalProcessor:6
+Model: CIFAR10 
+Pass: ALL 
+KernelVersion: UNROLL
+FeedForwardSparsity: 24
+BackPropSparsity: 84
+SignalCacheLineSparsity: 83
+WeightUpdateSparsity: 89
+DeltaCacheLineSparsity: 67
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp:  2.63 msecs
+         0          1      15.14   0.649480 9830400
+         1          1      32.77   0.900068 29491200
+         2          1      16.13   0.516488 8331264
+         3          1      15.03   0.558247 8388608
+         4          1       6.17   0.006641 40960
+Pass_run_time: 78.1527secs
+BackwardProp:  2.99 msecs
+         0          1       9.54   1.030887 9830400
+         1          1      32.87   0.897209 29491200
+         2          1      16.39   0.508385 8331264
+         3          1      15.78   0.531660 8388608
+         4          1       2.00   0.020503 40960
+Pass_run_time: 42.4495secs
+WeightUpdate:  4.11 msecs
+         0          1      12.58   0.781142 9830400
+         1          1      34.01   0.867033 29491200
+         2          1       6.83   1.219790 8331264
+         3          1       6.87   1.220734 8388608
+         4          1       1.85   0.022109 40960
+Pass_run_time: 106.337secs
+Total_run_time: 226.94secs
+ThreadAffinityConfig(Enabled): HyperThreading:Enabled LogicalProcessor:12 PhysicalProcessor:6
+Model: CIFAR10 
+Pass: ALL 
+KernelVersion: SPARSE
+FeedForwardSparsity: 24
+BackPropSparsity: 84
+SignalCacheLineSparsity: 83
+WeightUpdateSparsity: 89
+DeltaCacheLineSparsity: 67
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp:  2.99 msecs
+         0          1      13.73   0.715911 9830400
+         1          1      27.31   1.079759 29491200
+         2          1      14.43   0.577426 8331264
+         3          1      13.75   0.609940 8388608
+         4          1       5.60   0.007317 40960
+Pass_run_time: 82.0159secs
+BackwardProp:  0.59 msecs
+         0          1      36.33   0.270612 9830400
+         1          1     187.15   0.157580 29491200
+         2          1     107.68   0.077368 8331264
+         3          1     108.95   0.076993 8388608
+         4          1       5.54   0.007391 40960
+Pass_run_time: 18.4706secs
+WeightUpdate:  1.87 msecs
+         0          1      41.13   0.239006 9830400
+         1          1     162.20   0.181820 29491200
+         2          1      11.67   0.713695 8331264
+         3          1      11.60   0.723433 8388608
+         4          1       4.01   0.010224 40960
+Pass_run_time: 83.4785secs
+Total_run_time: 183.965secs
+ThreadAffinityConfig(Enabled): HyperThreading:Enabled LogicalProcessor:12 PhysicalProcessor:6
+Model: CIFAR10 
+Pass: ALL 
+KernelVersion: OPT_SW
+FeedForwardSparsity: 24
+BackPropSparsity: 84
+SignalCacheLineSparsity: 83
+WeightUpdateSparsity: 89
+DeltaCacheLineSparsity: 67
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp:  2.70 msecs
+         0          1      14.94   0.657776 9830400
+         1          1      32.04   0.920463 29491200
+         2          1      15.10   0.551675 8331264
+         3          1      14.85   0.565065 8388608
+         4          1       6.04   0.006783 40960
+Pass_run_time: 79.8692secs
+BackwardProp:  0.60 msecs
+         0          1      35.67   0.275578 9830400
+         1          1     183.37   0.160829 29491200
+         2          1     106.09   0.078530 8331264
+         3          1     107.16   0.078282 8388608
+         4          1       5.43   0.007544 40960
+Pass_run_time: 19.2535secs
+WeightUpdate:  1.89 msecs
+         0          1      40.07   0.245356 9830400
+         1          1     159.20   0.185252 29491200
+         2          1      11.61   0.717514 8331264
+         3          1      11.53   0.727731 8388608
+         4          1       3.84   0.010672 40960
+Pass_run_time: 84.8582secs
+Total_run_time: 183.981secs
+ThreadAffinityConfig(Enabled): HyperThreading:Enabled LogicalProcessor:12 PhysicalProcessor:6
+Model: CIFAR10 
+Pass: ALL 
+KernelVersion: HARDWARE
+FeedForwardSparsity: 24
+BackPropSparsity: 84
+SignalCacheLineSparsity: 83
+WeightUpdateSparsity: 89
+DeltaCacheLineSparsity: 67
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp:  2.05 msecs
+         0          1      21.03   0.467476 9830400
+         1          1      45.92   0.642239 29491200
+         2          1      18.56   0.448950 8331264
+         3          1      17.21   0.487437 8388608
+         4          1       6.03   0.006791 40960
+Pass_run_time: 73.185secs
+BackwardProp:  0.48 msecs
+         0          1      35.38   0.277822 9830400
+         1          1     247.41   0.119198 29491200
+         2          1     219.54   0.037949 8331264
+         3          1     223.86   0.037472 8388608
+         4          1       5.57   0.007353 40960
+Pass_run_time: 17.537secs
+WeightUpdate:  0.70 msecs
+         0          1      38.77   0.253582 9830400
+         1          1     183.04   0.161118 29491200
+         2          1      61.86   0.134676 8331264
+         3          1      57.14   0.146804 8388608
+         4          1       5.23   0.007839 40960
+Pass_run_time: 72.9844secs
+Total_run_time: 163.706secs
+ThreadAffinityConfig(Enabled): HyperThreading:Enabled LogicalProcessor:12 PhysicalProcessor:6
+Model: IMG1K 
+Pass: ALL 
+KernelVersion: UNROLL
+FeedForwardSparsity: 30
+BackPropSparsity: 94
+SignalCacheLineSparsity: 93
+WeightUpdateSparsity: 32
+DeltaCacheLineSparsity: 1
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp: 50.43 msecs
+         0          1      18.80  22.416596 421362000
+         1          1      31.32  19.154285 600000000
+         2          1      33.29   3.460620 115200000
+         3          1      35.69   4.357778 155520000
+         4          1      15.99   0.675623 10800000
+         5          1      10.74   0.186160 2000000
+         6          1      10.88   0.183815 2000000
+Pass_run_time: 107.725secs
+BackwardProp: 54.83 msecs
+         0          1      16.79  25.089341 421362000
+         1          1      28.77  20.851549 600000000
+         2          1      29.09   3.959696 115200000
+         3          1      40.40   3.849913 155520000
+         4          1      15.87   0.680715 10800000
+         5          1       9.87   0.202549 2000000
+         6          1      10.11   0.197832 2000000
+Pass_run_time: 69.811secs
+WeightUpdate: 52.53 msecs
+         0          1      18.07  23.313913 421362000
+         1          1      31.44  19.086871 600000000
+         2          1      32.49   3.545243 115200000
+         3          1      35.65   4.362659 155520000
+         4          1       7.07   1.528277 10800000
+         5          1       5.72   0.349587 2000000
+         6          1       5.77   0.346848 2000000
+Pass_run_time: 125.307secs
+Total_run_time: 302.843secs
+ThreadAffinityConfig(Enabled): HyperThreading:Enabled LogicalProcessor:12 PhysicalProcessor:6
+Model: IMG1K 
+Pass: ALL 
+KernelVersion: SPARSE
+FeedForwardSparsity: 30
+BackPropSparsity: 94
+SignalCacheLineSparsity: 93
+WeightUpdateSparsity: 32
+DeltaCacheLineSparsity: 1
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp: 59.89 msecs
+         0          1      15.67  26.881239 421362000
+         1          1      26.41  22.716686 600000000
+         2          1      28.41   4.054791 115200000
+         3          1      30.71   5.063381 155520000
+         4          1      14.73   0.733339 10800000
+         5          1       9.08   0.220147 2000000
+         6          1       9.24   0.216504 2000000
+Pass_run_time: 117.143secs
+BackwardProp:  5.89 msecs
+         0          1     117.84   3.575660 421362000
+         1          1     416.86   1.439328 600000000
+         2          1     337.09   0.341745 115200000
+         3          1     345.55   0.450069 155520000
+         4          1     219.45   0.049214 10800000
+         5          1     116.51   0.017166 2000000
+         6          1     119.99   0.016668 2000000
+Pass_run_time: 20.5707secs
+WeightUpdate:  7.43 msecs
+         0          1     120.52   3.496332 421362000
+         1          1     411.51   1.458033 600000000
+         2          1     243.19   0.473711 115200000
+         3          1     202.00   0.769893 155520000
+         4          1      12.25   0.881623 10800000
+         5          1      11.57   0.172854 2000000
+         6          1      11.58   0.172731 2000000
+Pass_run_time: 79.0967secs
+Total_run_time: 216.811secs
+ThreadAffinityConfig(Enabled): HyperThreading:Enabled LogicalProcessor:12 PhysicalProcessor:6
+Model: IMG1K 
+Pass: ALL 
+KernelVersion: OPT_SW
+FeedForwardSparsity: 30
+BackPropSparsity: 94
+SignalCacheLineSparsity: 93
+WeightUpdateSparsity: 32
+DeltaCacheLineSparsity: 1
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp: 48.75 msecs
+         0          1      20.04  21.025641 421362000
+         1          1      31.67  18.942467 600000000
+         2          1      33.59   3.429407 115200000
+         3          1      36.08   4.310216 155520000
+         4          1      16.00   0.675172 10800000
+         5          1      10.66   0.187670 2000000
+         6          1      10.85   0.184403 2000000
+Pass_run_time: 105.476secs
+BackwardProp:  5.91 msecs
+         0          1     117.59   3.583401 421362000
+         1          1     415.47   1.444134 600000000
+         2          1     335.78   0.343081 115200000
+         3          1     344.76   0.451090 155520000
+         4          1     218.01   0.049540 10800000
+         5          1     116.43   0.017178 2000000
+         6          1     120.30   0.016625 2000000
+Pass_run_time: 20.6396secs
+WeightUpdate:  7.40 msecs
+         0          1     121.30   3.473709 421362000
+         1          1     412.18   1.455662 600000000
+         2          1     242.79   0.474475 115200000
+         3          1     202.17   0.769259 155520000
+         4          1      12.23   0.882897 10800000
+         5          1      11.56   0.173057 2000000
+         6          1      11.61   0.172250 2000000
+Pass_run_time: 79.139secs
+Total_run_time: 205.255secs
+ThreadAffinityConfig(Enabled): HyperThreading:Enabled LogicalProcessor:12 PhysicalProcessor:6
+Model: IMG1K 
+Pass: ALL 
+KernelVersion: HARDWARE
+FeedForwardSparsity: 30
+BackPropSparsity: 94
+SignalCacheLineSparsity: 93
+WeightUpdateSparsity: 32
+DeltaCacheLineSparsity: 1
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp: 35.72 msecs
+         0          1      26.18  16.093792 421362000
+         1          1      44.90  13.362192 600000000
+         2          1      47.89   2.405320 115200000
+         3          1      51.79   3.002796 155520000
+         4          1      21.15   0.510758 10800000
+         5          1      11.43   0.175049 2000000
+         6          1      11.58   0.172672 2000000
+Pass_run_time: 92.1517secs
+BackwardProp:  5.28 msecs
+         0          1     116.15   3.627637 421362000
+         1          1     513.62   1.168185 600000000
+         2          1     544.92   0.211406 115200000
+         3          1     721.56   0.215533 155520000
+         4          1     324.51   0.033281 10800000
+         5          1     155.78   0.012839 2000000
+         6          1     160.59   0.012454 2000000
+Pass_run_time: 20.0737secs
+WeightUpdate:  6.84 msecs
+         0          1     120.28   3.503215 421362000
+         1          1     411.55   1.457918 600000000
+         2          1     292.40   0.393986 115200000
+         3          1     256.65   0.605955 155520000
+         4          1      17.37   0.621803 10800000
+         5          1      15.85   0.126213 2000000
+         6          1      15.23   0.131283 2000000
+Pass_run_time: 78.5887secs
+Total_run_time: 190.814secs
+ThreadAffinityConfig(Enabled): HyperThreading:Enabled LogicalProcessor:12 PhysicalProcessor:6
+Model: IMG22K 
+Pass: ALL 
+KernelVersion: UNROLL
+FeedForwardSparsity: 30
+BackPropSparsity: 92
+SignalCacheLineSparsity: 63
+WeightUpdateSparsity: 7
+DeltaCacheLineSparsity: 0
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp: 134.52 msecs
+         0          1      11.55  50.034073 578027520
+         1          1      31.54  42.807975 1350000000
+         2          1      31.81   9.563641 304200000
+         3          1      34.61  10.069960 348480000
+         4          1      34.44  10.159058 349920000
+         5          1      19.95   4.511519 90000000
+         6          1      16.51   1.090328 18000000
+         7          1      21.00   6.285020 132000000
+Pass_run_time: 243.621secs
+BackwardProp: 144.30 msecs
+         0          1      10.88  53.119134 578027520
+         1          1      28.75  46.964308 1350000000
+         2          1      29.35  10.365351 304200000
+         3          1      31.86  10.936183 348480000
+         4          1      33.41  10.473074 349920000
+         5          1      19.41   4.637257 90000000
+         6          1      15.87   1.134515 18000000
+         7          1      19.78   6.672194 132000000
+Pass_run_time: 179.267secs
+WeightUpdate: 160.67 msecs
+         0          1      10.53  54.908783 578027520
+         1          1      31.77  42.496932 1350000000
+         2          1      31.16   9.761287 304200000
+         3          1      34.11  10.217645 348480000
+         4          1      33.87  10.331957 349920000
+         5          1       7.34  12.259455 90000000
+         6          1       6.55   2.746497 18000000
+         7          1       7.35  17.950679 132000000
+Pass_run_time: 305.653secs
+Total_run_time: 728.54secs
+ThreadAffinityConfig(Enabled): HyperThreading:Enabled LogicalProcessor:12 PhysicalProcessor:6
+Model: IMG22K 
+Pass: ALL 
+KernelVersion: SPARSE
+FeedForwardSparsity: 30
+BackPropSparsity: 92
+SignalCacheLineSparsity: 63
+WeightUpdateSparsity: 7
+DeltaCacheLineSparsity: 0
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp: 161.01 msecs
+         0          1       9.34  61.914532 578027520
+         1          1      26.73  50.496210 1350000000
+         2          1      26.92  11.299487 304200000
+         3          1      28.76  12.115191 348480000
+         4          1      28.68  12.201475 349920000
+         5          1      18.32   4.913627 90000000
+         6          1      15.12   1.190732 18000000
+         7          1      19.19   6.876826 132000000
+Pass_run_time: 269.812secs
+BackwardProp: 17.38 msecs
+         0          1      65.42   8.836226 578027520
+         1          1     313.99   4.299437 1350000000
+         2          1     301.16   1.010084 304200000
+         3          1     338.60   1.029185 348480000
+         4          1     334.39   1.046437 349920000
+         5          1     208.98   0.430658 90000000
+         6          1     152.42   0.118098 18000000
+         7          1     217.54   0.606780 132000000
+Pass_run_time: 52.0659secs
+WeightUpdate: 36.11 msecs
+         0          1      66.60   8.679490 578027520
+         1          1     325.35   4.149348 1350000000
+         2          1     276.11   1.101736 304200000
+         3          1     292.61   1.190930 348480000
+         4          1     259.23   1.349837 349920000
+         5          1      12.30   7.319151 90000000
+         6          1      12.07   1.491606 18000000
+         7          1      12.19  10.826102 132000000
+Pass_run_time: 180.816secs
+Total_run_time: 502.694secs
+ThreadAffinityConfig(Enabled): HyperThreading:Enabled LogicalProcessor:12 PhysicalProcessor:6
+Model: IMG22K 
+Pass: ALL 
+KernelVersion: OPT_SW
+FeedForwardSparsity: 30
+BackPropSparsity: 92
+SignalCacheLineSparsity: 63
+WeightUpdateSparsity: 7
+DeltaCacheLineSparsity: 0
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp: 140.51 msecs
+         0          1      10.50  55.073290 578027520
+         1          1      31.15  43.333049 1350000000
+         2          1      31.51   9.654405 304200000
+         3          1      34.29  10.163310 348480000
+         4          1      34.21  10.229233 349920000
+         5          1      19.73   4.561735 90000000
+         6          1      16.21   1.110495 18000000
+         7          1      20.66   6.389363 132000000
+Pass_run_time: 250.218secs
+BackwardProp: 17.35 msecs
+         0          1      65.52   8.821769 578027520
+         1          1     314.50   4.292488 1350000000
+         2          1     302.13   1.006855 304200000
+         3          1     338.90   1.028254 348480000
+         4          1     334.80   1.045158 349920000
+         5          1     208.92   0.430785 90000000
+         6          1     150.22   0.119824 18000000
+         7          1     217.04   0.608179 132000000
+Pass_run_time: 52.0529secs
+WeightUpdate: 35.83 msecs
+         0          1      67.64   8.546214 578027520
+         1          1     325.06   4.153071 1350000000
+         2          1     275.58   1.103853 304200000
+         3          1     291.80   1.194257 348480000
+         4          1     260.00   1.345863 349920000
+         5          1      12.32   7.307212 90000000
+         6          1      12.05   1.493262 18000000
+         7          1      12.36  10.681661 132000000
+Pass_run_time: 180.467secs
+Total_run_time: 482.737secs
+ThreadAffinityConfig(Enabled): HyperThreading:Enabled LogicalProcessor:12 PhysicalProcessor:6
+Model: IMG22K 
+Pass: ALL 
+KernelVersion: HARDWARE
+FeedForwardSparsity: 30
+BackPropSparsity: 92
+SignalCacheLineSparsity: 63
+WeightUpdateSparsity: 7
+DeltaCacheLineSparsity: 0
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp: 90.99 msecs
+         0          1      19.08  30.294139 578027520
+         1          1      43.47  31.059287 1350000000
+         2          1      44.57   6.824978 304200000
+         3          1      48.92   7.123497 348480000
+         4          1      49.32   7.095585 349920000
+         5          1      27.12   3.318055 90000000
+         6          1      21.22   0.848143 18000000
+         7          1      29.85   4.422621 132000000
+Pass_run_time: 199.985secs
+BackwardProp: 16.74 msecs
+         0          1      59.87   9.655214 578027520
+         1          1     336.04   4.017375 1350000000
+         2          1     380.46   0.799563 304200000
+         3          1     456.46   0.763444 348480000
+         4          1     516.06   0.678060 349920000
+         5          1     297.09   0.302937 90000000
+         6          1     196.18   0.091753 18000000
+         7          1     305.11   0.432635 132000000
+Pass_run_time: 51.4525secs
+WeightUpdate: 35.68 msecs
+         0          1      60.90   9.492191 578027520
+         1          1     318.77   4.235073 1350000000
+         2          1     276.06   1.101940 304200000
+         3          1     296.20   1.176510 348480000
+         4          1     266.97   1.310717 349920000
+         5          1      13.12   6.859557 90000000
+         6          1      12.48   1.441814 18000000
+         7          1      13.11  10.066384 132000000
+Pass_run_time: 180.57secs
+Total_run_time: 432.007secs
