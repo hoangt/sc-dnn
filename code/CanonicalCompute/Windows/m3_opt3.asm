@@ -85,7 +85,7 @@ loop_12_end:
 ; Start Sparse Work: Handle liveouts since all intermediate values are zeroes
 	shl		rax,	2; multiply sparseCount by 4
 	add		rcx,	rax
-;	movups  xmm3,	xmmword ptr -16[rcx]	; load last delta weight values
+	movups  xmm3,	xmmword ptr -16[rcx]	; load last delta weight values
 	add		rdx,	rax
 	xorps	xmm1,	xmm1
 	xor		rax,	rax

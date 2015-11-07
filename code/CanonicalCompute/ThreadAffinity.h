@@ -4,7 +4,6 @@
 #include <vector>
 #include <assert.h>
 
-
     struct ThreadAffinityConfig {
         bool _enabled;
         bool _hyperThreadingEnabled;
@@ -33,8 +32,7 @@
 
         void Configure(const uint32_t threadCount)
         {
-			assert(_enabled == true);
-
+            _enabled = true;
             SYSTEM_INFO sysinfo;
             GetSystemInfo(&sysinfo);
             _logicalProcessorCount = sysinfo.dwNumberOfProcessors;
@@ -43,12 +41,12 @@
             _affinityMask.resize(threadCount);
 
             DWORD bufferLength = 0;
-            bool logicalProcessorInfo = GetLogicalProcessorInformationEx(LOGICAL_PROCESSOR_RELATIONSHIP::RelationProcessorCore, nullptr, &bufferLength);
-            if ((logicalProcessorInfo == false) && (GetLastError() == ERROR_INSUFFICIENT_BUFFER) && (bufferLength > 0))
+            BOOL logicalProcessorInfo = GetLogicalProcessorInformationEx(LOGICAL_PROCESSOR_RELATIONSHIP::RelationProcessorCore, nullptr, &bufferLength);
+            if ((logicalProcessorInfo == FALSE) && (GetLastError() == ERROR_INSUFFICIENT_BUFFER) && (bufferLength > 0))
             {
                 PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX buffer = (PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX)malloc(bufferLength);
                 logicalProcessorInfo = GetLogicalProcessorInformationEx(LOGICAL_PROCESSOR_RELATIONSHIP::RelationProcessorCore, buffer, &bufferLength);
-                if (logicalProcessorInfo == true)
+                if (logicalProcessorInfo == TRUE)
                 {
                     DWORD byteOffset = 0;
                     PSYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX ptr = buffer;
@@ -71,7 +69,7 @@
             // Compute logical processor and affinity mask assignments of threads
             if (_hyperThreadingEnabled)
             {
-                // The assignment goals for hyperthreading is to
+                // The assignment goals for hyper threading is to
                 // (1) minimize physical core sharing to avoid L1 sharing
                 // (2) maximize physical core utilization per socket to avoid sharing data through L3
                 for (size_t t = 0; t < threadCount; t++)
@@ -107,11 +105,11 @@
 
 
 /* 
-	  // Call globally
-	   struct ThreadAffinityConfig _trainingThreadAffinity;
-	   _trainingThreadAffinity.Configure(threadCount);
+      // Call globally
+       struct ThreadAffinityConfig _trainingThreadAffinity;
+       _trainingThreadAffinity.Configure(threadCount);
 
-	   // Inside each thread
+       // Inside each thread
        const DWORD logicalProcessor = _trainingThreadAffinity.LogicalProcessor(threadId);
        const DWORD affinityMask = _trainingThreadAffinity.AffinityMask(threadId);
        SetThreadAffinityMask(GetCurrentThread(), affinityMask);

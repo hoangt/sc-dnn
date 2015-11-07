@@ -26,7 +26,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -137,6 +137,7 @@
     <ClInclude Include="paramparser.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="strary.h" />
+    <ClInclude Include="ThreadAffinity.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="xstring.h" />
   </ItemGroup>

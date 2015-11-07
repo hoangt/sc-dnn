@@ -73,16 +73,16 @@ typedef struct LayerConfig {
     int _BackPropSparsity;
     int _DeltaComputeSparsity;
     int _WeightUpdateSparsity;
-	int _SignalCacheLineSparsity;
+    int _SignalCacheLineSparsity;
 
-	void InitSparsity(int forward, int backward, int deltaWeight, int weightUpdate, int signalCacheLine)
-	{
-		_FeedForwardSparsity = forward;
-		_BackPropSparsity = backward;
-		_DeltaComputeSparsity = deltaWeight;
-		_WeightUpdateSparsity = weightUpdate;
-		_SignalCacheLineSparsity = signalCacheLine;
-	}
+    void InitSparsity(int forward, int backward, int deltaWeight, int weightUpdate, int signalCacheLine)
+    {
+        _FeedForwardSparsity = forward;
+        _BackPropSparsity = backward;
+        _DeltaComputeSparsity = deltaWeight;
+        _WeightUpdateSparsity = weightUpdate;
+        _SignalCacheLineSparsity = signalCacheLine;
+    }
 } LayerConfig;
 
 typedef struct Layer {

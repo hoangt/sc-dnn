@@ -23,41 +23,41 @@ void CanonicalConfig::Init()
 void CanonicalConfig::Print()
 {
   printf("WorkerCount: %d \n"
-	 "ThreadCount: %d \n"
-	 "Model: %s \n"
-	 "SampleCount: %d \n"
-	 "OutputLayer: %s \n"
-	 "DeltWeightOpt: %s\n"
-	 "Momentum: %s \n"
-	 "StartLayer: %d \n"
-	 "Task: %s \n"
-	 "Affinity: %s\n"
-	 "ZeroSignalOpt: %s\n"
-	 "SparseKernelsVersion: %d\n"
-	 "FeedForwardSparsity: %d\n" 
-	 "BackPropSparsity: %d\n"
-	 "DeltaComputeSparsity: %d\n"
-	 "WeightUpdateSparsity: %d\n"
-	 "SignalCacheLineSparsity: %d\n",
-	 _workerCount,
-	 _threadCount,
-	 ModelName[_modelType], 
-	 _sampleCount, 
-	 (_replicatedOutputLayer ? "Replicated" : "Partitioned"), 
-	 (_deltaWeightOpt ? "enabled" : "disabled"),
-	 (_deltaWeightOpt ? "enabled" : "disabled"),
-	 _startLayer,
-	 (_training ? "Training" : "Classify"),
-	 (_affinity ? "Enabled" : "Disabled"),
-	 (_zeroSignalOpt ? "Enabled" : "Disabled"),
-	 (_sparseKernelVersion),
-	 _forwardSparsity,
-	 _backwardSparsity,
-	 _deltaComputeSparsity,
-	 _weightUpdateSparsity,
-	 _signalCacheLineSparsity
-	 );
-	fflush(stdout);
+     "ThreadCount: %d \n"
+     "Model: %s \n"
+     "SampleCount: %d \n"
+     "OutputLayer: %s \n"
+     "DeltWeightOpt: %s\n"
+     "Momentum: %s \n"
+     "StartLayer: %d \n"
+     "Task: %s \n"
+     "Affinity: %s\n"
+     "ZeroSignalOpt: %s\n"
+     "SparseKernelsVersion: %d\n"
+     "FeedForwardSparsity: %d\n" 
+     "BackPropSparsity: %d\n"
+     "DeltaComputeSparsity: %d\n"
+     "WeightUpdateSparsity: %d\n"
+     "SignalCacheLineSparsity: %d\n",
+     _workerCount,
+     _threadCount,
+     ModelName[_modelType], 
+     _sampleCount, 
+     (_replicatedOutputLayer ? "Replicated" : "Partitioned"), 
+     (_deltaWeightOpt ? "enabled" : "disabled"),
+     (_deltaWeightOpt ? "enabled" : "disabled"),
+     _startLayer,
+     (_training ? "Training" : "Classify"),
+     (_affinity ? "Enabled" : "Disabled"),
+     (_zeroSignalOpt ? "Enabled" : "Disabled"),
+     (_sparseKernelVersion),
+     _forwardSparsity,
+     _backwardSparsity,
+     _deltaComputeSparsity,
+     _weightUpdateSparsity,
+     _signalCacheLineSparsity
+     );
+    fflush(stdout);
 }
 
 void DNN::Init (int nLayers, LayerConfig *lp, int nWorkers, bool replicate)
@@ -70,17 +70,17 @@ void DNN::Init (int nLayers, LayerConfig *lp, int nWorkers, bool replicate)
   for (int i = g_CanonicalConfig._startLayer; i < nLayers; i++)
     {
       if (i == (nLayers - 1))
-	{
-	  _Replicated[i] = replicate;
-	  _Layers[i].Init(lp[i]._OutputFeature, lp[i]._Input2Height, (replicate) ? lp[i]._Input2Width : lp[i]._Input2Width/nWorkers, lp[i]._FeedForwardSparsity,
-		  lp[i]._BackPropSparsity, lp[i]._DeltaComputeSparsity, lp[i]._WeightUpdateSparsity, lp[i]._SignalCacheLineSparsity);
-	  _nThreads[i] = (replicate) ? (int)(ceil((float)G_THREAD_COUNT/nWorkers)) : G_THREAD_COUNT;
-	}
+    {
+      _Replicated[i] = replicate;
+      _Layers[i].Init(lp[i]._OutputFeature, lp[i]._Input2Height, (replicate) ? lp[i]._Input2Width : lp[i]._Input2Width/nWorkers, lp[i]._FeedForwardSparsity,
+          lp[i]._BackPropSparsity, lp[i]._DeltaComputeSparsity, lp[i]._WeightUpdateSparsity, lp[i]._SignalCacheLineSparsity);
+      _nThreads[i] = (replicate) ? (int)(ceil((float)G_THREAD_COUNT/nWorkers)) : G_THREAD_COUNT;
+    }
       else {
-	_Replicated[i] = false;
-	_Layers[i].Init(lp[i]._OutputFeature, lp[i]._Input2Height, lp[i]._Input2Width, lp[i]._FeedForwardSparsity,
-		lp[i]._BackPropSparsity, lp[i]._DeltaComputeSparsity, lp[i]._WeightUpdateSparsity, lp[i]._SignalCacheLineSparsity);
-	_nThreads[i] = G_THREAD_COUNT;
+    _Replicated[i] = false;
+    _Layers[i].Init(lp[i]._OutputFeature, lp[i]._Input2Height, lp[i]._Input2Width, lp[i]._FeedForwardSparsity,
+        lp[i]._BackPropSparsity, lp[i]._DeltaComputeSparsity, lp[i]._WeightUpdateSparsity, lp[i]._SignalCacheLineSparsity);
+    _nThreads[i] = G_THREAD_COUNT;
       }
     }		
 }
@@ -92,19 +92,33 @@ void DNN::Fini(void)
       delete[] _Layers[i]._Weights;
       _Layers[i]._Weights = NULL;
     }
-  _nLayers = 0;		
+  _nLayers = 0;
   delete [] _Layers;
   _Layers = NULL;
 }
 
 void DNN::Print(const char *modelName)
 {
-  for (int i = G_START_LAYER; i < _nLayers; i++)
+#define OF_NAME "OUTF"
+#define I2H_NAME "I2H"
+#define I2W_NAME "I2W"
+#define D_I2W_NAME "D_I2W"
+#define S_I2W_NAME "S_I2W"
+
+    printf("\n%-40s %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \n", "MODEL", 
+        OF_NAME, I2H_NAME, I2W_NAME, D_I2W_NAME, S_I2W_NAME, "CONNS");
+
+    for (int i = G_START_LAYER; i < _nLayers; i++)
     {
-      printf("%s Config%dW \t Layer%d: \t %10d \t %10d \t %10d \t %10d\n", modelName, _nWorkers, i, _Layers[i]._OutputFeature, _Layers[i]._Input2Height, _Layers[i]._Input2Width, _Layers[i]._Connections);
-      printf("%s Archit%dW \t Layer%d: \t %10d \t %10d \t %10d \n", modelName, _nWorkers, i, _Layers[i]._InputSize, _Layers[i]._OutputFeature*_Layers[i]._Input2Width, _Layers[i]._OutputSize);
+        printf("%s Config%dW \t Layer%d: \t %10d \t %10d \t %10d \t %10d \t %10d \t %10d\n", 
+            modelName, _nWorkers, i, _Layers[i]._OutputFeature, _Layers[i]._Input2Height, _Layers[i]._Input2Width, _Layers[i]._DenseInput2Width, _Layers[i]._SparseInput2Width, _Layers[i]._Connections);
     }
-  fflush(stdout);
+    printf("\n");
+    //for (int i = G_START_LAYER; i < _nLayers; i++)
+    //{
+    //    printf("%s Archit%dW \t Layer%d: \t %10d \t %10d \t %10d \n", modelName, _nWorkers, i, _Layers[i]._InputSize, _Layers[i]._OutputFeature*_Layers[i]._Input2Width, _Layers[i]._OutputSize);
+    //}
+    fflush(stdout);
 }
 
 void Layer::Init (int of, int i2h, int i2w, int ffs, int bps, int dcs, int wus, int scls)
@@ -121,7 +135,7 @@ void Layer::Init (int of, int i2h, int i2w, int ffs, int bps, int dcs, int wus, 
   _BackPropSparsity = bps;
   _DeltaComputeSparsity = dcs;
   _WeightUpdateSparsity = wus;
-  // Assume sparse signal cachelines come, followed by sparse signal wordds, and finally dense signal words
+  // Assume sparse signal cachelines come, followed by sparse signal words, and finally dense signal words
   _minDenseSignalIndex = (G_ZERO_SIGNAL_OPT == false) ? 0 : (int)(bps * of * i2h * 0.01); 
   _minSparseSignalWordIndex = (G_ZERO_SIGNAL_OPT == false) ? 0 : (int)(scls * of * i2h * 0.01);
   MY_ASSERT (_minSparseSignalWordIndex <= _minDenseSignalIndex);
