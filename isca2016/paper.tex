@@ -1,10 +1,6 @@
-\documentclass[pageno]{jpaper}
+\documentclass{sig-alternate} 
 
-\newcommand{\asplossubmissionnumber}{XXX}
-
-\usepackage[normalem]{ulem}
 \usepackage{times}
-\usepackage{fullpage}
 \usepackage{mathtools}
 \usepackage{amsmath}
 \usepackage{comment}
@@ -12,21 +8,41 @@
 \usepackage{color}
 \usepackage{amsfonts}
 \newcommand{\pluseq}{\mathrel{+}=}
+
+\usepackage{mathptmx} % This is Times font
 \newcommand{\IGNORE}[1]{}
+\usepackage{fancyhdr}
+\usepackage[normalem]{ulem}
+\usepackage[hyphens]{url}
+\usepackage{hyperref}
 
-\renewcommand{\baselinestretch}{0.942}
+%%%%%%%%%%%---SETME-----%%%%%%%%%%%%%
+\newcommand{\hpcasubmissionnumber}{NaN}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\input{notations}
+\fancypagestyle{firstpage}{
+  \fancyhf{}
+\setlength{\headheight}{50pt}
+\renewcommand{\headrulewidth}{0pt}
+  \fancyhead[C]{\normalsize{ISCA 2016 Submission
+      \textbf{\#\hpcasubmissionnumber} \\ Confidential Draft: DO NOT DISTRIBUTE}} 
+  \pagenumbering{arabic}
+}  
+
+%\renewcommand{\baselinestretch}{0.942}
+
+%\input{notations}
 \begin{document}
 
 \title{Efficient Sparse Data Computations for Deep Learning}
 %\author{Anonymous}
 \date{}
 \maketitle
-\thispagestyle{empty}
+\thispagestyle{firstpage}
+\pagestyle{plain}
 
-\setlength{\belowdisplayskip}{5pt} \setlength{\belowdisplayshortskip}{5pt}
-\setlength{\abovedisplayskip}{5pt} \setlength{\abovedisplayshortskip}{5pt}
+%\setlength{\belowdisplayskip}{5pt} \setlength{\belowdisplayshortskip}{5pt}
+%\setlength{\abovedisplayskip}{5pt} \setlength{\abovedisplayshortskip}{5pt}
 
 \input{abstract}
 \input{intro}
@@ -42,7 +58,7 @@
 
 
 
-\bibliographystyle{plain}
+\bibliographystyle{ieeetr}
 \bibliography{references}
 
 \end{document}
