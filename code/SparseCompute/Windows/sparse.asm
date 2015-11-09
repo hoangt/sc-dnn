@@ -67,8 +67,4 @@ loop_1_end:
     ret 0
 mulsum2_sparse	ENDP
 
-
-
-
-
 END

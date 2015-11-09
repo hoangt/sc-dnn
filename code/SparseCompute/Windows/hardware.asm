@@ -12,7 +12,6 @@
 ;  rcx pf0
 ;  rdx pf1
 ;  r8  denseCount
-;  r9  sparseCount
 ; sparsity in activation (rcx)
 mulsum2_hardware PROC
     xorps   xmm0,  xmm0
