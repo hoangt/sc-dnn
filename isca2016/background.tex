@@ -17,20 +17,20 @@ Define $a_{i}$ as the activation of neuron $i$ in layer $l$. It is computed as a
 where $w_{ij}$ is the weight associated with the connection between neurons $i$ at layer $l$ and neuron $j$ at layer $l-1$, and $b_{i}$ is a bias term associated with neuron $i$. The activation function, $f$, associated with all neurons in the network is a pre-defined non-linear function, typically sigmoid or hyperbolic tangent.
 
 {\bf Back-propagation:}
-Error terms $\delta$ are computed for each neuron $i$ in the output layer $L$:
+Error gradients $\delta$ are computed for each neuron $i$ in the output layer $L$:
 \begin{equation}
 \delta_{i} = \left(true_{i} - a_{i}\right) \times f'(a_{i})\ ,
 \label{eqn:output_error_term}
 \end{equation}
 where $true(x)$ is the true value of the output and $f'(x)$ is the derivative of $f(x)$.
-These error terms are back-propagated to each neuron $i$ in the layer $l$ from its $S$ connected neurons in layer $l+1$:
+These error gradients are back-propagated to each neuron $i$ in the layer $l$ from its $S$ connected neurons in layer $l+1$:
 \begin{equation}
 \delta_{i} = \left(\sum\limits_{s=1}^{S}\delta_{s} \times w_{si}\right) \times f'(a_{i}) \ .
 \label{eqn:other_error_term}
 \end{equation}
 
 {\bf Weight updates:}
-These error terms are used to compute the weight deltas, $\Delta w_{ij}$, for updating the weights:
+These error gradients are used to compute the weight deltas, $\Delta w_{ij}$, for updating the weights:
 \begin{equation}
 \Delta w_{ij} = \alpha \times \delta_{i} \times a_{j} ~~for~ j = 1...J \ ,
 \label{eqn:weight_delta}
