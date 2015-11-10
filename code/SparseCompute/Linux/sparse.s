@@ -11,11 +11,12 @@
 #
 .globl mulsum2_sparse
 mulsum2_sparse:	
+	xorps 	%xmm3,	%xmm3
+	
 	xorps	%xmm0,	%xmm0
-	xorps 	$xmm3,	%xmm3
 	mov	%rdx,	%r9
 	shr	$0x2,	%r9
-	and	$0xFFFFFFFFFFFFFFFC, %r9 # $0x10 bytes alignment
+#	and	$0xFFFFFFFFFFFFFFFC, %r9 # $0x10 bytes alignment
 	test	%r9,	%r9
 	jz		loop_1_end
 loop_1:
@@ -62,7 +63,7 @@ sparse_4:
 	add	$0x10,	%rdi
 	add	$0x10,	%rsi
 	dec	%r9
- 	je		loop_1_end
+ 	jne		loop_1
 loop_1_end:
 	haddps	%xmm0,	%xmm0
 	haddps	%xmm0,	%xmm0

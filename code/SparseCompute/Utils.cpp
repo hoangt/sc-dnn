@@ -19,16 +19,26 @@ void CanonicalConfig::Init()
   _affinity = true;
   _sparseKernelVersion = 0;
   _zeroSignalOpt = false;
-  ConfigurePasses(false);
-  _passName = "None";
+  EnableAllPasses();
 }
 
-void CanonicalConfig::ConfigurePasses(bool setting)
+void CanonicalConfig::EnableAllPasses()
 {
     for (int i = 0; i < DNNPass::NUM_DNN_PASS; i++)
     {
-        _enablePass[i] = setting;
+        _enablePass[i] = true;
     }
+    _passName = "ALL";
+}
+
+void CanonicalConfig::EnablePass(DNNPass pass, const char* name)
+{
+  MY_ASSERT(pass < DNNPass::NUM_DNN_PASS);
+  for (int i = 0; i < DNNPass::NUM_DNN_PASS; i++)
+  {
+    _enablePass[i] = (i == pass) ? true : false;
+  } 
+  _passName = name;
 }
 
 const char* KernelNames[KernelVersion::KERNEL_VERSION_COUNT] = { "BASELINE", "UNROLL", "SW_SPARSE", "OPT_SW", "HW_SPARSE" };

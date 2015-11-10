@@ -210,6 +210,7 @@ struct CanonicalConfig {
 
     void Init();
     void Print();
-    void ConfigurePasses(bool);
+    void EnableAllPasses();
+    void EnablePass(DNNPass, const char* name);
 };
 

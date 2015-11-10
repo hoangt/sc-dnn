@@ -14,7 +14,7 @@ mulsum2_unroll:
 	xorps	%xmm0,	%xmm0
 	mov	%rdx,	%r9
 	shr	$0x2,	%r9
-	and	$0xFFFFFFFFFFFFFFFC, %r9 # $0x10 bytes alignment
+#	and	$0xFFFFFFFFFFFFFFFC, %r9 # $0x10 bytes alignment
 	test	%r9,	%r9
 	jz		loop_1_end
 loop_1:
@@ -76,47 +76,47 @@ mulsum3_unroll:
 	movss %xmm2, -0x4(%rsp)
 	movups -0x10(%rsp), %xmm2
 
-    mov   %rdx, %r8
-    shr   $0x2, %rdx
-    test  %rdx,	%rdx
-    jz    loop_1_end
-loop_1:
+	mov   %rdx, %r8
+	shr   $0x2, %rdx
+	test  %rdx,	%rdx
+	jz    loop_1_end
+loop_3:
 	movups	(%rsi),	%xmm1
 	movups	(%rdi), %xmm3
 	mulps	%xmm2,	%xmm1
 	addps	%xmm1,	%xmm3
 	movups	%xmm3,	(%rdi)
-    add		$0x10,	%rdi
-    add		$0x10,	%rsi
-    dec		%rdx
-    je   loop_1_end
+	add	$0x10,	%rdi
+	add	$0x10,	%rsi
+	dec	%rdx
+	je   loop_3_end
 	movups	(%rsi),	%xmm1
 	movups	(%rdi), %xmm3
 	mulps	%xmm2,	%xmm1
 	addps	%xmm1,	%xmm3
 	movups	%xmm3,	(%rdi)
-    add		$0x10,	%rdi
-    add		$0x10,	%rsi
-    dec		%rdx
-    je   loop_1_end
+	add	$0x10,	%rdi
+	add	$0x10,	%rsi
+	dec	%rdx
+	je   loop_3_end
 	movups	(%rsi),	%xmm1
 	movups	(%rdi), %xmm3
 	mulps	%xmm2,	%xmm1
 	addps	%xmm1,	%xmm3
 	movups	%xmm3,	(%rdi)
-    add		$0x10,	%rdi
-    add		$0x10,	%rsi
-    dec		%rdx
-    je   loop_1_end
+	add	$0x10,	%rdi
+	add	$0x10,	%rsi
+	dec	%rdx
+	je   loop_3_end
 	movups	(%rsi),	%xmm1
 	movups	(%rdi), %xmm3
 	mulps	%xmm2,	%xmm1
 	addps	%xmm1,	%xmm3
 	movups	%xmm3,	(%rdi)
-    add		$0x10,	%rdi
-    add		$0x10,	%rsi
-    dec		%rdx
-    jne   loop_1
-loop_1_end:
+	add	$0x10,	%rdi
+	add	$0x10,	%rsi
+	dec	%rdx
+	jne   loop_3
+loop_3_end:
     retq
 

@@ -14,7 +14,7 @@ mulsum2_hardware:
 	xorps	%xmm0,	%xmm0
 	mov	%rdx,	%r9
 	shr	$0x2,	%r9
-	and	$0xFFFFFFFFFFFFFFFC, %r9 # $0x10 bytes alignment
+#	and	$0xFFFFFFFFFFFFFFFC, %r9 # $0x10 bytes alignment
 	test	%r9,	%r9
 	jz		loop_1_end
 loop_1:
@@ -78,12 +78,12 @@ loop_1_end:
 # Simulate loop exit compensation code for liveouts
 .globl mulsum3_hardware
 mulsum3_hardware:
-	shl		0x2,	%r9
-	add		%r9,	%rdx
-	add		%r9,	%rcx
+	shl	$0x2,	%r9
+	add	%r9,	%rdx
+	add	%r9,	%rcx
 	
 	movups	-0x4(%rcx), %xmm3
-    xorps	%xmm1,	%xmm1
-    xor		%r9,		%r9
-    retq
+	xorps	%xmm1,	%xmm1
+	xor	%r9,		%r9
+	retq
 

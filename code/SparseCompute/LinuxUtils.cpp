@@ -35,7 +35,10 @@ static struct option long_options[] = {
   {"backwardsparsity", required_argument, 0, 'b'},
   {"deltacomputesparsity", required_argument, 0, 'e'},
   {"weightupdatesparsity", required_argument, 0, 'u'},
-  {"sparsekernels", required_argument, 0, 'k'},
+  {"signalcachelinesparsity", required_argument, 0, 'g'},
+  {"deltacachelinesparsity", required_argument, 0, 'y'},
+  {"kernel", required_argument, 0, 'k'},
+  {"pass", required_argument, 0, 'h'},
   {0, 0, 0, 0}
 };
 
@@ -48,6 +51,15 @@ void SetCanonicalConfig(int argc, char* argv[], CanonicalConfig& config)
       break;
     }
     switch (c) {
+    case 'h':
+      ProcessPassParam(optarg);
+      break;
+    case 'g':
+      config._signalCacheLineSparsity = atoi(optarg);
+      break;
+    case 'y':
+      config._deltaCacheLineSparsity = atoi(optarg);
+      break;
     case 's':
       config._sampleCount = atoi(optarg);
       break;
@@ -91,7 +103,11 @@ void SetCanonicalConfig(int argc, char* argv[], CanonicalConfig& config)
       config._weightUpdateSparsity = atoi(optarg);
       break;
     case 'k':
-        config._sparseKernelVersion = atoi(optarg);
+      {
+        int kernelVersion = atoi(optarg);
+	assert (kernelVersion < (int)KernelVersion::KERNEL_VERSION_COUNT);
+	config._kernelVersion = static_cast<KernelVersion>(kernelVersion);
+      }
       break;
     default:
       printf("%c: **No Match**\n", c);

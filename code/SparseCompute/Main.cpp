@@ -360,8 +360,7 @@ void ProcessPassParam(const char* passString)
     {
         if (CASE_INSENSITIVE_STRCMP(passString, DNNPassName[i]) == 0)
         {
-            g_CanonicalConfig._enablePass[i] = true;
-            g_CanonicalConfig._passName = DNNPassName[i];
+  	    g_CanonicalConfig.EnablePass(static_cast<DNNPass>(i), DNNPassName[i]);
             break;
         }
     }
