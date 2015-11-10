@@ -16,7 +16,7 @@
 mulsum2_hardware PROC
     xorps   xmm0,  xmm0
     mov     r10,   r8
-    shr		r10,	4	; cache line count
+    shr		r10,	2
     test	r10,	r10
     jz		loop_11_end
 ;   Do dense work first
@@ -70,7 +70,7 @@ mulsum2_hardware ENDP
 
 ;	Mimic loop exit compensation code for liveouts
 mulsum3_hardware PROC
-; extern void  avx2_mulsum_3_mem(const float *pf0, const float *pf1, float f2, INT64 count);
+; extern void  mulsum_3(const float *pf0, const float *pf1, float f2, INT64 count);
 ;
 ;	for(INT64 i = 0; i < counut; i++);
 ;	{

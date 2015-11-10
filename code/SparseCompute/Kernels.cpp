@@ -100,7 +100,7 @@ void HardwareBackPropagate(Layer* layer, const float* inputError, float* outputE
             }
             else 
             {
-                mulsum3_unroll(outputError + (j*layer->_Input2Width), layer->_Weights + (i*layer->_Input2Width), inputError[signalIndex], layer->_DenseInput2Width);
+                mulsum3_unroll(outputError + (j*layer->_Input2Width), layer->_Weights + (i*layer->_Input2Width), inputError[signalIndex], layer->_Input2Width);
             }
         }
     }
@@ -128,7 +128,7 @@ void SparseWeightDeltas_2D(Layer* layer, float* weightDeltas, const float* input
     {
         if (inputError[i] != 0.0f)
         {
-            mulsum3_unroll(weightDeltas + (i*layer->_Input2Width), inputAct, inputError[i], layer->_Input2Width);
+            mulsum3_sparse(weightDeltas + (i*layer->_Input2Width), inputAct, inputError[i], layer->_Input2Width);
         }
     }
 }
@@ -141,16 +141,16 @@ void HardwareWeightDeltas_2D(Layer* layer, float* weightDeltas, const float* inp
         {
             if (i % 16 == 0)
             {
-                mulsum3_hardware(weightDeltas + (i*layer->_Input2Width), inputAct, 0.0f, layer->_Input2Width);
+                mulsum3_hardware(weightDeltas + (i*layer->_Input2Width), inputAct, 0.0f, layer->_DenseInput2Width);
             }
         }
         else if (i < layer->_minDenseSignalIndex)
         {
-            mulsum3_hardware(weightDeltas + (i*layer->_Input2Width), inputAct, 0.0f, layer->_Input2Width);
+            mulsum3_hardware(weightDeltas + (i*layer->_Input2Width), inputAct, 0.0f, layer->_DenseInput2Width);
         }
         else
         {
-            mulsum3_unroll(weightDeltas + (i*layer->_Input2Width), inputAct, inputError[i], layer->_Input2Width);
+            mulsum3_unroll(weightDeltas + (i*layer->_Input2Width), inputAct, inputError[i], layer->_DenseInput2Width);
         }
     }
 }
@@ -191,7 +191,7 @@ void SparseWeightDeltas_3D(Layer* layer, float* weightDeltas, const float* input
             float signal = inputError[signalIndex];
             if (signal != 0.0f)
             {
-                mulsum3_unroll(weightDeltas + (i*layer->_Input2Width), inputAct + (j*layer->_Input2Width), signal, layer->_Input2Width);
+                mulsum3_sparse(weightDeltas + (i*layer->_Input2Width), inputAct + (j*layer->_Input2Width), signal, layer->_Input2Width);
             }
         }
     }
@@ -208,16 +208,16 @@ void HardwareWeightDeltas_3D(Layer* layer, float* weightDeltas, const float* inp
             {
                 if (signalIndex % 16 == 0)
                 {
-                    mulsum3_hardware(weightDeltas + (i*layer->_Input2Width), inputAct + (j*layer->_Input2Width), 0.0f, layer->_Input2Width);
+                    mulsum3_hardware(weightDeltas + (i*layer->_Input2Width), inputAct + (j*layer->_Input2Width), 0.0f, layer->_DenseInput2Width);
                 }
             }
             else if (signalIndex < layer->_minDenseSignalIndex)
             {
-                mulsum3_hardware(weightDeltas + (i*layer->_Input2Width), inputAct + (j*layer->_Input2Width), 0.0f, layer->_Input2Width);
+                mulsum3_hardware(weightDeltas + (i*layer->_Input2Width), inputAct + (j*layer->_Input2Width), 0.0f, layer->_DenseInput2Width);
             }
             else
             {
-                mulsum3_unroll(weightDeltas + (i*layer->_Input2Width), inputAct + (j*layer->_Input2Width), inputError[signalIndex], layer->_Input2Width);
+                mulsum3_unroll(weightDeltas + (i*layer->_Input2Width), inputAct + (j*layer->_Input2Width), inputError[signalIndex], layer->_DenseInput2Width);
             }
 
         }
@@ -234,6 +234,11 @@ void UnrollWeightUpdate(Layer* layer, const float* weightDeltas)
     mulsum3_unroll(layer->_Weights, weightDeltas, 1.0f, layer->_WeightSize);
 }
 
+void SparseWeightUpdate(Layer* layer, const float* weightDeltas)
+{
+    mulsum3_sparse(layer->_Weights, weightDeltas, 1.0f, layer->_WeightSize);
+}
+
 void HardwareWeightUpdate(Layer* layer, const float* weightDeltas)
 {
     mulsum3_unroll((layer->_Weights + layer->_minDenseDeltaWordIndex), (weightDeltas + layer->_minDenseDeltaWordIndex), 1.0f, layer->_DenseDeltaSize);
@@ -243,7 +248,7 @@ FeedForward g_FeedFowardKernels[KernelVersion::KERNEL_VERSION_COUNT] = { &Baseli
 BackPropagate g_BackPropagateKernels[KernelVersion::KERNEL_VERSION_COUNT] = { &BaselineBackPropagate, &UnrollBackPropagate, &SparseBackPropagate, &SparseBackPropagate, &HardwareBackPropagate };
 ComputeWeightDelta_2D g_ComputeWeightDeltaKernels_2D[KernelVersion::KERNEL_VERSION_COUNT] = { &BaselineWeightDeltas_2D, &UnrollWeightDeltas_2D, &SparseWeightDeltas_2D, SparseWeightDeltas_2D, &HardwareWeightDeltas_2D };
 ComputeWeightDelta_3D g_ComputeWeightDeltaKernels_3D[KernelVersion::KERNEL_VERSION_COUNT] = { &BaselineWeightDeltas_3D, &UnrollWeightDeltas_3D, &SparseWeightDeltas_3D, SparseWeightDeltas_3D, &HardwareWeightDeltas_3D };
-WeightUpdate g_ComputeWeightUpdateKernels[KernelVersion::KERNEL_VERSION_COUNT] = { &BaselineWeightUpdate, &UnrollWeightUpdate, &UnrollWeightUpdate, &UnrollWeightUpdate, &HardwareWeightUpdate };
+WeightUpdate g_ComputeWeightUpdateKernels[KernelVersion::KERNEL_VERSION_COUNT] = { &BaselineWeightUpdate, &UnrollWeightUpdate, &SparseWeightUpdate, &UnrollWeightUpdate, &HardwareWeightUpdate };
 
 
 void InitDNNKernels(DNNKernels& dnnKernels, const KernelVersion kernel)
