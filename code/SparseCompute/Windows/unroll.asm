@@ -12,7 +12,7 @@
 mulsum2_unroll PROC
     xorps	xmm0,	xmm0
     mov		r9,		r8
-    shr		r9,		4	; cache line count
+    shr		r9,		2
     test	r9,		r9
     jz		loop_1_end
 loop_1:
@@ -75,7 +75,7 @@ mulsum3_unroll PROC
     movups xmm2, dword ptr[rsp-10h]
 
     mov   r8, r9
-    shr   r9, 4             ; cache line size
+    shr   r9, 2
     test  r9, r9
     jz    loop_1_end
 loop_1:

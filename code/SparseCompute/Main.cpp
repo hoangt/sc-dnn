@@ -183,6 +183,7 @@ DWORD DNNModelThreadDeltaWeightUpdate(ThreadLayerState *tl)
                 tl->_FLOPTime[l] += ELAPSED_USEC_TIME(deltaTimer);
 
                 // Update weights
+                Sparsify(weightDeltas[l], tl->_LayerState[l]._WeightSize, G_WEIGHTUPDATE_SPARSITY);
                 DECLARE_TIMER(weightTimer);
                 START_TIMER(weightTimer);
                 g_DNNKernels._weightUpdate(layer, weightDeltas[l]);
