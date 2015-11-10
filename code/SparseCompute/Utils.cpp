@@ -31,17 +31,17 @@ void CanonicalConfig::ConfigurePasses(bool setting)
     }
 }
 
-const char* KernelNames[KernelVersion::KERNEL_VERSION_COUNT] = { "BASELINE", "UNROLL", "SPARSE", "OPTIMAL_SOFTWARE", "HARDWARE" };
+const char* KernelNames[KernelVersion::KERNEL_VERSION_COUNT] = { "BASELINE", "UNROLL", "SW_SPARSE", "OPT_SW", "HW_SPARSE" };
 
 void CanonicalConfig::Print()
 {
   printf(
       "Model: %s \n"
       "Pass: %s \n"
-      /*      "WorkerCount: %d \n"
-     "ThreadCount: %d \n"
+      "WorkerCount: %d \n"
+      "ThreadCount: %d \n"
      "SampleCount: %d \n"
-     "OutputLayer: %s \n"
+     /*     "OutputLayer: %s \n"
      "DeltWeightOpt: %s\n"
      "Momentum: %s \n"
      "StartLayer: %d \n"
@@ -58,10 +58,10 @@ void CanonicalConfig::Print()
      ,
      ModelName[_modelType],
      _passName,
-     /*     _workerCount,
+     _workerCount,
      _threadCount,
      _sampleCount, 
-     (_replicatedOutputLayer ? "Replicated" : "Partitioned"), 
+     /*     (_replicatedOutputLayer ? "Replicated" : "Partitioned"),
      (_deltaWeightOpt ? "enabled" : "disabled"),
      (_deltaWeightOpt ? "enabled" : "disabled"),
      _startLayer,
