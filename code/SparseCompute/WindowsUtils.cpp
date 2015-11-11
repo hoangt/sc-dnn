@@ -44,11 +44,6 @@ void ProcessParams(CParamParser& pparser, CanonicalConfig& config)
     {
         ProcessPassParam((char *)WtoA(pparser.ParamString(TEXT("pass"))));
     }
-    else
-    {
-        config.ConfigurePasses(true);
-        config._passName = "ALL";
-    }
 }
 
 void SetCanonicalConfig(int argc, char* argv[], CanonicalConfig& config)
