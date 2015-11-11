@@ -106,8 +106,10 @@ mulsum3_sparse:
 	jz    loop_1_end
 loop_3:
 	movups	(%rsi),	%xmm1
+#ifndef  M5_BUILD 
 	ptest	%xmm3,	%xmm1
 	jnz		sparse_31
+#endif
 	movups	(%rdi), %xmm3
 	mulps	%xmm2,	%xmm1
 	addps	%xmm1,	%xmm3
@@ -118,8 +120,10 @@ sparse_31:
 	dec	%rdx
 	je   loop_3_end
 	movups	(%rsi),	%xmm1
+#ifndef  M5_BUILD 
 	ptest	%xmm3,	%xmm1
 	jnz		sparse_32	
+#endif
 	movups	(%rdi), %xmm3
 	mulps	%xmm2,	%xmm1
 	addps	%xmm1,	%xmm3
@@ -130,8 +134,10 @@ sparse_32:
 	dec	%rdx
 	je   loop_3_end
 	movups	(%rsi),	%xmm1
+#ifndef  M5_BUILD 
 	ptest	%xmm3,	%xmm1
 	jnz		sparse_33
+#endif
 	movups	(%rdi), %xmm3
 	mulps	%xmm2,	%xmm1
 	addps	%xmm1,	%xmm3
@@ -142,8 +148,10 @@ sparse_33:
 	dec	%rdx
 	je   loop_3_end
 	movups	(%rsi),	%xmm1
+#ifndef  M5_BUILD 
 	ptest	%xmm3,	%xmm1
 	jnz		sparse_34
+#endif
 	movups	(%rdi), %xmm3
 	mulps	%xmm2,	%xmm1
 	addps	%xmm1,	%xmm3

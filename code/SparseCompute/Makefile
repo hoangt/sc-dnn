@@ -2,10 +2,10 @@ OBJECTS = SparseCompute DebugSparseCompute M5SparseCompute DebugM5SparseCompute
 CC = g++
 CFLAGS = -O3 -static -Os -DLINUX_BUILD -pthread -march=x86-64 -std=gnu++11
 DEBUG_CFLAGS = -g3 -static -DLINUX_BUILD -pthread -march=x86-64 -std=gnu++11
-M5_CFLAGS = -O3 -static -Os -DLINUX_BUILD Linux/m5pthread.o -march=x86-64 -std=gnu++11
-M5_DEBUG_CFLAGS = -g3 -static -DLINUX_BUILD Linux/m5pthread.o -march=x86-64 -std=gnu++11
+M5_CFLAGS = -O3 -static -Os -DLINUX_BUILD Linux/m5pthread.o -march=x86-64 -std=gnu++11 -DM5_BUILD 
+M5_DEBUG_CFLAGS = -g3 -static -DLINUX_BUILD Linux/m5pthread.o -march=x86-64 -std=gnu++11 -DM5_BUILD
 
-SOURCE = Main.cpp LinuxUtils.cpp Utils.cpp Kernels.cpp DataProvider.cpp Linux/*.s 
+SOURCE = Main.cpp LinuxUtils.cpp Utils.cpp Kernels.cpp DataProvider.cpp Linux/*.s Linux/*.S  
 
 all: $(OBJECTS) 
 
