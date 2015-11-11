@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<JobConfig>
+    <Name>THREAD_MODEL_SparseCompute</Name>
+    <Priority>1</Priority>
+    <Files>
+        <File>
+            <Src>D:\Projects\sc-dnn\code\SparseCompute\x64\Release\SparseCompute.exe</Src>
+	   <Src>runMODEL.cmd</Src>
+        </File>
+    </Files>
+    <Targets>
+        <Target Name="MainTarget" NodeType="xcg-wcs-node" Count="1">
+            <Tasks>
+                <Task Name="MainTask" >
+                    <CommandLine>runMODEL.cmd ThreadCount</CommandLine>
+                </Task> 
+	    </Tasks>
+	</Target>
+    </Targets>
+</JobConfig>
