@@ -63,6 +63,7 @@ class DataBlock
     void copyPartial(const DataBlock & dblk, int offset, int len);
     bool equal(const DataBlock& obj) const;
     void print(std::ostream& out) const;
+    bool isZeroData() const;
 
   private:
     void alloc();

@@ -152,6 +152,9 @@ structure (CacheMemory, external = "yes") {
   void setMRU(Address);
   void recordRequestType(CacheRequestType);
   bool checkResourceAvailable(CacheResourceType, Address);
+  
+  bool isZeroDataBlock(DataBlock);
+  void remove(Address);
 
   Scalar demand_misses;
   Scalar demand_hits;

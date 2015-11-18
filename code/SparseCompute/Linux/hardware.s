@@ -78,12 +78,12 @@ loop_1_end:
 # Simulate loop exit compensation code for liveouts
 .globl mulsum3_hardware
 mulsum3_hardware:
-	shl	$0x2,	%r9
-	add	%r9,	%rdx
-	add	%r9,	%rcx
+	shl	$0x2,	%rdx
+	add	%rdx,	%rdi
+	add	%rdx,	%rsi
 	
-	movups	-0x4(%rcx), %xmm3
+	movups	-0x4(%rsi), %xmm3
 	xorps	%xmm1,	%xmm1
-	xor	%r9,		%r9
+	xor	%rdx,	%rdx
 	retq
 

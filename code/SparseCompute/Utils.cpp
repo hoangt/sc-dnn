@@ -18,7 +18,7 @@ void CanonicalConfig::Init()
   _training = true;
   _affinity = true;
   _sparseKernelVersion = 0;
-  _zeroSignalOpt = false;
+  _zeroSignalOpt = true;
   EnableAllPasses();
 }
 
@@ -133,14 +133,19 @@ void DNN::Print(const char *modelName)
 #define I2W_NAME "I2W"
 #define D_I2W_NAME "D_I2W"
 #define S_I2W_NAME "S_I2W"
+#define D_SIG_NAME "D_SGI"
+#define S_SIG_NAME "S_SGI"
+#define D_DWI_NAME "D_DWI"
+#define S_DWI_NAME "S_DWI"
+#define D_DSZ_NAME "D_DSZ"
 
-    printf("\n%-40s %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \n", "MODEL", 
-        OF_NAME, I2H_NAME, I2W_NAME, D_I2W_NAME, S_I2W_NAME, "CONNS");
+    printf("\n%-40s %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s \t %-10s\n", "MODEL", 
+        OF_NAME, I2H_NAME, I2W_NAME, D_I2W_NAME, S_I2W_NAME, "CONNS", D_SIG_NAME, S_SIG_NAME, D_DWI_NAME, S_DWI_NAME, D_DSZ_NAME);
 
     for (int i = G_START_LAYER; i < _nLayers; i++)
     {
-        printf("%s Config%dW \t Layer%d: \t %10d \t %10d \t %10d \t %10d \t %10d \t %10d\n", 
-            modelName, _nWorkers, i, _Layers[i]._OutputFeature, _Layers[i]._Input2Height, _Layers[i]._Input2Width, _Layers[i]._DenseInput2Width, _Layers[i]._SparseInput2Width, _Layers[i]._Connections);
+        printf("%s Config%dW \t Layer%d: \t %10d \t %10d \t %10d \t %10d \t %10d \t %10d \t %10d \t %10d \t %10d \t %10d \t %10d\n", 
+            modelName, _nWorkers, i, _Layers[i]._OutputFeature, _Layers[i]._Input2Height, _Layers[i]._Input2Width, _Layers[i]._DenseInput2Width, _Layers[i]._SparseInput2Width, _Layers[i]._Connections, _Layers[i]._minDenseSignalIndex, _Layers[i]._minSparseSignalWordIndex, _Layers[i]._minDenseDeltaWordIndex, _Layers[i]._minSparseDeltaWordIndex, _Layers[i]._DenseDeltaSize);
     }
     printf("\n");
     //for (int i = G_START_LAYER; i < _nLayers; i++)
@@ -169,6 +174,8 @@ void Layer::Init (int of, int i2h, int i2w, int ffs, int bps, int dcs, int wus, 
   _minDenseSignalIndex = (G_ZERO_SIGNAL_OPT == false) ? 0 : (int)(bps * of * i2h * 0.01); 
   _minSparseSignalWordIndex = (G_ZERO_SIGNAL_OPT == false) ? 0 : (int)(scls * of * i2h * 0.01);
   MY_ASSERT (_minSparseSignalWordIndex <= _minDenseSignalIndex);
+
+  // Assume sparse activations come first, followed by dense activations
   _SparseInput2Width = ffs * i2w * 0.01;
   _DenseInput2Width = i2w - _SparseInput2Width;
   MY_ASSERT((_SparseInput2Width +_DenseInput2Width) == _Input2Width);

@@ -80,6 +80,9 @@ class CacheMemory : public SimObject
         allocate(address, new_entry);
     }
 
+    // Remove this address
+    void remove(const Address& address);
+
     // Explicitly free up this address
     void deallocate(const Address& address);
 
@@ -109,6 +112,9 @@ class CacheMemory : public SimObject
     void regStats();
     bool checkResourceAvailable(CacheResourceType res, Address addr);
     void recordRequestType(CacheRequestType requestType);
+
+   // Return true if a zero data block
+  bool isZeroDataBlock(const DataBlock&);
 
   public:
     Stats::Scalar m_demand_hits;

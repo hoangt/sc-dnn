@@ -90,3 +90,12 @@ DataBlock::operator=(const DataBlock & obj)
     memcpy(m_data, obj.m_data, RubySystem::getBlockSizeBytes());
     return *this;
 }
+
+bool 
+DataBlock::isZeroData() const
+{
+    for (int i = 0; i < RubySystem::getBlockSizeBytes(); i++) {
+      if (m_data[i] != 0) return false;
+    }
+    return true;
+}

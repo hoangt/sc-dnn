@@ -59,6 +59,7 @@ Sequencer::Sequencer(const Params *p)
 
     m_instCache_ptr = p->icache;
     m_dataCache_ptr = p->dcache;
+    m_zeroCache_ptr = p->zcache;
     m_max_outstanding_requests = p->max_outstanding_requests;
     m_deadlock_threshold = p->deadlock_threshold;
 
@@ -66,6 +67,7 @@ Sequencer::Sequencer(const Params *p)
     assert(m_deadlock_threshold > 0);
     assert(m_instCache_ptr != NULL);
     assert(m_dataCache_ptr != NULL);
+    assert(m_zeroCache_ptr != NULL);
 
     m_usingNetworkTester = p->using_network_tester;
 }
@@ -504,13 +506,6 @@ Sequencer::hitCallback(SequencerRequest* srequest, DataBlock& data,
     RubyRequestType type = srequest->m_type;
     Cycles issued_time = srequest->issue_time;
 
-    // Set this cache entry to the most recently used
-    if (type == RubyRequestType_IFETCH) {
-        m_instCache_ptr->setMRU(request_line_address);
-    } else {
-        m_dataCache_ptr->setMRU(request_line_address);
-    }
-
     assert(curCycle() >= issued_time);
     Cycles total_latency = curCycle() - issued_time;
 
@@ -524,6 +519,7 @@ Sequencer::hitCallback(SequencerRequest* srequest, DataBlock& data,
              llscSuccess ? "Done" : "SC_Failed", "", "",
              request_address, total_latency);
 
+    bool zeroDataBlock = false;
     // update the data unless it is a non-data-carrying flush
     if (g_system_ptr->m_warmup_enabled) {
         data.setData(pkt->getConstPtr<uint8_t>(),
@@ -537,10 +533,20 @@ Sequencer::hitCallback(SequencerRequest* srequest, DataBlock& data,
             memcpy(pkt->getPtr<uint8_t>(),
                    data.getData(request_address.getOffset(), pkt->getSize()),
                    pkt->getSize());
+	    zeroDataBlock = data.isZeroData();
         } else {
             data.setData(pkt->getConstPtr<uint8_t>(),
                          request_address.getOffset(), pkt->getSize());
         }
+    }
+    
+    // Set this cache entry to the most recently used
+    if (type == RubyRequestType_IFETCH) {
+        m_instCache_ptr->setMRU(request_line_address);
+    } else if (zeroDataBlock) {
+        m_zeroCache_ptr->setMRU(request_line_address);
+    } else {
+        m_dataCache_ptr->setMRU(request_line_address);
     }
 
     // If using the RubyTester, update the RubyTester sender state's

@@ -78,12 +78,12 @@ def create_system(options, full_system, system, dma_ports, ruby_system):
     assert (options.num_cpus % options.num_clusters == 0)
     num_cpus_per_cluster = options.num_cpus / options.num_clusters
 
-    assert (options.num_l2caches % options.num_clusters == 0)
-    num_l2caches_per_cluster = options.num_l2caches / options.num_clusters
+    assert (options.num_l3caches % options.num_clusters == 0)
+    num_l3caches_per_cluster = options.num_l3caches / options.num_clusters
 
-    l2_bits = int(math.log(num_l2caches_per_cluster, 2))
+    l3_bits = int(math.log(num_l3caches_per_cluster, 2))
     block_size_bits = int(math.log(options.cacheline_size, 2))
-    l2_index_start = block_size_bits + l2_bits
+    l3_index_start = block_size_bits + l3_bits
 
     #
     # Must create the individual controllers before the network to ensure the
@@ -94,10 +94,10 @@ def create_system(options, full_system, system, dma_ports, ruby_system):
             #
             # First create the Ruby objects associated with this cpu
             #
-            l0i_cache = L0Cache(size = '4096B', assoc = 1, is_icache = True,
+            l0i_cache = L0Cache(size = options.l1i_size, assoc = options.l1i_assoc, is_icache = True,
                 start_index_bit = block_size_bits, replacement_policy="LRU")
 
-            l0d_cache = L0Cache(size = '4096B', assoc = 1, is_icache = False,
+            l0d_cache = L0Cache(size = options.l1d_size, assoc = options.l1d_assoc, is_icache = False,
                 start_index_bit = block_size_bits, replacement_policy="LRU")
 
             l0_cntrl = L0Cache_Controller(version = i*num_cpus_per_cluster + j,
@@ -112,11 +112,11 @@ def create_system(options, full_system, system, dma_ports, ruby_system):
 
             l0_cntrl.sequencer = cpu_seq
 
-            l1_cache = L1Cache(size = options.l1d_size, assoc = options.l1d_assoc,
+            l1_cache = L1Cache(size = options.l2_size, assoc = options.l2_assoc,
                             start_index_bit = block_size_bits, is_icache = False)
 
             l1_cntrl = L1Cache_Controller(version = i*num_cpus_per_cluster+j,
-                          cache = l1_cache, l2_select_num_bits = l2_bits,
+                          cache = l1_cache, l2_select_num_bits = l3_bits,
                           cluster_id = i, ruby_system = ruby_system)
 
             exec("ruby_system.l0_cntrl%d = l0_cntrl" % (
@@ -144,19 +144,19 @@ def create_system(options, full_system, system, dma_ports, ruby_system):
             l1_cntrl.responseFromL2 =  ruby_system.network.master
 
 
-        for j in xrange(num_l2caches_per_cluster):
-            l2_cache = L2Cache(size = options.l2_size,
-                               assoc = options.l2_assoc,
-                               start_index_bit = l2_index_start)
+        for j in xrange(num_l3caches_per_cluster):
+            l2_cache = L2Cache(size = options.l3_size,
+                               assoc = options.l3_assoc,
+                               start_index_bit = l3_index_start)
 
             l2_cntrl = L2Cache_Controller(
-                        version = i * num_l2caches_per_cluster + j,
+                        version = i * num_l3caches_per_cluster + j,
                         L2cache = l2_cache, cluster_id = i,
                         transitions_per_cycle=options.ports,
                         ruby_system = ruby_system)
 
             exec("ruby_system.l2_cntrl%d = l2_cntrl" % (
-                        i * num_l2caches_per_cluster + j))
+                        i * num_l3caches_per_cluster + j))
             l2_cntrl_nodes.append(l2_cntrl)
 
             # Connect the L2 controllers and the network

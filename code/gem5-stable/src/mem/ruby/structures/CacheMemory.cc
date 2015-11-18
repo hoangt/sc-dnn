@@ -277,6 +277,20 @@ CacheMemory::deallocate(const Address& address)
     }
 }
 
+void
+CacheMemory::remove(const Address& address)
+{
+    assert(address == line_address(address));
+    assert(isTagPresent(address));
+    DPRINTF(RubyCache, "address: %s\n", address);
+    int64 cacheSet = addressToCacheSet(address);
+    int loc = findTagInSet(cacheSet, address);
+    if (loc != -1) {
+        m_cache[cacheSet][loc] = NULL;
+        m_tag_index.erase(address);
+    }
+}
+
 // Returns with the physical address of the conflicting cache line
 Address
 CacheMemory::cacheProbe(const Address& address) const
@@ -562,4 +576,11 @@ CacheMemory::checkResourceAvailable(CacheResourceType res, Address addr)
         assert(false);
         return true;
     }
+}
+
+
+bool
+CacheMemory::isZeroDataBlock(const DataBlock & dblk)
+{
+  return dblk.isZeroData();
 }

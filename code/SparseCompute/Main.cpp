@@ -420,7 +420,7 @@ int main(int argc, char *argv[])
 
 
     DNNModel.Init(ModelLayerCount[(int)G_MODEL_TYPE], lc, G_WORKER_COUNT, G_REPLICATED_OUTPUT_LAYER);
-//   DNNModel.Print( ModelName[g_CanonicalConfig._modelType]);
+//    DNNModel.Print( ModelName[g_CanonicalConfig._modelType]);
 
 #ifdef PREPARE_COMPUTE_DATA
     PrepareComputeData(DNNModel);
@@ -429,8 +429,8 @@ int main(int argc, char *argv[])
     InitDNNKernels(g_DNNKernels, G_DNN_KERNEL_VERSION);
 
     double runTime = runDNNModel();
-
     std::cout<<"Total_run_time: " << runTime/(1E06) << "secs" << endl;
+
     DNNModel.Fini();
 
 #ifdef PREPARE_COMPUTE_DATA

@@ -179,6 +179,7 @@ class Sequencer : public RubyPort
 
     CacheMemory* m_dataCache_ptr;
     CacheMemory* m_instCache_ptr;
+    CacheMemory* m_zeroCache_ptr;
 
     typedef m5::hash_map<Address, SequencerRequest*> RequestTable;
     RequestTable m_writeRequestTable;
