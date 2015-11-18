@@ -100,14 +100,19 @@ def create_system(options, full_system, system, dma_ports, ruby_system):
             l0d_cache = L0Cache(size = options.l1d_size, assoc = options.l1d_assoc, is_icache = False,
                 start_index_bit = block_size_bits, replacement_policy="LRU")
 
+            l0z_cache = L0Cache(size = options.l1d_size, assoc = options.l1d_assoc, is_icache = False,
+                start_index_bit = block_size_bits, replacement_policy="LRU")
+
             l0_cntrl = L0Cache_Controller(version = i*num_cpus_per_cluster + j,
                           Icache = l0i_cache, Dcache = l0d_cache,
+                          Zcache = l0z_cache,
                           send_evictions = send_evicts(options),
                           clk_domain=system.cpu[i].clk_domain,
                           ruby_system = ruby_system)
 
             cpu_seq = RubySequencer(version = i, icache = l0i_cache,
                         clk_domain=system.cpu[i].clk_domain,
+			zcache = l0z_cache,
                         dcache = l0d_cache, ruby_system = ruby_system)
 
             l0_cntrl.sequencer = cpu_seq
