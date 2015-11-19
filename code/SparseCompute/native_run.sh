@@ -20,9 +20,10 @@ echo "PROGOPTS="${progOpts}
 
 prog="$progDir/M5SparseCompute"
 
-for k in 1 3 4; do  
+#for k in 1 3 4; do  
+for k in 1 ; do  
 
-  $prog  --kernel $k ${progOpts}
+  echo $prog  --kernel $k ${progOpts}
 done
 
 

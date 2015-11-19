@@ -311,7 +311,7 @@ RubyPort::MemSlavePort::recvFunctional(PacketPtr pkt)
 
     // Unless the requester explicitly said otherwise, generate an error if
     // the functional request failed
-    if (!accessSucceeded && !pkt->suppressFuncError()) {
+    if (!accessSucceeded && !pkt->suppressFuncError() && false) {
         fatal("Ruby functional %s failed for address %#x\n",
               pkt->isWrite() ? "write" : "read", pkt->getAddr());
     }

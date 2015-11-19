@@ -12,13 +12,14 @@ using namespace std;
 
 void SetTrainingThreadAffinity(int threadNum)
 {
-  /*
+/*
   cpu_set_t cpuset;
   
   CPU_ZERO(&cpuset);
   CPU_SET((threadNum % numOnlineCPUs), &cpuset);
   pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
-  */
+*/
+
 }
 
 static struct option long_options[] = {

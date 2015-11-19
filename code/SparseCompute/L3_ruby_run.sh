@@ -14,12 +14,12 @@ fi
 sampleCount=$1
 tc=$2
 cpus=$((tc + 1))
-sparsityOpts="--forwardsparsity 30 --backwardsparsity 83 --signalcachelinesparsity 81 --weightupdatesparsity 5 --deltacachelinesparsity 0"
+sparsityOpts="--forwardsparsity 30 --backwardsparsity 83 --signalcachelinesparsity 81 --weightupdatesparsity 5 --deltacachelinesparsity 0 --pass ForwardProp"
 progOpts="--samples $sampleCount --threads $tc $sparsityOpts"
 . ./cacheSpecs.sh
 cacheOpts="--l1d_size=${l1Size} --l1i_size=${l1Size} --l2_size=${l2Size} --l3_size=${l3Size}"
 
-simOpts="--ruby --cpu-type=timing --caches --l2cache --num-l3caches=1 ${cacheOpts} --num-cpus=$cpus"
+simOpts="--ruby --cpu-type=timing --caches --l2cache --num-l3caches=1 ${cacheOpts} --num-l2caches=${cpus} --num-cpus=$cpus"
 
 echo "Run SparseCompute in GEM5-RUby" 
 echo "GEM5="${gem5Bin}
