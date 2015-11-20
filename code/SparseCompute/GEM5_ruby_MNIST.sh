@@ -21,6 +21,7 @@ if [ $# -gt 3 ]; then
 fi
 
 . ./MNIST_Sparse.sh 
+
 progOpts="--samples $sampleCount --threads $tc $sparsityOpts --model ${model} --workers ${workerCount}"
 
 . ./cacheSpecs.sh $cacheScale

@@ -14,13 +14,17 @@ cacheScale=1
 if [ $# -eq 5 ]; then
   cacheScale=$5
 fi
+
+cpus=1
+if [ $# -eq 6 ]; then
+  cpus=$6
+fi
  
 ic=$1
 oc=$2
 sr=$3
 iter=$4
 
-cpus=1
 progOpts="$ic $oc $sr $iter"
 optString="${ic}_${oc}_${sr}_${iter}"
 
