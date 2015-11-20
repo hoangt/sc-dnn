@@ -5,6 +5,7 @@
 #include <time.h>
 #include <algorithm>
 #include <assert.h>
+#include "string.h"
 #include "DataProvider.h"
 
 using namespace std;
@@ -18,13 +19,13 @@ void InitDataProvider()
 void Sparsify(float* data, const int size, const int sparsePercent, const int sparsecacheLinePercent)
 {
 	assert(sparsePercent >= sparsecacheLinePercent);
-	const int numCacheLines = size / DATA_PER_CACHELINE;
-	const int remainderSparsePercent = 100 * (sparsePercent - sparsecacheLinePercent)/(100 - sparsecacheLinePercent);
+	int numCacheLines = size / DATA_PER_CACHELINE;
+	int remainderSparsePercent = 100 * (sparsePercent - sparsecacheLinePercent)/(100 - sparsecacheLinePercent);
 
 	for (size_t i = 0; i < numCacheLines; i++)
 	{
 		float* cacheLine = data + (i * DATA_PER_CACHELINE);
-		const int lineProbability = rand() % 100;
+		int lineProbability = rand() % 100;
 		if (lineProbability < sparsecacheLinePercent)
 		{
 			memset(cacheLine, 0, sizeof(float)* DATA_PER_CACHELINE);
@@ -83,7 +84,7 @@ void PrintSparseStatistics(const char* tag, const std::vector<std::vector<float>
     printf("SparseStatistics: %s Min:%5.2f Max:%5.2f Avg:%5.2f\n", tag, minSparsity, maxSparsity, averageSparsity);
 }
 
-void PrintSparseStatistics(const char* tag, const std::vector<const float*>& sparseData, const std::vector<const int>& dataSize)
+void PrintSparseStatistics(const char* tag, const std::vector<const float*>& sparseData, const std::vector<int>& dataSize)
 {
 	assert(sparseData.size() > 0);
 	int totalSparseCount = 0;
@@ -94,7 +95,7 @@ void PrintSparseStatistics(const char* tag, const std::vector<const float*>& spa
 	for (size_t i = 0; i < sparseData.size(); i++)
 	{
 		int layerCount = 0;
-		const int numCacheLines = dataSize[i] / DATA_PER_CACHELINE;
+		int numCacheLines = dataSize[i] / DATA_PER_CACHELINE;
 		for (size_t j = 0; j < numCacheLines; j++)
 		{
 			const float* cacheLine = sparseData[i] + (j * DATA_PER_CACHELINE);
@@ -112,7 +113,7 @@ void PrintSparseStatistics(const char* tag, const std::vector<const float*>& spa
 		cacheLineDataCount += numCacheLines;
 	}
 
-	const float averageSparsity = static_cast<float>(totalSparseCount) / static_cast<float>(dataCount);
-	const float averageCacheLineSparsity = static_cast<float>(totalCacheLineSparseCount) / static_cast<float> (cacheLineDataCount);
+	float averageSparsity = static_cast<float>(totalSparseCount) / static_cast<float>(dataCount);
+	float averageCacheLineSparsity = static_cast<float>(totalCacheLineSparseCount) / static_cast<float> (cacheLineDataCount);
 	printf("SparseStatistics: %s Word:%5.2f $Line:%5.2f\n", tag, averageSparsity, averageCacheLineSparsity);
 }

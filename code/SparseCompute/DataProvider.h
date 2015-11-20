@@ -16,4 +16,4 @@ void GetSparseData(std::vector<std::vector<float>>& sparseData, size_t unitCount
 
 void PrintSparseStatistics(const char* tag, const std::vector<std::vector<float>>& sparseData);
 
-void PrintSparseStatistics(const char* tag, const std::vector<const float*>& sparseData, const std::vector<const int>& dataSize);
+void PrintSparseStatistics(const char* tag, const std::vector<const float*>& sparseData, const std::vector<int>& dataSize);

@@ -10,7 +10,7 @@ fi
 sc=$1
 tc=$2
 cpus=$((tc + 1))
-sparsityOpts="--forwardsparsity 30 --backwardsparsity 83 --signalcachelinesparsity 81 --weightupdatesparsity 5 --deltacachelinesparsity 0"
+sparsityOpts="--forwardsparsity 30 --activationcachelinesparsity 14 --backwardsparsity 83 --signalcachelinesparsity 81 --weightupdatesparsity 5 --deltacachelinesparsity 0"
 #sparsityOpts="--forwardsparsity 30 --backwardsparsity 100 --signalcachelinesparsity 100 --weightupdatesparsity 5 --deltacachelinesparsity 0"
 progOpts="--samples $sc --threads $tc $sparsityOpts"
 
@@ -20,10 +20,10 @@ echo "PROGOPTS="${progOpts}
 
 prog="$progDir/M5SparseCompute"
 
-#for k in 1 3 4; do  
-for k in 1 ; do  
+for k in 1 3 4; do  
+#for k in 1 ; do  
 
-  echo $prog  --kernel $k ${progOpts}
+  $prog  --kernel $k ${progOpts}
 done
 
 

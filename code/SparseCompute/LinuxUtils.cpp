@@ -37,6 +37,7 @@ static struct option long_options[] = {
   {"deltacomputesparsity", required_argument, 0, 'e'},
   {"weightupdatesparsity", required_argument, 0, 'u'},
   {"signalcachelinesparsity", required_argument, 0, 'g'},
+  {"activationcachelinesparsity", required_argument, 0, 'v'},
   {"deltacachelinesparsity", required_argument, 0, 'y'},
   {"kernel", required_argument, 0, 'k'},
   {"pass", required_argument, 0, 'h'},
@@ -55,7 +56,10 @@ void SetCanonicalConfig(int argc, char* argv[], CanonicalConfig& config)
     case 'h':
       ProcessPassParam(optarg);
       break;
-    case 'g':
+   case 'v':
+	config._activationCacheLineSparsity = atoi(optarg); 
+	break;
+   case 'g':
       config._signalCacheLineSparsity = atoi(optarg);
       break;
     case 'y':

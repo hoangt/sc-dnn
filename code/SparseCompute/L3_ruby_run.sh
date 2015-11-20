@@ -14,8 +14,9 @@ fi
 sampleCount=$1
 tc=$2
 cpus=$((tc + 1))
-sparsityOpts="--forwardsparsity 30 --backwardsparsity 83 --signalcachelinesparsity 81 --weightupdatesparsity 5 --deltacachelinesparsity 0 --pass ForwardProp"
-progOpts="--samples $sampleCount --threads $tc $sparsityOpts"
+sparsityOpts="--forwardsparsity 35 --activationcachelinesparsity 14 --backwardsparsity 83 --signalcachelinesparsity 81 --weightupdatesparsity 5 --deltacachelinesparsity 0"
+passOpt="--pass ForwardProp"
+progOpts="--samples $sampleCount --threads $tc $sparsityOpts $passOpts"
 . ./cacheSpecs.sh
 cacheOpts="--l1d_size=${l1Size} --l1i_size=${l1Size} --l2_size=${l2Size} --l3_size=${l3Size}"
 

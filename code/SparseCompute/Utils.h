@@ -63,6 +63,7 @@ extern CanonicalConfig g_CanonicalConfig;
 #define G_WEIGHTUPDATE_SPARSITY g_CanonicalConfig._weightUpdateSparsity
 #define G_SPARSE_KERNEL_VERSION(v) (g_CanonicalConfig._sparseKernelVersion == v)
 #define G_ZERO_SIGNAL_OPT g_CanonicalConfig._zeroSignalOpt 
+#define G_ACTIVATION_CACHELINE_SPARSITY g_CanonicalConfig._activationCacheLineSparsity
 #define G_SIGNAL_CACHELINE_SPARSITY g_CanonicalConfig._signalCacheLineSparsity
 #define G_DELTA_CACHELINE_SPARSITY g_CanonicalConfig._deltaCacheLineSparsity
 #define G_DNN_KERNEL_VERSION g_CanonicalConfig._kernelVersion
