@@ -52,13 +52,14 @@ const char *DNNPassName[NUM_DNN_PASS] = {"ForwardProp", "BackwardProp", "WeightU
 DWORD DNNModelThreadForward(ThreadLayerState *tl)
 {
     SetTrainingThreadAffinity(tl->_threadNum);
-    float **inputActivation = new float *[tl->_numLayers];
-    float **outputActivation = new float *[tl->_numLayers];
-    for (int i = tl->_startLayer; i < tl->_numLayers; i++)
-    {
-        inputActivation[i] = new float[tl->_LayerState[i]._InputSize];
-        outputActivation[i] = new float[tl->_LayerState[i]._OutputSize];
-    }
+
+    //float **inputActivation = new float *[tl->_numLayers];
+    //float **outputActivation = new float *[tl->_numLayers];
+    //for (int i = tl->_startLayer; i < tl->_numLayers; i++)
+    //{
+    //    inputActivation[i] = new float[tl->_LayerState[i]._InputSize];
+    //    outputActivation[i] = new float[tl->_LayerState[i]._OutputSize];
+    //}
 
     while (true)
     {
@@ -74,10 +75,9 @@ DWORD DNNModelThreadForward(ThreadLayerState *tl)
             Sparsify(layerActivations[activationId], G_FORWARD_SPARSITY);
             const float* inpACT = &activationVector[0];
 #else
-            float *inpACT = inputActivation[l];
-            Sparsify(inpACT, tl->_LayerState[l]._InputSize, G_FORWARD_SPARSITY);
+            float *inpACT = tl->_inputActivation[l];
 #endif
-            float *outACT = outputActivation[l];
+            float *outACT = tl->_outputActivation[l];
             Layer *layer = (tl->_LayerState + l);
 
             DECLARE_TIMER(timer);
@@ -89,14 +89,16 @@ DWORD DNNModelThreadForward(ThreadLayerState *tl)
             tl->_SampleCount[l]++;
         }
     }
-    for (int i = tl->_startLayer; i < tl->_numLayers; i++)
-    {
-        delete [] inputActivation[i];
-        delete [] outputActivation[i];
-    }
-        
-    delete []inputActivation;
-    delete []outputActivation;
+
+	//for (int i = tl->_startLayer; i < tl->_numLayers; i++)
+ //   {
+ //       delete [] inputActivation[i];
+ //       delete [] outputActivation[i];
+ //   }
+ //       
+ //   delete []inputActivation;
+ //   delete []outputActivation;
+
     return 0;
 }
 
@@ -105,13 +107,14 @@ DWORD DNNModelThreadBackward(ThreadLayerState *tl)
 {
     SetTrainingThreadAffinity(tl->_threadNum);
 
-    float **outputError = new float *[tl->_numLayers];
-    float **inputError = new float *[tl->_numLayers];
-    for (int i = tl->_startLayer; i < tl->_numLayers; i++)
-    {
-        outputError[i] = new float[tl->_LayerState[i]._InputSize];
-        inputError[i] = new float[tl->_LayerState[i]._OutputSize];
-    }
+    //float **outputError = new float *[tl->_numLayers];
+    //float **inputError = new float *[tl->_numLayers];
+    //for (int i = tl->_startLayer; i < tl->_numLayers; i++)
+    //{
+    //    outputError[i] = new float[tl->_LayerState[i]._InputSize];
+    //    inputError[i] = new float[tl->_LayerState[i]._OutputSize];
+    //}
+
     while (true)
     {
         INT64 sampleId = ATOMIC_INCREMENT64(g_CurrentSamplePos);
@@ -119,25 +122,27 @@ DWORD DNNModelThreadBackward(ThreadLayerState *tl)
         int numLayers = ((sampleId % G_WORKER_COUNT) == 0) ? tl->_numLayers : tl->_numLayers-1;
         for (int l = tl->_startLayer; l < numLayers; l++)
         {
-            Sparsify(inputError[l], tl->_LayerState[l]._OutputSize, G_BACKPROP_SPARSITY);
+            //Sparsify(tl->_inputError[l], tl->_LayerState[l]._OutputSize, G_BACKPROP_SPARSITY);
             Layer *layer = (tl->_LayerState + l);
  
             DECLARE_TIMER(timer);
             START_TIMER(timer);
-            g_DNNKernels._backPropagate(layer, inputError[l], outputError[l]);
+            g_DNNKernels._backPropagate(layer, tl->_inputError[l], tl->_outputError[l]);
             STOP_TIMER(timer);
             tl->_FLOPTime[l] += ELAPSED_USEC_TIME(timer);
 
             tl->_SampleCount[l]++;
         }
     }
-    for (int i = tl->_startLayer; i < tl->_numLayers; i++)
-    {
-        delete [] outputError[i];
-        delete [] inputError[i];
-    }
-    delete []outputError;
-    delete []inputError;
+
+    //for (int i = tl->_startLayer; i < tl->_numLayers; i++)
+    //{
+    //    delete [] outputError[i];
+    //    delete [] inputError[i];
+    //}
+    //delete []outputError;
+    //delete []inputError;
+
     return 0;
 }
 
@@ -145,27 +150,29 @@ DWORD DNNModelThreadDeltaWeightUpdate(ThreadLayerState *tl)
 {
     SetTrainingThreadAffinity(tl->_threadNum);
 
-    float **inputActivation = new float *[tl->_numLayers];
-    float **inputError = new float *[tl->_numLayers];
-    float **weightDeltas = new  float *[tl->_numLayers];
-    //float **weightMomentum = new  float *[tl->_numLayers];
-    
-    for (int i = tl->_startLayer; i < tl->_numLayers; i++)
-    {
-            inputActivation[i] = new float[tl->_LayerState[i]._InputSize];
-            inputError[i] = new float[tl->_LayerState[i]._OutputSize];
-            weightDeltas[i] = new float[tl->_LayerState[i]._WeightSize];
-            //weightMomentum[i] = new float[tl->_LayerState[i]._WeightSize];
-    }
-    while (true)
+    //float **inputActivation = new float *[tl->_numLayers];
+    //float **inputError = new float *[tl->_numLayers];
+    //float **weightDeltas = new  float *[tl->_numLayers];
+    ////float **weightMomentum = new  float *[tl->_numLayers];
+    //
+    //for (int i = tl->_startLayer; i < tl->_numLayers; i++)
+    //{
+    //        inputActivation[i] = new float[tl->_LayerState[i]._InputSize];
+    //        inputError[i] = new float[tl->_LayerState[i]._OutputSize];
+    //        weightDeltas[i] = new float[tl->_LayerState[i]._WeightSize];
+    //        //weightMomentum[i] = new float[tl->_LayerState[i]._WeightSize];
+    //}
+
+
+	while (true)
     {
             INT64 sampleId = ATOMIC_INCREMENT64(g_CurrentSamplePos);
             if (sampleId >= G_SAMPLE_COUNT) break;
             int numLayers = ((sampleId % G_WORKER_COUNT) == 0) ? tl->_numLayers : tl->_numLayers-1;
             for (int l = tl->_startLayer; l < numLayers; l++) 
             {
-                Sparsify(inputActivation[l], tl->_LayerState[l]._InputSize, G_FORWARD_SPARSITY);
-                Sparsify(inputError[l], tl->_LayerState[l]._OutputSize, G_BACKPROP_SPARSITY);
+                //Sparsify(tl->_inputActivation[l], tl->_LayerState[l]._InputSize, G_FORWARD_SPARSITY);
+                //Sparsify(tl->_inputError[l], tl->_LayerState[l]._OutputSize, G_BACKPROP_SPARSITY);
                 Layer *layer = (tl->_LayerState + l);
                 
                 // Compute weight deltas
@@ -173,20 +180,20 @@ DWORD DNNModelThreadDeltaWeightUpdate(ThreadLayerState *tl)
                 START_TIMER(deltaTimer);
                 if (layer->_Input2Height == 1) 
                 {
-                    g_DNNKernels._computeWeightDelta_2D(layer, weightDeltas[l], inputActivation[l], inputError[l]);
+                    g_DNNKernels._computeWeightDelta_2D(layer, tl->_weightDeltas[l], tl->_inputActivation[l], tl->_inputError[l]);
                 }
                 else 
                 {
-                    g_DNNKernels._computeWeightDelta_3D(layer, weightDeltas[l], inputActivation[l], inputError[l]);
+                    g_DNNKernels._computeWeightDelta_3D(layer, tl->_weightDeltas[l], tl->_inputActivation[l], tl->_inputError[l]);
                 }
                 STOP_TIMER(deltaTimer);
                 tl->_FLOPTime[l] += ELAPSED_USEC_TIME(deltaTimer);
 
                 // Update weights
-                Sparsify(weightDeltas[l], tl->_LayerState[l]._WeightSize, G_WEIGHTUPDATE_SPARSITY);
+                //Sparsify(tl->_weightDeltas[l], tl->_LayerState[l]._WeightSize, G_WEIGHTUPDATE_SPARSITY);
                 DECLARE_TIMER(weightTimer);
                 START_TIMER(weightTimer);
-                g_DNNKernels._weightUpdate(layer, weightDeltas[l]);
+                g_DNNKernels._weightUpdate(layer, tl->_weightDeltas[l]);
                 STOP_TIMER(weightTimer);
                 tl->_FLOPTime[l] += ELAPSED_USEC_TIME(weightTimer);
 
@@ -194,17 +201,18 @@ DWORD DNNModelThreadDeltaWeightUpdate(ThreadLayerState *tl)
         }
     }
 
-    for (int i = tl->_startLayer; i < tl->_numLayers; i++)
-    {
-            delete [] inputActivation[i];
-            delete [] inputError[i];
-            delete [] weightDeltas[i];
-            //delete [] weightMomentum[i];
-    }
-    delete []inputActivation;
-    delete []inputError;
-    delete [] weightDeltas;
-    //delete [] weightMomentum;
+    //for (int i = tl->_startLayer; i < tl->_numLayers; i++)
+    //{
+    //        delete [] inputActivation[i];
+    //        delete [] inputError[i];
+    //        delete [] weightDeltas[i];
+    //        //delete [] weightMomentum[i];
+    //}
+    //delete []inputActivation;
+    //delete []inputError;
+    //delete [] weightDeltas;
+    ////delete [] weightMomentum;
+
     return 0;
 }
                     
@@ -212,13 +220,14 @@ DWORD DNNModelThreadWeightUpdate(ThreadLayerState *tl)
 {
     SetTrainingThreadAffinity(tl->_threadNum);
 
-    float **inputActivation = new float *[tl->_numLayers];
-    float **outputActivation = new float *[tl->_numLayers];
-    for (int i = tl->_startLayer; i < tl->_numLayers; i++)
-    {
-        inputActivation[i] = new float[tl->_LayerState[i]._InputSize];
-        outputActivation[i] = new float[tl->_LayerState[i]._OutputSize];
-    }
+    //float **inputActivation = new float *[tl->_numLayers];
+    //float **outputActivation = new float *[tl->_numLayers];
+    //for (int i = tl->_startLayer; i < tl->_numLayers; i++)
+    //{
+    //    inputActivation[i] = new float[tl->_LayerState[i]._InputSize];
+    //    outputActivation[i] = new float[tl->_LayerState[i]._OutputSize];
+    //}
+
     while (true)
     {
         INT64 sampleId = ATOMIC_INCREMENT64(g_CurrentSamplePos);
@@ -226,8 +235,8 @@ DWORD DNNModelThreadWeightUpdate(ThreadLayerState *tl)
         int numLayers = ((sampleId % G_WORKER_COUNT) == 0) ? tl->_numLayers : tl->_numLayers-1;
         for (int l = tl->_startLayer; l < numLayers; l++)
         {
-            float *inpACT = inputActivation[l];
-            float *outACT = outputActivation[l];
+            float *inpACT = tl->_inputActivation[l];
+            float *outACT = tl->_outputActivation[l];
             Layer *layer = (tl->_LayerState + l);
             DECLARE_TIMER(timer);
             START_TIMER(timer);
@@ -251,14 +260,16 @@ DWORD DNNModelThreadWeightUpdate(ThreadLayerState *tl)
             tl->_SampleCount[l]++;
         }
     }
-    for (int i = tl->_startLayer; i < tl->_numLayers; i++)
-    {
-        delete [] inputActivation[i];
-        delete [] outputActivation[i];
-    }
-    delete []inputActivation;
-    delete []outputActivation;
-    return 0;
+
+    //for (int i = tl->_startLayer; i < tl->_numLayers; i++)
+    //{
+    //    delete [] inputActivation[i];
+    //    delete [] outputActivation[i];
+    //}
+    //delete []inputActivation;
+    //delete []outputActivation;
+    
+	return 0;
 }
 
 void PrintComputeStats(int numThreads, ThreadLayerState *tl, DNNPass dp)
@@ -320,26 +331,57 @@ double runDNNModelThreads (int numThreads, DNNPass dp)
     return elapsedTime;
 }
 
+
+double runDNNModelThreads(std::vector<ThreadLayerState>&threadStates, DNNPass dp)
+{
+	g_CurrentSamplePos = -1;
+
+	DECLARE_TIMER(computeTimer);
+	START_TIMER(computeTimer);
+	DoModelCompute(threadStates.size(), &threadStates[0], dp);
+	STOP_TIMER(computeTimer);
+	PrintComputeStats(threadStates.size(), &threadStates[0], dp);
+
+	double elapsedTime = ELAPSED_USEC_TIME(computeTimer);
+	std::cout << "Pass_run_time: " << elapsedTime / (1E06) << "secs" << endl;
+	return elapsedTime;
+}
+
 double runDNNModel(void)
 {
     printf("%-10s %-10s %-10s %-10s %-10s\n", "Layers", "Threads", "GFLOP/s", "MSec", "FLOPs");
     double elapsedTime = 0;
+	std::vector<ThreadLayerState> threadStates;
+	
+	threadStates.resize(G_THREAD_COUNT);
+	for (int i = 0; i < threadStates.size(); i++)
+	{
+		threadStates[i].Init(i, DNNModel);
+	}
    
     if (G_DNN_PASS_ENABLED(DNN_FORWARD) && g_DNNKernels._feedForward != nullptr)
     {
-        elapsedTime = runDNNModelThreads(G_THREAD_COUNT, DNN_FORWARD);
-    }
+//        elapsedTime = runDNNModelThreads(G_THREAD_COUNT, DNN_FORWARD);
+		elapsedTime = runDNNModelThreads(threadStates, DNN_FORWARD);
+	}
 
     if (G_DNN_PASS_ENABLED(DNN_BACKWARD) && g_DNNKernels._backPropagate != nullptr)
     {
-        elapsedTime += runDNNModelThreads(G_THREAD_COUNT, DNN_BACKWARD);
-    }
+//        elapsedTime += runDNNModelThreads(G_THREAD_COUNT, DNN_BACKWARD);
+		elapsedTime += runDNNModelThreads(threadStates, DNN_BACKWARD);
+	}
         
     if (G_DNN_PASS_ENABLED(DNN_WEIGHTUPDATE) && g_DNNKernels._computeWeightDelta_2D != nullptr && g_DNNKernels._computeWeightDelta_3D != nullptr)
     {
-        elapsedTime += runDNNModelThreads(G_THREAD_COUNT, DNN_WEIGHTUPDATE);
-    }
+//        elapsedTime += runDNNModelThreads(G_THREAD_COUNT, DNN_WEIGHTUPDATE);
+		elapsedTime += runDNNModelThreads(threadStates, DNN_WEIGHTUPDATE);
+	}
  
+	for (int i = 0; i < threadStates.size(); i++)
+	{
+		threadStates[i].Fini();
+	}
+
     return elapsedTime;
 }
 
@@ -365,7 +407,6 @@ void ProcessPassParam(const char* passString)
             break;
         }
     }
-
 }
 
 void PrepareComputeData(DNN& model)
