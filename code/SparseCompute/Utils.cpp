@@ -1,4 +1,5 @@
 #include "Utils.h"
+#include "DataProvider.h"
 
 void CanonicalConfig::Init()
 {
@@ -60,7 +61,8 @@ void CanonicalConfig::Print()
      "ZeroSignalOpt: %s\n" */
      "KernelVersion: %s\n"
      "FeedForwardSparsity: %d\n" 
-     "BackPropSparsity: %d\n"
+	 "ActivationCacheLineSparsity: %d\n"
+	 "BackPropSparsity: %d\n"
      "SignalCacheLineSparsity: %d\n"
      /*     "DeltaComputeSparsity: %d\n"*/
      "WeightUpdateSparsity: %d\n" 
@@ -80,6 +82,7 @@ void CanonicalConfig::Print()
      (_zeroSignalOpt ? "Enabled" : "Disabled"), */
      KernelNames[((int)G_DNN_KERNEL_VERSION)],
      _forwardSparsity,
+	 _activationCacheLineSparsity,
      _backwardSparsity,
      _signalCacheLineSparsity,
      /*_deltaComputeSparsity, */
@@ -155,12 +158,13 @@ void DNN::Print(const char *modelName)
     fflush(stdout);
 }
 
+
 void Layer::Init (int of, int i2h, int i2w, int ffs, int bps, int dcs, int wus, int scls, int dcls)
 {		
   _OutputFeature = of;
   _Input2Height = i2h;
   _Input2Width = i2w;
-  _Weights = new float[_OutputFeature * i2w];
+  _Weights = new float[CACHELINE_ALIGN(_OutputFeature * i2w)];
   _InputSize = i2w * i2h;
   _OutputSize = of * i2h;
   _WeightSize = _OutputFeature * _Input2Width;
@@ -187,20 +191,96 @@ void Layer::Init (int of, int i2h, int i2w, int ffs, int bps, int dcs, int wus, 
   _DenseDeltaSize = _WeightSize - _minDenseDeltaWordIndex;
 }
 
-void ThreadLayerState::Init (int tNum, DNN& model)
+void ThreadLayerState::Init (const int tNum, const DNN& model)
 {
   _threadNum = tNum;
   _LayerState = model._Layers;
   _FLOPTime = new double[model._nLayers];
   _SampleCount = new int[model._nLayers];
-  for (int i = 0; i < model._nLayers; i++)
-    {
-      _FLOPTime[i] = 0;
-      _SampleCount[i] = 0;
-    }
   _startLayer = G_START_LAYER;
   _numLayers = model._nLayers;	
   MY_ASSERT(_startLayer < _numLayers);
+  ResetStats();
+  InitData();
+}
+
+void ThreadLayerState::ResetStats()
+{
+	for (int i = _startLayer; i < _numLayers; i++)
+	{
+		_FLOPTime[i] = 0;
+		_SampleCount[i] = 0;
+	}
+}
+
+void ThreadLayerState::InitData()
+{
+	_inputActivation = new float*[_numLayers];
+	_outputActivation = new float*[_numLayers];
+	_inputError = new float*[_numLayers];
+	_outputError = new float*[_numLayers];
+	_weightDeltas = new float*[_numLayers];
+
+
+	for (int i = _startLayer; i < _numLayers; i++)
+	{
+		const int alignedInputSize = CACHELINE_ALIGN(_LayerState[i]._InputSize);
+		const int alignedOutputSize = CACHELINE_ALIGN(_LayerState[i]._OutputSize);
+		const int alignedWeightSize = CACHELINE_ALIGN(_LayerState[i]._WeightSize);
+
+		_inputActivation[i] = new float[alignedInputSize];
+		_outputActivation[i] = new float[alignedOutputSize];
+		_inputError[i] = new float[alignedOutputSize];
+		_outputError[i] = new float[alignedInputSize];
+		_weightDeltas[i] = new float[alignedWeightSize];
+
+		Sparsify(_inputActivation[i], alignedInputSize, G_FORWARD_SPARSITY, 0);
+		Sparsify(_inputError[i], alignedOutputSize, G_BACKPROP_SPARSITY, G_SIGNAL_CACHELINE_SPARSITY);
+		Sparsify(_weightDeltas[i], alignedWeightSize, G_WEIGHTUPDATE_SPARSITY, G_DELTA_CACHELINE_SPARSITY);
+		Sparsify(_LayerState[i]._Weights, alignedWeightSize, 0, 0);
+	}
+
+	std::vector<const float*> activations(_numLayers);
+	std::vector<const float*> errors(_numLayers);
+	std::vector<const float*> deltas(_numLayers);
+	std::vector<const int> activationSize(_numLayers);
+	std::vector<const int> errorSize(_numLayers);
+	std::vector<const int> deltaSize(_numLayers);
+	for (int i = _startLayer; i < _numLayers; i++)
+	{
+		activations[i] = _inputActivation[i];
+		activationSize[i] = CACHELINE_ALIGN(_LayerState[i]._InputSize);
+		errors[i] = _inputError[i];
+		errorSize[i] = CACHELINE_ALIGN(_LayerState[i]._OutputSize);
+		deltas[i] = _weightDeltas[i];
+		deltaSize[i] = CACHELINE_ALIGN(_LayerState[i]._WeightSize);
+	}
+
+	//PrintSparseStatistics("InputActivations", activations, activationSize);
+	//PrintSparseStatistics("InputErrors", errors, errorSize);
+	//PrintSparseStatistics("WeightDeltas", deltas, deltaSize);
+}
+
+void ThreadLayerState::FiniData()
+{
+	for (int i = _startLayer; i < _numLayers; i++)
+	{
+		delete[] _inputActivation[i];
+		delete[] _outputActivation[i];
+
+		delete[] _inputError[i];
+		delete[] _outputError[i];
+
+		delete[] _weightDeltas[i];
+	}
+
+	delete[] _inputActivation;
+	delete[] _outputActivation;
+
+	delete[] _inputError;
+	delete[] _outputError;
+
+	delete[] _weightDeltas;
 }
 
 void ThreadLayerState::Fini (void)
@@ -210,5 +290,6 @@ void ThreadLayerState::Fini (void)
       delete [] _FLOPTime;
       _FLOPTime = NULL;
     }
+  FiniData();
 }
 

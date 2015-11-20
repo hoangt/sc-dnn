@@ -136,8 +136,19 @@ typedef struct ThreadLayerState {
   int _numLayers;
   int _threadNum;
   int _startLayer;
+
+  float** _inputActivation;
+  float** _outputActivation;
+
+  float** _inputError;
+  float** _outputError;
+
+  float** _weightDeltas;
   
-  void Init(int, DNN&);
+  void Init(const int, const DNN&);
+  void InitData();
+  void FiniData();
+  void ResetStats();
   void Fini(void);
 } ThreadLayerState;
 
@@ -197,6 +208,7 @@ struct CanonicalConfig {
     int _weightUpdateSparsity;
     int _signalCacheLineSparsity;
     int _deltaCacheLineSparsity;
+	int _activationCacheLineSparsity;
     ModelType _modelType;
     bool _replicatedOutputLayer;
     bool _deltaWeightOpt;
