@@ -24,10 +24,10 @@ class ModelPerf:
 		for i in range(0, len(self.kernels)):
 			resultString = "\t" + "{0:<10s}".format(self.kernels[i])
 			totalTime = self.forwardProp[i] + self.backwardProp[i] + self.weightUpdate[i]
-			resultString += "\t" + str(self.forwardProp[i])
-			resultString += "\t" + str(self.backwardProp[i]) 
-			resultString += "\t" + str(self.weightUpdate[i])
-			resultString += "\t" + str(totalTime)
+			resultString += "\t" + "{0:0.2f}".format(self.forwardProp[i])
+			resultString += "\t" + "{0:0.2f}".format(self.backwardProp[i]) 
+			resultString += "\t" + "{0:0.2f}".format(self.weightUpdate[i])
+			resultString += "\t" + "{0:0.2f}".format(totalTime)
 			print resultString
 
 					
@@ -67,8 +67,6 @@ def GetPerfResults(inputFile):
 				modelPerf = ModelPerf()
 		continue
 	
-		
-
 def main():
 	if not (len(sys.argv) == 2):
 		print "Usage: " + sys.argv[0] + "<InputFile.txt>"
