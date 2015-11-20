@@ -2,8 +2,8 @@
 
 progDir=`pwd`
 
-if [ $# -lt 2 ]; then 
-   echo "Usage: $0 <SampleCount> <ThreadCount>" 
+if [ $# -lt 3 ]; then 
+   echo "Usage: $0 <SampleCount> <ThreadCount> <WorkerCount>" 
    exit
 fi
 

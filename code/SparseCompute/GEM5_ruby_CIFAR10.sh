@@ -5,22 +5,23 @@ gem5Script="$SIMDIR/configs/example/se.py"
 
 progDir=`pwd`
 
-if [ $# -lt 2 ]; then 
-   echo "Usage: $0 <SampleCount> <ThreadCount> [CacheScale]" 
+if [ $# -lt 3 ]; then 
+   echo "Usage: $0 <SampleCount> <ThreadCount> <WorkerCount> [CacheScale]" 
    exit
 fi
 
 sampleCount=$1
 tc=$2
+workerCount=$3
 cpus=$((tc + 1))
 cacheScale=1
 
-if [ $# -gt 2 ]; then
-  cacheScale=$3
+if [ $# -gt 3 ]; then
+  cacheScale=$4
 fi
 
 . ./CIFAR10_Sparse.sh 
-progOpts="--samples $sampleCount --threads $tc $sparsityOpts --model ${model}"
+progOpts="--samples $sampleCount --threads $tc $sparsityOpts --model ${model} --workers ${workerCount}"
 
 . ./cacheSpecs.sh $cacheScale
 cacheOpts="--l1d_size=${l1Size} --l1i_size=${l1Size} --l2_size=${l2Size} --l3_size=${l3Size}"
@@ -40,7 +41,7 @@ dirSuffix="${sampleCount}_${tc}_${cacheScale}"
 #for k in 1  3 4 ; do  
 for k in 1  ; do  
 
-  outDir="${model}-${cacheType}-${dirSuffix}/ruby-k$k"
+  outDir="${model}_${workerCount}W-${cacheType}-${dirSuffix}/ruby-k$k"
   
   ${gem5Bin} -d $outDir ${gem5Script} $simOpts -c "$prog"  -o "--kernel $k ${progOpts}"
 done
