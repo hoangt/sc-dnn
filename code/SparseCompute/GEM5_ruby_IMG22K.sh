@@ -25,7 +25,7 @@ progOpts="--samples $sampleCount --threads $tc $sparsityOpts --model ${model}"
 . ./cacheSpecs.sh $cacheScale
 cacheOpts="--l1d_size=${l1Size} --l1i_size=${l1Size} --l2_size=${l2Size} --l3_size=${l3Size}"
 
-simOpts="--ruby --cpu-type=timing --caches --l2cache --num-l3caches=1 ${cacheOpts} --num-cpus=$cpus"
+simOpts="--ruby --cpu-type=timing --caches --l2cache --num-l3caches=1 ${cacheOpts} --num-cpus=$cpus --mem-size=2GB --mem-type=ruby_memory"
 
 echo "Run SparseCompute in GEM5-Ruby" 
 echo "GEM5="${gem5Bin}
