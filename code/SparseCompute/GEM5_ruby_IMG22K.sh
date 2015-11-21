@@ -21,7 +21,7 @@ if [ $# -gt 3 ]; then
 fi
 
 . ./IMG22K_Sparse.sh 
-progOpts="--samples $sampleCount --threads $tc $sparsityOpts --model ${model} --workers ${workerCount}"
+progOpts="--samples $sampleCount --threads $tc $sparsityOpts --model ${model} --workers ${workerCount} --outputscale ${scaleOpt}"
 
 . ./cacheSpecs.sh $cacheScale
 cacheOpts="--l1d_size=${l1Size} --l1i_size=${l1Size} --l2_size=${l2Size} --l3_size=${l3Size}"
@@ -43,7 +43,7 @@ for k in 1  ; do
 
   outDir="${model}_${workerCount}W-${cacheType}-${dirSuffix}/ruby-k$k"
   
-  ${gem5Bin} -d $outDir ${gem5Script} $simOpts -c "$prog"  -o "--kernel $k ${progOpts}"
+  echo ${gem5Bin} -d $outDir ${gem5Script} $simOpts -c "$prog"  -o "--kernel $k ${progOpts}"
 done
 
 

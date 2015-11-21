@@ -103,7 +103,7 @@ mulsum3_hardware:
 # rdx  denseCount
 # rcx  sparseCount
 
-.globl weightupdate_hadrware
+.globl weightupdate_hardware
 weightupdate_hardware:
     movss %xmm2, -0x10(%rsp)
     movss %xmm2, -0xc(%rsp)
