@@ -1,0 +1,62 @@
+MODELOPTS=--forwardsparsity 33 --activationcachelinesparsity 14 --backwardsparsity 83 --signalcachelinesparsity 81 --weightupdatesparsity 5 --deltacachelinesparsity 0 --model MNIST
+CacheSizeOpts=--l1i_size=32kB --l1d_size=32kB --l2_size=256kB --l3_size=20MB
+Run SparseCompute in GEM5-Ruby
+GEM5=/home/tunji/sc-dnn/code/gem5-stable/build/X86_MESI_Three_Level/gem5.opt
+SCRIPT=/home/tunji/sc-dnn/code/gem5-stable/configs/example/se.py
+PROGDIR=/home/tunji/sc-dnn/code/SparseCompute
+PROGOPTS=--samples 4 --threads 4 --forwardsparsity 33 --activationcachelinesparsity 14 --backwardsparsity 83 --signalcachelinesparsity 81 --weightupdatesparsity 5 --deltacachelinesparsity 0 --model MNIST --workers 1
+SIMOPTS=--ruby --cpu-type=timing --caches --l2cache --num-l3caches=1 --l1d_size=32kB --l1i_size=32kB --l2_size=256kB --l3_size=20MB --num-cpus=5
+warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (512 Mbytes)gem5 Simulator System.  http://gem5.org
+gem5 is copyrighted software; use the --copyright option for details.
+
+gem5 compiled Nov 19 2015 16:07:41
+gem5 started Nov 20 2015 11:45:47
+gem5 executing on tunji-Virtual-Machine
+command line: /home/tunji/sc-dnn/code/gem5-stable/build/X86_MESI_Three_Level/gem5.opt -d MNIST_1W-L3-4_4_1/ruby-k1 /home/tunji/sc-dnn/code/gem5-stable/configs/example/se.py --ruby --cpu-type=timing --caches --l2cache --num-l3caches=1 --l1d_size=32kB --l1i_size=32kB --l2_size=256kB --l3_size=20MB --num-cpus=5 -c /home/tunji/sc-dnn/code/SparseCompute/M5SparseCompute -o --kernel 1 --samples 4 --threads 4 --forwardsparsity 33 --activationcachelinesparsity 14 --backwardsparsity 83 --signalcachelinesparsity 81 --weightupdatesparsity 5 --deltacachelinesparsity 0 --model MNIST --workers 1
+Global frequency set at 1000000000000 ticks per second
+
+0: system.remote_gdb.listener: listening for remote gdb #0 on port 7009
+0: system.remote_gdb.listener: listening for remote gdb #1 on port 7010
+0: system.remote_gdb.listener: listening for remote gdb #2 on port 7011
+0: system.remote_gdb.listener: listening for remote gdb #3 on port 7012
+0: system.remote_gdb.listener: listening for remote gdb #4 on port 7013
+**** REAL SIMULATION ****
+info: Entering event queue @ 0.  Starting simulation...
+info: Increasing stack size by one page.
+warn: ignoring syscall access(5373089, ...)
+Model: MNIST 
+Pass: ALL 
+WorkerCount: 1 
+ThreadCount: 4 
+SampleCount: 4 
+KernelVersion: UNROLL
+FeedForwardSparsity: 33
+ActivationCacheLineSparsity: 14
+BackPropSparsity: 83
+SignalCacheLineSparsity: 81
+WeightUpdateSparsity: 5
+DeltaCacheLineSparsity: 0
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp:  1.38 msecs
+         0          4       1.50   0.280950 420500
+         1          4       2.10   0.576450 1210000
+         2          4       1.74   0.330400 576000
+         3          4       1.77   0.181050 320000
+         4          4       0.86   0.009300 8000
+Pass_run_time: 0.0109secs
+BackwardProp:  1.56 msecs
+         0          4       1.31   0.321800 420500
+         1          4       1.82   0.664500 1210000
+         2          4       1.59   0.361225 576000
+         3          4       1.60   0.199625 320000
+         4          4       0.79   0.010075 8000
+Pass_run_time: 0.013783secs
+WeightUpdate:  1.86 msecs
+         0          4       1.28   0.329083 420500
+         1          4       1.76   0.688900 1210000
+         2          4       1.07   0.537250 576000
+         3          4       1.09   0.294200 320000
+         4          4       0.68   0.011767 8000
+Pass_run_time: 0.019227secs
+Total_run_time: 0.04391secs
+Exiting @ tick 488745598500 because target called exit()
