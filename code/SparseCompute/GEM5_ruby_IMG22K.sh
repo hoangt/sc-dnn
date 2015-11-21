@@ -43,7 +43,7 @@ for k in 1  ; do
 
   outDir="${model}_${workerCount}W-${cacheType}-${dirSuffix}/ruby-k$k"
   
-  echo ${gem5Bin} -d $outDir ${gem5Script} $simOpts -c "$prog"  -o "--kernel $k ${progOpts}"
+  ${gem5Bin} -d $outDir ${gem5Script} $simOpts -c "$prog"  -o "--kernel $k ${progOpts}"
 done
 
 
