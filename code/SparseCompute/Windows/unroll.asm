@@ -57,7 +57,7 @@ mulsum2_unroll	ENDP
 mulsum3_unroll PROC
 ; extern void  mulsum3_unroll(const float *pf0, const float *pf1, float f2, INT64 count);
 ;
-;	for(INT64 i = 0; i < counut; i++);
+;	for(INT64 i = 0; i < count; i++);
 ;	{
 ;       pf0[i] += pf1[i] * f2;
 ;   }

@@ -241,7 +241,7 @@ void SparseWeightUpdate(Layer* layer, const float* weightDeltas)
 
 void HardwareWeightUpdate(Layer* layer, const float* weightDeltas)
 {
-    mulsum3_unroll((layer->_Weights + layer->_minDenseDeltaWordIndex), (weightDeltas + layer->_minDenseDeltaWordIndex), 1.0f, layer->_DenseDeltaSize);
+    weightupdate_hardware((layer->_Weights + layer->_minSparseDeltaWordIndex), (weightDeltas + layer->_minSparseDeltaWordIndex), 1.0f, layer->_DenseDeltaSize, (layer->_minDenseDeltaWordIndex - layer->_minSparseDeltaWordIndex));
 }
 
 FeedForward g_FeedFowardKernels[KernelVersion::KERNEL_VERSION_COUNT] = { &BaselineFeedForward, &UnrollFeedForward, &SparseFeedForward, &UnrollFeedForward, &HardwareFeedForward };

@@ -91,4 +91,103 @@ mulsum3_hardware PROC
     ret 0
 mulsum3_hardware ENDP
 
+
+weightupdate_hardware   PROC
+; extern void  mulsum3_unroll(const float *pf0, const float *pf1, const float f2, INT64 denseCount, INT64 sparseCount);
+;
+;	for(INT64 i = 0; i < denseCount; i++);
+;	{
+;       pf0[i] += pf1[i] * f2;
+;   }
+;   for (INT64 j = 0; j < sparseCount; j++)
+;   {
+;       = pf1[i]; // Load pf1
+;   } 
+
+; rcx pf0
+; rdx pf1
+; xmm2 f2
+; r9  denseCount
+; r8 sparseCount
+    xorps xmm3, xmm3
+
+    movss dword ptr[rsp-10h], xmm2
+    movss dword ptr[rsp-0ch], xmm2
+    movss dword ptr[rsp-08h], xmm2
+    movss dword ptr[rsp-04h], xmm2
+    movups xmm2, dword ptr[rsp-10h]
+
+    mov   r8, r9
+    shr   r9, 2
+    test  r9, r9
+    jz    loop_31_end
+; Do dense portion first
+loop_31:
+    movups xmm1, xmmword ptr [rdx]
+    movups xmm3, xmmword ptr [rcx]
+    mulps xmm1, xmm2
+    addps xmm3, xmm1
+    movups xmmword ptr [rcx], xmm3
+    add   rcx, 16
+    add   rdx, 16
+    dec   r9
+    je   loop_31_end
+    movups xmm1, xmmword ptr [rdx]
+    movups xmm3, xmmword ptr [rcx]
+    mulps xmm1, xmm2
+    addps xmm3, xmm1
+    movups xmmword ptr [rcx], xmm3
+    add   rcx, 16
+    add   rdx, 16
+    dec   r9
+    je   loop_31_end
+    movups xmm1, xmmword ptr [rdx]
+    movups xmm3, xmmword ptr [rcx]
+    mulps xmm1, xmm2
+    addps xmm3, xmm1
+    movups xmmword ptr [rcx], xmm3
+    add   rcx, 16
+    add   rdx, 16
+    dec   r9
+    je   loop_31_end
+    movups xmm1, xmmword ptr [rdx]
+    movups xmm3, xmmword ptr [rcx]
+    mulps xmm1, xmm2
+    addps xmm3, xmm1
+    movups xmmword ptr [rcx], xmm3
+    add   rcx, 16
+    add   rdx, 16
+    dec   r9
+    jne   loop_31
+loop_31_end:
+; Start sparse portion
+    shr   r8, 2
+    test  r8, 8
+    jz    loop_32_end
+loop_32:
+    movups xmm1, xmmword ptr [rdx]
+    add   rcx, 16
+    add   rdx, 16
+    dec   r8
+    je   loop_32_end
+    movups xmm1, xmmword ptr [rdx]
+    add   rcx, 16
+    add   rdx, 16
+    dec   r8
+    je   loop_32_end
+    movups xmm1, xmmword ptr [rdx]
+    add   rcx, 16
+    add   rdx, 16
+    dec   r8
+    je   loop_32_end
+    movups xmm1, xmmword ptr [rdx]
+    add   rcx, 16
+    add   rdx, 16
+    dec   r8
+    jne   loop_32
+loop_32_end:
+
+    ret 0
+weightupdate_hardware   ENDP
+
 END

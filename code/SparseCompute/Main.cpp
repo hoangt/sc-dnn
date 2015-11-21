@@ -90,7 +90,7 @@ DWORD DNNModelThreadForward(ThreadLayerState *tl)
         }
     }
 
-	//for (int i = tl->_startLayer; i < tl->_numLayers; i++)
+    //for (int i = tl->_startLayer; i < tl->_numLayers; i++)
  //   {
  //       delete [] inputActivation[i];
  //       delete [] outputActivation[i];
@@ -164,7 +164,7 @@ DWORD DNNModelThreadDeltaWeightUpdate(ThreadLayerState *tl)
     //}
 
 
-	while (true)
+    while (true)
     {
             INT64 sampleId = ATOMIC_INCREMENT64(g_CurrentSamplePos);
             if (sampleId >= G_SAMPLE_COUNT) break;
@@ -269,7 +269,7 @@ DWORD DNNModelThreadWeightUpdate(ThreadLayerState *tl)
     //delete []inputActivation;
     //delete []outputActivation;
     
-	return 0;
+    return 0;
 }
 
 void PrintComputeStats(int numThreads, ThreadLayerState *tl, DNNPass dp)
@@ -334,53 +334,53 @@ double runDNNModelThreads (int numThreads, DNNPass dp)
 
 double runDNNModelThreads(std::vector<ThreadLayerState>&threadStates, DNNPass dp)
 {
-	g_CurrentSamplePos = -1;
+    g_CurrentSamplePos = -1;
 
-	DECLARE_TIMER(computeTimer);
-	START_TIMER(computeTimer);
-	DoModelCompute(threadStates.size(), &threadStates[0], dp);
-	STOP_TIMER(computeTimer);
-	PrintComputeStats(threadStates.size(), &threadStates[0], dp);
+    DECLARE_TIMER(computeTimer);
+    START_TIMER(computeTimer);
+    DoModelCompute(threadStates.size(), &threadStates[0], dp);
+    STOP_TIMER(computeTimer);
+    PrintComputeStats(threadStates.size(), &threadStates[0], dp);
 
-	double elapsedTime = ELAPSED_USEC_TIME(computeTimer);
-	std::cout << "Pass_run_time: " << elapsedTime / (1E06) << "secs" << endl;
-	return elapsedTime;
+    double elapsedTime = ELAPSED_USEC_TIME(computeTimer);
+    std::cout << "Pass_run_time: " << elapsedTime / (1E06) << "secs" << endl;
+    return elapsedTime;
 }
 
 double runDNNModel(void)
 {
     printf("%-10s %-10s %-10s %-10s %-10s\n", "Layers", "Threads", "GFLOP/s", "MSec", "FLOPs");
     double elapsedTime = 0;
-	std::vector<ThreadLayerState> threadStates;
-	
-	threadStates.resize(G_THREAD_COUNT);
-	for (int i = 0; i < threadStates.size(); i++)
-	{
-		threadStates[i].Init(i, DNNModel);
-	}
+    std::vector<ThreadLayerState> threadStates;
+    
+    threadStates.resize(G_THREAD_COUNT);
+    for (int i = 0; i < threadStates.size(); i++)
+    {
+        threadStates[i].Init(i, DNNModel);
+    }
    
     if (G_DNN_PASS_ENABLED(DNN_FORWARD) && g_DNNKernels._feedForward != nullptr)
     {
 //        elapsedTime = runDNNModelThreads(G_THREAD_COUNT, DNN_FORWARD);
-		elapsedTime = runDNNModelThreads(threadStates, DNN_FORWARD);
-	}
+        elapsedTime = runDNNModelThreads(threadStates, DNN_FORWARD);
+    }
 
     if (G_DNN_PASS_ENABLED(DNN_BACKWARD) && g_DNNKernels._backPropagate != nullptr)
     {
 //        elapsedTime += runDNNModelThreads(G_THREAD_COUNT, DNN_BACKWARD);
-		elapsedTime += runDNNModelThreads(threadStates, DNN_BACKWARD);
-	}
+        elapsedTime += runDNNModelThreads(threadStates, DNN_BACKWARD);
+    }
         
     if (G_DNN_PASS_ENABLED(DNN_WEIGHTUPDATE) && g_DNNKernels._computeWeightDelta_2D != nullptr && g_DNNKernels._computeWeightDelta_3D != nullptr)
     {
 //        elapsedTime += runDNNModelThreads(G_THREAD_COUNT, DNN_WEIGHTUPDATE);
-		elapsedTime += runDNNModelThreads(threadStates, DNN_WEIGHTUPDATE);
-	}
+        elapsedTime += runDNNModelThreads(threadStates, DNN_WEIGHTUPDATE);
+    }
  
-	for (int i = 0; i < threadStates.size(); i++)
-	{
-		threadStates[i].Fini();
-	}
+    for (int i = 0; i < threadStates.size(); i++)
+    {
+        threadStates[i].Fini();
+    }
 
     return elapsedTime;
 }
@@ -403,7 +403,7 @@ void ProcessPassParam(const char* passString)
     {
         if (CASE_INSENSITIVE_STRCMP(passString, DNNPassName[i]) == 0)
         {
-  	    g_CanonicalConfig.EnablePass(static_cast<DNNPass>(i), DNNPassName[i]);
+        g_CanonicalConfig.EnablePass(static_cast<DNNPass>(i), DNNPassName[i]);
             break;
         }
     }
