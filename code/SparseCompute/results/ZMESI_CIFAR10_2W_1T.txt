@@ -1,0 +1,47 @@
+gem5 started Nov 20 2015 10:03:52
+gem5 executing on tunji-Virtual-Machine
+command line: /home/tunji/sc-dnn/code/gem5-stable/build/X86_ZMESI_Three_Level/gem5.opt -d CIFAR10_2W-ZL3-1_1_1/ruby-k1 /home/tunji/sc-dnn/code/gem5-stable/configs/example/se.py --ruby --cpu-type=timing --caches --l2cache --num-l3caches=1 --l1d_size=32kB --l1i_size=32kB --l2_size=256kB --l3_size=20MB --num-cpus=2 -c /home/tunji/sc-dnn/code/SparseCompute/M5SparseCompute -o --kernel 1 --samples 1 --threads 1 --forwardsparsity 24 --activationcachelinesparsity 8 --backwardsparsity 84 --signalcachelinesparsity 83 --weightupdatesparsity 89 --deltacachelinesparsity 67 --model CIFAR10 --workers 2
+Global frequency set at 1000000000000 ticks per second
+warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (512 Mbytes)
+0: system.remote_gdb.listener: listening for remote gdb #0 on port 7008
+0: system.remote_gdb.listener: listening for remote gdb #1 on port 7009
+**** REAL SIMULATION ****
+info: Entering event queue @ 0.  Starting simulation...
+info: Increasing stack size by one page.
+warn: ignoring syscall access(5373089, ...)
+Model: CIFAR10 
+Pass: ALL 
+WorkerCount: 2 
+ThreadCount: 1 
+SampleCount: 1 
+KernelVersion: UNROLL
+FeedForwardSparsity: 24
+ActivationCacheLineSparsity: 8
+BackPropSparsity: 84
+SignalCacheLineSparsity: 83
+WeightUpdateSparsity: 89
+DeltaCacheLineSparsity: 67
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp: 30.36 msecs
+         0          1       0.98   8.803000 8601600
+         1          1       1.07  13.757000 14745600
+         2          1       0.95   3.300500 3145728
+         3          1       0.95   4.404000 4194304
+         4          1       0.42   0.096500 40960
+Pass_run_time: 0.060729secs
+BackwardProp: 34.28 msecs
+         0          1       0.86   9.992750 8601600
+         1          1       0.95  15.567000 14745600
+         2          1       0.85   3.692000 3145728
+         3          1       0.85   4.924000 4194304
+         4          1       0.40   0.102750 40960
+Pass_run_time: 0.076395secs
+WeightUpdate: 39.44 msecs
+         0          1       0.83  10.362000 8601600
+         1          1       0.90  16.375500 14745600
+         2          1       0.58   5.382500 3145728
+         3          1       0.58   7.193500 4194304
+         4          1       0.33   0.122333 40960
+Pass_run_time: 0.099509secs
+Total_run_time: 0.236633secs
+
