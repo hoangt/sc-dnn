@@ -68,6 +68,8 @@ extern CanonicalConfig g_CanonicalConfig;
 #define G_DELTA_CACHELINE_SPARSITY g_CanonicalConfig._deltaCacheLineSparsity
 #define G_DNN_KERNEL_VERSION g_CanonicalConfig._kernelVersion
 #define G_DNN_PASS_ENABLED(p) g_CanonicalConfig._enablePass[p]
+#define G_THREAD_MODEL g_CanonicalConfig._threadModel
+#define G_OUTPUT_SCALE g_CanonicalConfig._outputScale
 
 typedef struct LayerConfig {
     int _OutputFeature;
@@ -197,6 +199,8 @@ DWORD DNNModelThreadForward(ThreadLayerState *tl);
 #define DEFAULT_MODEL_TYPE MNIST_MODEL
 #define DEFAULT_AFFINITY true
 #define DEFAULT_KERNEL_VERSION (int) KernelVersion::BASELINE
+#define DEFAULT_THREAD_MODEL 1
+#define DEFAULT_OUTPUT_SCALE 1
 
 struct CanonicalConfig {
     int _threadCount;
@@ -209,7 +213,7 @@ struct CanonicalConfig {
     int _weightUpdateSparsity;
     int _signalCacheLineSparsity;
     int _deltaCacheLineSparsity;
-	int _activationCacheLineSparsity;
+    int _activationCacheLineSparsity;
     ModelType _modelType;
     bool _replicatedOutputLayer;
     bool _deltaWeightOpt;
@@ -220,6 +224,8 @@ struct CanonicalConfig {
     KernelVersion _kernelVersion;
     bool _enablePass[DNNPass::NUM_DNN_PASS];
     const char* _passName;
+    int _threadModel;
+    int _outputScale;
 
     void Init();
     void Print();

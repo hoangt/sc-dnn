@@ -18,27 +18,27 @@ void InitDataProvider()
 
 void Sparsify(float* data, const int size, const int sparsePercent, const int sparsecacheLinePercent)
 {
-	assert(sparsePercent >= sparsecacheLinePercent);
-	int numCacheLines = size / DATA_PER_CACHELINE;
-	int remainderSparsePercent = 100 * (sparsePercent - sparsecacheLinePercent)/(100 - sparsecacheLinePercent);
+    assert(sparsePercent >= sparsecacheLinePercent);
+    int numCacheLines = size / DATA_PER_CACHELINE;
+    int remainderSparsePercent = 100 * (sparsePercent - sparsecacheLinePercent)/(100 - sparsecacheLinePercent);
 
-	for (size_t i = 0; i < numCacheLines; i++)
-	{
-		float* cacheLine = data + (i * DATA_PER_CACHELINE);
-		int lineProbability = rand() % 100;
-		if (lineProbability < sparsecacheLinePercent)
-		{
-			memset(cacheLine, 0, sizeof(float)* DATA_PER_CACHELINE);
-		}
-		else
-		{
-			for (size_t j = 0; j < DATA_PER_CACHELINE; j++)
-			{
-				int wordProbability = rand() % 100;
-				cacheLine[j] = (wordProbability < remainderSparsePercent) ? 0.0f : static_cast<float>(wordProbability);
-			}
-		}
-	}
+    for (size_t i = 0; i < numCacheLines; i++)
+    {
+        float* cacheLine = data + (i * DATA_PER_CACHELINE);
+        int lineProbability = rand() % 100;
+        if (lineProbability < sparsecacheLinePercent)
+        {
+            memset(cacheLine, 0, sizeof(float)* DATA_PER_CACHELINE);
+        }
+        else
+        {
+            for (size_t j = 0; j < DATA_PER_CACHELINE; j++)
+            {
+                int wordProbability = rand() % 100;
+                cacheLine[j] = (wordProbability < remainderSparsePercent) ? 0.0f : static_cast<float>(wordProbability);
+            }
+        }
+    }
 }
 
 void Sparsify(std::vector<float>& data, const int sparsePercent)
@@ -86,34 +86,34 @@ void PrintSparseStatistics(const char* tag, const std::vector<std::vector<float>
 
 void PrintSparseStatistics(const char* tag, const std::vector<const float*>& sparseData, const std::vector<int>& dataSize)
 {
-	assert(sparseData.size() > 0);
-	int totalSparseCount = 0;
-	int totalCacheLineSparseCount = 0;
-	int dataCount = 0;
-	int cacheLineDataCount = 0;
+    assert(sparseData.size() > 0);
+    int totalSparseCount = 0;
+    int totalCacheLineSparseCount = 0;
+    int dataCount = 0;
+    int cacheLineDataCount = 0;
 
-	for (size_t i = 0; i < sparseData.size(); i++)
-	{
-		int layerCount = 0;
-		int numCacheLines = dataSize[i] / DATA_PER_CACHELINE;
-		for (size_t j = 0; j < numCacheLines; j++)
-		{
-			const float* cacheLine = sparseData[i] + (j * DATA_PER_CACHELINE);
-			int count = 0;
-			for (size_t k = 0; k < DATA_PER_CACHELINE; k++)
-			{
-				if (cacheLine[k] == 0.0f) count++;
-			}
-			layerCount += count;
-			if (count == DATA_PER_CACHELINE) totalCacheLineSparseCount++;
-		}
+    for (size_t i = 0; i < sparseData.size(); i++)
+    {
+        int layerCount = 0;
+        int numCacheLines = dataSize[i] / DATA_PER_CACHELINE;
+        for (size_t j = 0; j < numCacheLines; j++)
+        {
+            const float* cacheLine = sparseData[i] + (j * DATA_PER_CACHELINE);
+            int count = 0;
+            for (size_t k = 0; k < DATA_PER_CACHELINE; k++)
+            {
+                if (cacheLine[k] == 0.0f) count++;
+            }
+            layerCount += count;
+            if (count == DATA_PER_CACHELINE) totalCacheLineSparseCount++;
+        }
 
-		totalSparseCount += layerCount;
-		dataCount += dataSize[i];
-		cacheLineDataCount += numCacheLines;
-	}
+        totalSparseCount += layerCount;
+        dataCount += dataSize[i];
+        cacheLineDataCount += numCacheLines;
+    }
 
-	float averageSparsity = static_cast<float>(totalSparseCount) / static_cast<float>(dataCount);
-	float averageCacheLineSparsity = static_cast<float>(totalCacheLineSparseCount) / static_cast<float> (cacheLineDataCount);
-	printf("SparseStatistics: %s Word:%5.2f $Line:%5.2f\n", tag, averageSparsity, averageCacheLineSparsity);
+    float averageSparsity = static_cast<float>(totalSparseCount) / static_cast<float>(dataCount);
+    float averageCacheLineSparsity = static_cast<float>(totalCacheLineSparseCount) / static_cast<float> (cacheLineDataCount);
+    printf("SparseStatistics: %s Word:%5.2f $Line:%5.2f\n", tag, averageSparsity, averageCacheLineSparsity);
 }

@@ -36,7 +36,9 @@ void ProcessParams(CParamParser& pparser, CanonicalConfig& config)
     config._zeroSignalOpt = pparser.IsParamExist(TEXT("zerosignalopt")) ? true : false;
     config._signalCacheLineSparsity = pparser.IsParamExist(TEXT("signalcachelinesparsity")) ? pparser.ParamInt(TEXT("signalcachelinesparsity")) : DEFAULT_SPARSITY;
     config._deltaCacheLineSparsity = pparser.IsParamExist(TEXT("deltacachelinesparsity")) ? pparser.ParamInt(TEXT("deltacachelinesparsity")) : DEFAULT_SPARSITY;
-	config._activationCacheLineSparsity = pparser.IsParamExist(TEXT("activationcachelinesparsity")) ? pparser.ParamInt(TEXT("activationcachelinesparsity")) : DEFAULT_SPARSITY;
+    config._activationCacheLineSparsity = pparser.IsParamExist(TEXT("activationcachelinesparsity")) ? pparser.ParamInt(TEXT("activationcachelinesparsity")) : DEFAULT_SPARSITY;
+    config._threadModel = pparser.IsParamExist(TEXT("threadmodel")) ? pparser.ParamInt(TEXT("threadmodel")) : DEFAULT_THREAD_MODEL;
+    config._outputScale = pparser.IsParamExist(TEXT("outputscale")) ? pparser.ParamInt(TEXT("outputscale")) : DEFAULT_OUTPUT_SCALE;
     int kernelVersion = pparser.IsParamExist(TEXT("kernel")) ? pparser.ParamInt(TEXT("kernel")) : DEFAULT_KERNEL_VERSION;
     assert(kernelVersion < (int)KernelVersion::KERNEL_VERSION_COUNT);
     config._kernelVersion = static_cast<KernelVersion>(kernelVersion);

@@ -41,6 +41,8 @@ static struct option long_options[] = {
   {"deltacachelinesparsity", required_argument, 0, 'y'},
   {"kernel", required_argument, 0, 'k'},
   {"pass", required_argument, 0, 'h'},
+  { "outputscale", required_argument, 0, 'x' },
+  { "threadmodel", required_argument, 0, 'z' },
   {0, 0, 0, 0}
 };
 
@@ -53,6 +55,12 @@ void SetCanonicalConfig(int argc, char* argv[], CanonicalConfig& config)
       break;
     }
     switch (c) {
+    case 'x':
+        config._outputScale = atoi(optarg);
+        break;
+    case 'z':
+        config._threadModel = atoi(optarg);
+        break;
     case 'h':
       ProcessPassParam(optarg);
       break;

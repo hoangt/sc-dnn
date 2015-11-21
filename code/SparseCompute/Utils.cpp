@@ -21,6 +21,8 @@ void CanonicalConfig::Init()
   _affinity = true;
   _sparseKernelVersion = 0;
   _zeroSignalOpt = true;
+  _threadModel = DEFAULT_THREAD_MODEL;
+  _outputScale = DEFAULT_OUTPUT_SCALE;
   EnableAllPasses();
 }
 
@@ -53,6 +55,8 @@ void CanonicalConfig::Print()
       "WorkerCount: %d \n"
       "ThreadCount: %d \n"
      "SampleCount: %d \n"
+     "ThreadModel: %d \n"
+     "OutputScale: %d\n"
      /*     "OutputLayer: %s \n"
      "DeltWeightOpt: %s\n"
      "Momentum: %s \n"
@@ -62,8 +66,8 @@ void CanonicalConfig::Print()
      "ZeroSignalOpt: %s\n" */
      "KernelVersion: %s\n"
      "FeedForwardSparsity: %d\n" 
-	 "ActivationCacheLineSparsity: %d\n"
-	 "BackPropSparsity: %d\n"
+     "ActivationCacheLineSparsity: %d\n"
+     "BackPropSparsity: %d\n"
      "SignalCacheLineSparsity: %d\n"
      /*     "DeltaComputeSparsity: %d\n"*/
      "WeightUpdateSparsity: %d\n" 
@@ -74,6 +78,8 @@ void CanonicalConfig::Print()
      _workerCount,
      _threadCount,
      _sampleCount, 
+     _threadModel,
+     _outputScale,
      /*     (_replicatedOutputLayer ? "Replicated" : "Partitioned"),
      (_deltaWeightOpt ? "enabled" : "disabled"),
      (_deltaWeightOpt ? "enabled" : "disabled"),
@@ -83,7 +89,7 @@ void CanonicalConfig::Print()
      (_zeroSignalOpt ? "Enabled" : "Disabled"), */
      KernelNames[((int)G_DNN_KERNEL_VERSION)],
      _forwardSparsity,
-	 _activationCacheLineSparsity,
+     _activationCacheLineSparsity,
      _backwardSparsity,
      _signalCacheLineSparsity,
      /*_deltaComputeSparsity, */
@@ -162,22 +168,22 @@ void DNN::Print(const char *modelName)
 
 void Layer::Init (int of, int i2h, int i2w, int ffs, int bps, int dcs, int wus, int scls, int dcls)
 {		
-  _OutputFeature = of;
+  _OutputFeature = (of > (2 * G_OUTPUT_SCALE)) ? of/G_OUTPUT_SCALE : of;
   _Input2Height = i2h;
   _Input2Width = i2w;
   _Weights = new float[CACHELINE_ALIGN(_OutputFeature * i2w)];
   _InputSize = i2w * i2h;
-  _OutputSize = of * i2h;
+  _OutputSize = _OutputFeature * i2h;
   _WeightSize = _OutputFeature * _Input2Width;
-  _Connections = of * i2h * i2w;
+  _Connections = _OutputFeature * i2h * i2w;
   _FeedForwardSparsity = ffs;
   _BackPropSparsity = bps;
   _DeltaComputeSparsity = dcs;
   _WeightUpdateSparsity = wus;
 
   // Assume sparse signal cache lines come, followed by sparse signal words, and finally dense signal words
-  _minDenseSignalIndex = (G_ZERO_SIGNAL_OPT == false) ? 0 : (int)(bps * of * i2h * 0.01); 
-  _minSparseSignalWordIndex = (G_ZERO_SIGNAL_OPT == false) ? 0 : (int)(scls * of * i2h * 0.01);
+  _minDenseSignalIndex = (G_ZERO_SIGNAL_OPT == false) ? 0 : (int)(bps * _OutputFeature * i2h * 0.01);
+  _minSparseSignalWordIndex = (G_ZERO_SIGNAL_OPT == false) ? 0 : (int)(scls * _OutputFeature * i2h * 0.01);
   MY_ASSERT (_minSparseSignalWordIndex <= _minDenseSignalIndex);
 
   // Assume sparse activations come first, followed by dense activations
@@ -207,82 +213,82 @@ void ThreadLayerState::Init (const int tNum, const DNN& model)
 
 void ThreadLayerState::ResetStats()
 {
-	for (int i = _startLayer; i < _numLayers; i++)
-	{
-		_FLOPTime[i] = 0;
-		_SampleCount[i] = 0;
-	}
+    for (int i = _startLayer; i < _numLayers; i++)
+    {
+        _FLOPTime[i] = 0;
+        _SampleCount[i] = 0;
+    }
 }
 
 void ThreadLayerState::InitData()
 {
-	_inputActivation = new float*[_numLayers];
-	_outputActivation = new float*[_numLayers];
-	_inputError = new float*[_numLayers];
-	_outputError = new float*[_numLayers];
-	_weightDeltas = new float*[_numLayers];
+    _inputActivation = new float*[_numLayers];
+    _outputActivation = new float*[_numLayers];
+    _inputError = new float*[_numLayers];
+    _outputError = new float*[_numLayers];
+    _weightDeltas = new float*[_numLayers];
 
 
-	for (int i = _startLayer; i < _numLayers; i++)
-	{
-		int alignedInputSize = CACHELINE_ALIGN(_LayerState[i]._InputSize);
-		int alignedOutputSize = CACHELINE_ALIGN(_LayerState[i]._OutputSize);
-		int alignedWeightSize = CACHELINE_ALIGN(_LayerState[i]._WeightSize);
+    for (int i = _startLayer; i < _numLayers; i++)
+    {
+        int alignedInputSize = CACHELINE_ALIGN(_LayerState[i]._InputSize);
+        int alignedOutputSize = CACHELINE_ALIGN(_LayerState[i]._OutputSize);
+        int alignedWeightSize = CACHELINE_ALIGN(_LayerState[i]._WeightSize);
 
-		_inputActivation[i] = new float[alignedInputSize];
-		_outputActivation[i] = new float[alignedOutputSize];
-		_inputError[i] = new float[alignedOutputSize];
-		_outputError[i] = new float[alignedInputSize];
-		_weightDeltas[i] = new float[alignedWeightSize];
+        _inputActivation[i] = new float[alignedInputSize];
+        _outputActivation[i] = new float[alignedOutputSize];
+        _inputError[i] = new float[alignedOutputSize];
+        _outputError[i] = new float[alignedInputSize];
+        _weightDeltas[i] = new float[alignedWeightSize];
 
-		Sparsify(_inputActivation[i], alignedInputSize, G_FORWARD_SPARSITY, G_ACTIVATION_CACHELINE_SPARSITY);
-		Sparsify(_inputError[i], alignedOutputSize, G_BACKPROP_SPARSITY, G_SIGNAL_CACHELINE_SPARSITY);
-		Sparsify(_weightDeltas[i], alignedWeightSize, G_WEIGHTUPDATE_SPARSITY, G_DELTA_CACHELINE_SPARSITY);
-		Sparsify(_LayerState[i]._Weights, alignedWeightSize, 0, 0);
-	}
+        Sparsify(_inputActivation[i], alignedInputSize, G_FORWARD_SPARSITY, G_ACTIVATION_CACHELINE_SPARSITY);
+        Sparsify(_inputError[i], alignedOutputSize, G_BACKPROP_SPARSITY, G_SIGNAL_CACHELINE_SPARSITY);
+        Sparsify(_weightDeltas[i], alignedWeightSize, G_WEIGHTUPDATE_SPARSITY, G_DELTA_CACHELINE_SPARSITY);
+        Sparsify(_LayerState[i]._Weights, alignedWeightSize, 0, 0);
+    }
 
-	std::vector<const float*> activations(_numLayers);
-	std::vector<const float*> errors(_numLayers);
-	std::vector<const float*> deltas(_numLayers);
-	std::vector<int> activationSize(_numLayers);
-	std::vector<int> errorSize(_numLayers);
-	std::vector<int> deltaSize(_numLayers);
-	for (int i = _startLayer; i < _numLayers; i++)
-	{
-		activations[i] = _inputActivation[i];
-		activationSize[i] = CACHELINE_ALIGN(_LayerState[i]._InputSize);
-		errors[i] = _inputError[i];
-		errorSize[i] = CACHELINE_ALIGN(_LayerState[i]._OutputSize);
-		deltas[i] = _weightDeltas[i];
-		deltaSize[i] = CACHELINE_ALIGN(_LayerState[i]._WeightSize);
-	}
+    std::vector<const float*> activations(_numLayers);
+    std::vector<const float*> errors(_numLayers);
+    std::vector<const float*> deltas(_numLayers);
+    std::vector<int> activationSize(_numLayers);
+    std::vector<int> errorSize(_numLayers);
+    std::vector<int> deltaSize(_numLayers);
+    for (int i = _startLayer; i < _numLayers; i++)
+    {
+        activations[i] = _inputActivation[i];
+        activationSize[i] = CACHELINE_ALIGN(_LayerState[i]._InputSize);
+        errors[i] = _inputError[i];
+        errorSize[i] = CACHELINE_ALIGN(_LayerState[i]._OutputSize);
+        deltas[i] = _weightDeltas[i];
+        deltaSize[i] = CACHELINE_ALIGN(_LayerState[i]._WeightSize);
+    }
 /*
-	PrintSparseStatistics("InputActivations", activations, activationSize);
-	PrintSparseStatistics("InputErrors", errors, errorSize);
-	PrintSparseStatistics("WeightDeltas", deltas, deltaSize);
+    PrintSparseStatistics("InputActivations", activations, activationSize);
+    PrintSparseStatistics("InputErrors", errors, errorSize);
+    PrintSparseStatistics("WeightDeltas", deltas, deltaSize);
 */
 }
 
 void ThreadLayerState::FiniData()
 {
-	for (int i = _startLayer; i < _numLayers; i++)
-	{
-		delete[] _inputActivation[i];
-		delete[] _outputActivation[i];
+    for (int i = _startLayer; i < _numLayers; i++)
+    {
+        delete[] _inputActivation[i];
+        delete[] _outputActivation[i];
 
-		delete[] _inputError[i];
-		delete[] _outputError[i];
+        delete[] _inputError[i];
+        delete[] _outputError[i];
 
-		delete[] _weightDeltas[i];
-	}
+        delete[] _weightDeltas[i];
+    }
 
-	delete[] _inputActivation;
-	delete[] _outputActivation;
+    delete[] _inputActivation;
+    delete[] _outputActivation;
 
-	delete[] _inputError;
-	delete[] _outputError;
+    delete[] _inputError;
+    delete[] _outputError;
 
-	delete[] _weightDeltas;
+    delete[] _weightDeltas;
 }
 
 void ThreadLayerState::Fini (void)

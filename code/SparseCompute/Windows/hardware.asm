@@ -15,9 +15,9 @@
 ; sparsity in activation (rcx)
 mulsum2_hardware PROC
     xorps   xmm0,  xmm0
-    mov     r10,   r8
-    shr		r10,	2
-    test	r10,	r10
+    mov     r9,   r8
+    shr		r9,	2
+    test	r9,	r9
     jz		loop_11_end
 ;   Do dense work first
 loop_11:
@@ -27,7 +27,7 @@ loop_11:
     addps	xmm0,	xmm1
     add		rcx,	16
     add		rdx,	16
-    dec		r10
+    dec		r9
     je		loop_11_end
     movups	xmm1,	xmmword ptr [rcx]
     movups	xmm2,	xmmword ptr [rdx]
@@ -35,7 +35,7 @@ loop_11:
     addps	xmm0,	xmm1
     add		rcx,	16
     add		rdx,	16
-    dec		r10
+    dec		r9
     je		loop_11_end
     movups	xmm1,	xmmword ptr [rcx]
     movups	xmm2,	xmmword ptr [rdx]
@@ -43,7 +43,7 @@ loop_11:
     addps	xmm0,	xmm1
     add		rcx,	16
     add		rdx,	16
-    dec		r10
+    dec		r9
     je		loop_11_end
     movups	xmm1,	xmmword ptr [rcx]
     movups	xmm2,	xmmword ptr [rdx]
@@ -51,7 +51,7 @@ loop_11:
     addps	xmm0,	xmm1
     add		rcx,	16
     add		rdx,	16
-    dec		r10
+    dec		r9
     jne		loop_11
 loop_11_end:
 ;   ret 0
