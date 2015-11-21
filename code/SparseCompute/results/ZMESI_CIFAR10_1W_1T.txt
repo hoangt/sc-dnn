@@ -1,0 +1,37 @@
+Model: CIFAR10 
+Pass: ALL 
+WorkerCount: 1 
+ThreadCount: 1 
+SampleCount: 1 
+KernelVersion: UNROLL
+FeedForwardSparsity: 24
+ActivationCacheLineSparsity: 8
+BackPropSparsity: 84
+SignalCacheLineSparsity: 83
+WeightUpdateSparsity: 89
+DeltaCacheLineSparsity: 67
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp: 148.80 msecs
+         0          1       0.44  22.391000 9830400
+         1          1       0.47  62.840500 29491200
+         2          1       0.26  32.225500 8331264
+         3          1       0.27  31.086500 8388608
+         4          1       0.16   0.256000 40960
+Pass_run_time: 0.297608secs
+BackwardProp: 162.89 msecs
+         0          1       0.39  25.101750 9830400
+         1          1       0.42  70.770000 29491200
+         2          1       0.25  33.599500 8331264
+         3          1       0.25  33.147250 8388608
+         4          1       0.15   0.275250 40960
+Pass_run_time: 0.353981secs
+WeightUpdate: 196.99 msecs
+         0          1       0.38  26.173667 9830400
+         1          1       0.40  73.338667 29491200
+         2          1       0.17  48.126833 8331264
+         3          1       0.17  49.008000 8388608
+         4          1       0.12   0.339833 40960
+Pass_run_time: 0.530356secs
+Total_run_time: 1.18195secs
+Exiting @ tick 2607499605500 because target called exit()
+
