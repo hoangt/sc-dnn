@@ -101,7 +101,7 @@ def create_system(options, full_system, system, dma_ports, ruby_system):
                 start_index_bit = block_size_bits, replacement_policy="LRU")
 
             l0z_cache = L0Cache(size = options.l1d_size, assoc = options.l1d_assoc, is_icache = False,
-                start_index_bit = block_size_bits, replacement_policy="LRU")
+                start_index_bit = block_size_bits, replacement_policy="LRU", dataAccessLatency=0)
 
             l0_cntrl = L0Cache_Controller(version = i*num_cpus_per_cluster + j,
                           Icache = l0i_cache, Dcache = l0d_cache,
@@ -121,7 +121,7 @@ def create_system(options, full_system, system, dma_ports, ruby_system):
                             start_index_bit = block_size_bits, is_icache = False)
 
             l1_zcache = L1Cache(size = options.l2_size, assoc = options.l2_assoc,
-                            start_index_bit = block_size_bits, is_icache = False)
+                            start_index_bit = block_size_bits, is_icache = False, dataAccessLatency=0)
 
             l1_cntrl = L1Cache_Controller(version = i*num_cpus_per_cluster+j,
                           cache = l1_cache, l2_select_num_bits = l3_bits,
@@ -160,7 +160,7 @@ def create_system(options, full_system, system, dma_ports, ruby_system):
 
             l2_zcache = L2Cache(size = options.l3_size,
                                assoc = options.l3_assoc,
-                               start_index_bit = l3_index_start)
+                               start_index_bit = l3_index_start, dataAccessLatency=0)
 
             l2_cntrl = L2Cache_Controller(
                         version = i * num_l3caches_per_cluster + j,
