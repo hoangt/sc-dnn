@@ -22,7 +22,7 @@ set DCLS=0
 set MODEL=MNIST
 set sparseOpt=-forwardsparsity:%FP%  -backwardsparsity:%BP%  -signalcachelinesparsity:%SCLS% -weightupdatesparsity:%WU% -deltacachelinesparsity:%DCLS% -activationcachelinesparsity:%ACLS%
 for /l %%i in (1,1,4) do (
- .\SparseCompute.exe %STD_OPT% -samples:%SAMPLES% -model:%MODEL% -kernel:%%i %sparseOpt%
+@rem .\SparseCompute.exe %STD_OPT% -samples:%SAMPLES% -model:%MODEL% -kernel:%%i %sparseOpt%
 )
  
 set FP=24
@@ -35,7 +35,7 @@ set SAMPLES=1000
 set MODEL=CIFAR10
 set sparseOpt=-forwardsparsity:%FP%  -backwardsparsity:%BP%  -signalcachelinesparsity:%SCLS% -weightupdatesparsity:%WU% -deltacachelinesparsity:%DCLS% -activationcachelinesparsity:%ACLS%
 for /l %%i in (1,1,4) do (
-@rem .\SparseCompute.exe %STD_OPT% -samples:%SAMPLES% -model:%MODEL% -kernel:%%i %sparseOpt%
+.\SparseCompute.exe %STD_OPT% -samples:%SAMPLES% -model:%MODEL% -kernel:%%i %sparseOpt%
 )
 
 set FP=37
