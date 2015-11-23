@@ -43,13 +43,13 @@ class L0Cache(RubyCache):
     latency = 1
 
 class L1Cache(RubyCache):
-    latency = 5
+    latency = 2
 
 #
 # Note: the L2 Cache latency is not currently used
 #
 class L2Cache(RubyCache):
-    latency = 15
+    latency = 10
 
 def define_options(parser):
     parser.add_option("--num-clusters", type="int", default=1,
@@ -118,7 +118,7 @@ def create_system(options, full_system, system, dma_ports, ruby_system):
             l0_cntrl.sequencer = cpu_seq
 
             l1_cache = L1Cache(size = options.l2_size, assoc = options.l2_assoc,
-                            start_index_bit = block_size_bits, is_icache = False)
+                            start_index_bit = block_size_bits, is_icache = False, dataAccessLatency=6)
 
             l1_zcache = L1Cache(size = options.l2_size, assoc = options.l2_assoc,
                             start_index_bit = block_size_bits, is_icache = False, dataAccessLatency=0)
@@ -156,7 +156,7 @@ def create_system(options, full_system, system, dma_ports, ruby_system):
         for j in xrange(num_l3caches_per_cluster):
             l2_cache = L2Cache(size = options.l3_size,
                                assoc = options.l3_assoc,
-                               start_index_bit = l3_index_start)
+                               start_index_bit = l3_index_start, dataAccessLatency=14)
 
             l2_zcache = L2Cache(size = options.l3_size,
                                assoc = options.l3_assoc,
