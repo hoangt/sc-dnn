@@ -57,7 +57,7 @@ DWORD DNNModelThreadForward(ThreadLayerState *tl)
     SetTrainingThreadAffinity(tl->_threadNum);
 
 #ifdef PREALLOCATE_THREAD_BUFFERS
-	//tl->PrintSparsity();
+//	tl->PrintSparsity();
 #else
     float **inputActivation = new float *[tl->_numLayers];
     float **outputActivation = new float *[tl->_numLayers];
@@ -540,7 +540,9 @@ int main(int argc, char *argv[])
 
 
     DNNModel.Init(ModelLayerCount[(int)G_MODEL_TYPE], lc, G_WORKER_COUNT, G_REPLICATED_OUTPUT_LAYER);
-    //DNNModel.Print( ModelName[g_CanonicalConfig._modelType]);
+#ifndef M5_BUILD
+    DNNModel.Print( ModelName[g_CanonicalConfig._modelType]);
+#endif
 
 #ifdef PREPARE_COMPUTE_DATA
     PrepareComputeData(DNNModel);

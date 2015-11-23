@@ -209,7 +209,9 @@ void ThreadLayerState::Init (const int tNum, const DNN& model)
   MY_ASSERT(_startLayer < _numLayers);
   ResetStats();
   InitData();
-  //PrintSparsity();
+#ifndef M5_BUILD 
+ PrintSparsity();
+#endif
 }
 
 void ThreadLayerState::ResetStats()
