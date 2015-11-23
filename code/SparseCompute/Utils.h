@@ -21,7 +21,6 @@ enum ModelType {NO_MODEL = 0, MNIST_MODEL = 1, IMAGENET_1K_MODEL, IMAGENET_22K_M
 enum DNNPass {DNN_FORWARD = 0, DNN_BACKWARD, DNN_WEIGHTUPDATE, NUM_DNN_PASS};
 
 #else // WINDOWS_BUILD 
-#include<atomic>
 #include "stdafx.h"
 #include "paramparser.h"
 #include "xstring.h"
@@ -148,6 +147,7 @@ typedef struct ThreadLayerState {
   
   void Init(const int, const DNN&);
   void InitData();
+  void PrintSparsity();
   void FiniData();
   void ResetStats();
   void Fini(void);

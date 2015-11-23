@@ -2,6 +2,7 @@
 #include "DataProvider.h"
 #include <iostream>
 #include <vector>
+#include<atomic>
 
 using namespace std;
 
@@ -55,7 +56,9 @@ DWORD DNNModelThreadForward(ThreadLayerState *tl)
 {
     SetTrainingThreadAffinity(tl->_threadNum);
 
-#ifndef PREALLOCATE_THREAD_BUFFERS
+#ifdef PREALLOCATE_THREAD_BUFFERS
+	//tl->PrintSparsity();
+#else
     float **inputActivation = new float *[tl->_numLayers];
     float **outputActivation = new float *[tl->_numLayers];
     for (int i = tl->_startLayer; i < tl->_numLayers; i++)
