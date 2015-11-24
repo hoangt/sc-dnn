@@ -1,0 +1,1265 @@
+{
+    "name": null, 
+    "sim_quantum": 0, 
+    "system": {
+        "kernel": "", 
+        "kernel_addr_check": true, 
+        "symbolfile": "", 
+        "readfile": "", 
+        "cxx_class": "System", 
+        "load_offset": 0, 
+        "work_end_ckpt_count": 0, 
+        "memories": [
+            "system.mem_ctrls"
+        ], 
+        "work_begin_ckpt_count": 0, 
+        "clk_domain": {
+            "name": "clk_domain", 
+            "clock": [
+                1000
+            ], 
+            "init_perf_level": 0, 
+            "voltage_domain": "system.voltage_domain", 
+            "eventq_index": 0, 
+            "cxx_class": "SrcClockDomain", 
+            "path": "system.clk_domain", 
+            "type": "SrcClockDomain", 
+            "domain_id": -1
+        }, 
+        "mem_ranges": [
+            "0:4294967295"
+        ], 
+        "eventq_index": 0, 
+        "ruby": {
+            "all_instructions": false, 
+            "memory_size_bits": 48, 
+            "cxx_class": "RubySystem", 
+            "phys_mem": null, 
+            "l1_cntrl0": {
+                "cache": {
+                    "tagArrayBanks": 1, 
+                    "latency": 2, 
+                    "is_icache": false, 
+                    "name": "cache", 
+                    "eventq_index": 0, 
+                    "dataArrayBanks": 1, 
+                    "cxx_class": "CacheMemory", 
+                    "tagAccessLatency": 1, 
+                    "replacement_policy": "PSEUDO_LRU", 
+                    "assoc": 8, 
+                    "start_index_bit": 6, 
+                    "dataAccessLatency": 6, 
+                    "path": "system.ruby.l1_cntrl0.cache", 
+                    "resourceStalls": false, 
+                    "type": "RubyCache", 
+                    "size": 524288
+                }, 
+                "requestToL2": {
+                    "peer": "system.ruby.network.slave[0]", 
+                    "role": "MASTER"
+                }, 
+                "system": "system", 
+                "l2_select_num_bits": 0, 
+                "cluster_id": 0, 
+                "cxx_class": "L1Cache_Controller", 
+                "bufferToL0": {
+                    "peer": "system.ruby.l0_cntrl0.bufferFromL1", 
+                    "role": "MASTER"
+                }, 
+                "l1_request_latency": 2, 
+                "recycle_latency": 10, 
+                "responseToL2": {
+                    "peer": "system.ruby.network.slave[1]", 
+                    "role": "MASTER"
+                }, 
+                "clk_domain": "system.ruby.clk_domain", 
+                "to_l2_latency": 1, 
+                "version": 0, 
+                "eventq_index": 0, 
+                "number_of_TBEs": 256, 
+                "transitions_per_cycle": 32, 
+                "bufferFromL0": {
+                    "peer": "system.ruby.l0_cntrl0.bufferToL1", 
+                    "role": "SLAVE"
+                }, 
+                "requestFromL2": {
+                    "peer": "system.ruby.network.master[0]", 
+                    "role": "SLAVE"
+                }, 
+                "responseFromL2": {
+                    "peer": "system.ruby.network.master[1]", 
+                    "role": "SLAVE"
+                }, 
+                "l1_response_latency": 2, 
+                "buffer_size": 0, 
+                "ruby_system": "system.ruby", 
+                "unblockToL2": {
+                    "peer": "system.ruby.network.slave[2]", 
+                    "role": "MASTER"
+                }, 
+                "name": "l1_cntrl0", 
+                "type": "L1Cache_Controller", 
+                "path": "system.ruby.l1_cntrl0"
+            }, 
+            "network": {
+                "slave": {
+                    "peer": [
+                        "system.ruby.l1_cntrl0.requestToL2", 
+                        "system.ruby.l1_cntrl0.responseToL2", 
+                        "system.ruby.l1_cntrl0.unblockToL2", 
+                        "system.ruby.l1_cntrl1.requestToL2", 
+                        "system.ruby.l1_cntrl1.responseToL2", 
+                        "system.ruby.l1_cntrl1.unblockToL2", 
+                        "system.ruby.l2_cntrl0.DirRequestFromL2Cache", 
+                        "system.ruby.l2_cntrl0.L1RequestFromL2Cache", 
+                        "system.ruby.l2_cntrl0.responseFromL2Cache", 
+                        "system.ruby.dir_cntrl0.responseFromDir"
+                    ], 
+                    "role": "SLAVE"
+                }, 
+                "name": "network", 
+                "int_links": [
+                    {
+                        "latency": 1, 
+                        "name": "int_links0", 
+                        "weight": 1, 
+                        "link_id": 6, 
+                        "eventq_index": 0, 
+                        "cxx_class": "SimpleIntLink", 
+                        "path": "system.ruby.network.int_links0", 
+                        "type": "SimpleIntLink", 
+                        "node_b": "system.ruby.network.routers6", 
+                        "node_a": "system.ruby.network.routers0", 
+                        "bandwidth_factor": 16
+                    }, 
+                    {
+                        "latency": 1, 
+                        "name": "int_links1", 
+                        "weight": 1, 
+                        "link_id": 7, 
+                        "eventq_index": 0, 
+                        "cxx_class": "SimpleIntLink", 
+                        "path": "system.ruby.network.int_links1", 
+                        "type": "SimpleIntLink", 
+                        "node_b": "system.ruby.network.routers6", 
+                        "node_a": "system.ruby.network.routers1", 
+                        "bandwidth_factor": 16
+                    }, 
+                    {
+                        "latency": 1, 
+                        "name": "int_links2", 
+                        "weight": 1, 
+                        "link_id": 8, 
+                        "eventq_index": 0, 
+                        "cxx_class": "SimpleIntLink", 
+                        "path": "system.ruby.network.int_links2", 
+                        "type": "SimpleIntLink", 
+                        "node_b": "system.ruby.network.routers6", 
+                        "node_a": "system.ruby.network.routers2", 
+                        "bandwidth_factor": 16
+                    }, 
+                    {
+                        "latency": 1, 
+                        "name": "int_links3", 
+                        "weight": 1, 
+                        "link_id": 9, 
+                        "eventq_index": 0, 
+                        "cxx_class": "SimpleIntLink", 
+                        "path": "system.ruby.network.int_links3", 
+                        "type": "SimpleIntLink", 
+                        "node_b": "system.ruby.network.routers6", 
+                        "node_a": "system.ruby.network.routers3", 
+                        "bandwidth_factor": 16
+                    }, 
+                    {
+                        "latency": 1, 
+                        "name": "int_links4", 
+                        "weight": 1, 
+                        "link_id": 10, 
+                        "eventq_index": 0, 
+                        "cxx_class": "SimpleIntLink", 
+                        "path": "system.ruby.network.int_links4", 
+                        "type": "SimpleIntLink", 
+                        "node_b": "system.ruby.network.routers6", 
+                        "node_a": "system.ruby.network.routers4", 
+                        "bandwidth_factor": 16
+                    }, 
+                    {
+                        "latency": 1, 
+                        "name": "int_links5", 
+                        "weight": 1, 
+                        "link_id": 11, 
+                        "eventq_index": 0, 
+                        "cxx_class": "SimpleIntLink", 
+                        "path": "system.ruby.network.int_links5", 
+                        "type": "SimpleIntLink", 
+                        "node_b": "system.ruby.network.routers6", 
+                        "node_a": "system.ruby.network.routers5", 
+                        "bandwidth_factor": 16
+                    }
+                ], 
+                "routers": [
+                    {
+                        "router_id": 0, 
+                        "name": "routers0", 
+                        "virt_nets": 10, 
+                        "clk_domain": "system.ruby.clk_domain", 
+                        "eventq_index": 0, 
+                        "cxx_class": "Switch", 
+                        "path": "system.ruby.network.routers0", 
+                        "type": "Switch"
+                    }, 
+                    {
+                        "router_id": 1, 
+                        "name": "routers1", 
+                        "virt_nets": 10, 
+                        "clk_domain": "system.ruby.clk_domain", 
+                        "eventq_index": 0, 
+                        "cxx_class": "Switch", 
+                        "path": "system.ruby.network.routers1", 
+                        "type": "Switch"
+                    }, 
+                    {
+                        "router_id": 2, 
+                        "name": "routers2", 
+                        "virt_nets": 10, 
+                        "clk_domain": "system.ruby.clk_domain", 
+                        "eventq_index": 0, 
+                        "cxx_class": "Switch", 
+                        "path": "system.ruby.network.routers2", 
+                        "type": "Switch"
+                    }, 
+                    {
+                        "router_id": 3, 
+                        "name": "routers3", 
+                        "virt_nets": 10, 
+                        "clk_domain": "system.ruby.clk_domain", 
+                        "eventq_index": 0, 
+                        "cxx_class": "Switch", 
+                        "path": "system.ruby.network.routers3", 
+                        "type": "Switch"
+                    }, 
+                    {
+                        "router_id": 4, 
+                        "name": "routers4", 
+                        "virt_nets": 10, 
+                        "clk_domain": "system.ruby.clk_domain", 
+                        "eventq_index": 0, 
+                        "cxx_class": "Switch", 
+                        "path": "system.ruby.network.routers4", 
+                        "type": "Switch"
+                    }, 
+                    {
+                        "router_id": 5, 
+                        "name": "routers5", 
+                        "virt_nets": 10, 
+                        "clk_domain": "system.ruby.clk_domain", 
+                        "eventq_index": 0, 
+                        "cxx_class": "Switch", 
+                        "path": "system.ruby.network.routers5", 
+                        "type": "Switch"
+                    }, 
+                    {
+                        "router_id": 6, 
+                        "name": "routers6", 
+                        "virt_nets": 10, 
+                        "clk_domain": "system.ruby.clk_domain", 
+                        "eventq_index": 0, 
+                        "cxx_class": "Switch", 
+                        "path": "system.ruby.network.routers6", 
+                        "type": "Switch"
+                    }
+                ], 
+                "cxx_class": "SimpleNetwork", 
+                "clk_domain": "system.ruby.clk_domain", 
+                "ext_links": [
+                    {
+                        "latency": 1, 
+                        "name": "ext_links0", 
+                        "weight": 1, 
+                        "ext_node": "system.ruby.l0_cntrl0", 
+                        "link_id": 0, 
+                        "eventq_index": 0, 
+                        "cxx_class": "SimpleExtLink", 
+                        "path": "system.ruby.network.ext_links0", 
+                        "int_node": "system.ruby.network.routers0", 
+                        "type": "SimpleExtLink", 
+                        "bandwidth_factor": 16
+                    }, 
+                    {
+                        "latency": 1, 
+                        "name": "ext_links1", 
+                        "weight": 1, 
+                        "ext_node": "system.ruby.l0_cntrl1", 
+                        "link_id": 1, 
+                        "eventq_index": 0, 
+                        "cxx_class": "SimpleExtLink", 
+                        "path": "system.ruby.network.ext_links1", 
+                        "int_node": "system.ruby.network.routers1", 
+                        "type": "SimpleExtLink", 
+                        "bandwidth_factor": 16
+                    }, 
+                    {
+                        "latency": 1, 
+                        "name": "ext_links2", 
+                        "weight": 1, 
+                        "ext_node": "system.ruby.l1_cntrl0", 
+                        "link_id": 2, 
+                        "eventq_index": 0, 
+                        "cxx_class": "SimpleExtLink", 
+                        "path": "system.ruby.network.ext_links2", 
+                        "int_node": "system.ruby.network.routers2", 
+                        "type": "SimpleExtLink", 
+                        "bandwidth_factor": 16
+                    }, 
+                    {
+                        "latency": 1, 
+                        "name": "ext_links3", 
+                        "weight": 1, 
+                        "ext_node": "system.ruby.l1_cntrl1", 
+                        "link_id": 3, 
+                        "eventq_index": 0, 
+                        "cxx_class": "SimpleExtLink", 
+                        "path": "system.ruby.network.ext_links3", 
+                        "int_node": "system.ruby.network.routers3", 
+                        "type": "SimpleExtLink", 
+                        "bandwidth_factor": 16
+                    }, 
+                    {
+                        "latency": 1, 
+                        "name": "ext_links4", 
+                        "weight": 1, 
+                        "ext_node": "system.ruby.l2_cntrl0", 
+                        "link_id": 4, 
+                        "eventq_index": 0, 
+                        "cxx_class": "SimpleExtLink", 
+                        "path": "system.ruby.network.ext_links4", 
+                        "int_node": "system.ruby.network.routers4", 
+                        "type": "SimpleExtLink", 
+                        "bandwidth_factor": 16
+                    }, 
+                    {
+                        "latency": 1, 
+                        "name": "ext_links5", 
+                        "weight": 1, 
+                        "ext_node": "system.ruby.dir_cntrl0", 
+                        "link_id": 5, 
+                        "eventq_index": 0, 
+                        "cxx_class": "SimpleExtLink", 
+                        "path": "system.ruby.network.ext_links5", 
+                        "int_node": "system.ruby.network.routers5", 
+                        "type": "SimpleExtLink", 
+                        "bandwidth_factor": 16
+                    }
+                ], 
+                "number_of_virtual_networks": 10, 
+                "adaptive_routing": false, 
+                "control_msg_size": 8, 
+                "eventq_index": 0, 
+                "netifs": [], 
+                "topology": "Crossbar", 
+                "buffer_size": 0, 
+                "path": "system.ruby.network", 
+                "master": {
+                    "peer": [
+                        "system.ruby.l1_cntrl0.requestFromL2", 
+                        "system.ruby.l1_cntrl0.responseFromL2", 
+                        "system.ruby.l1_cntrl1.requestFromL2", 
+                        "system.ruby.l1_cntrl1.responseFromL2", 
+                        "system.ruby.l2_cntrl0.unblockToL2Cache", 
+                        "system.ruby.l2_cntrl0.L1RequestToL2Cache", 
+                        "system.ruby.l2_cntrl0.responseToL2Cache", 
+                        "system.ruby.dir_cntrl0.requestToDir", 
+                        "system.ruby.dir_cntrl0.responseToDir"
+                    ], 
+                    "role": "MASTER"
+                }, 
+                "endpoint_bandwidth": 1000, 
+                "type": "SimpleNetwork", 
+                "ruby_system": "system.ruby"
+            }, 
+            "l2_cntrl0": {
+                "L1RequestToL2Cache": {
+                    "peer": "system.ruby.network.master[5]", 
+                    "role": "SLAVE"
+                }, 
+                "system": "system", 
+                "l2_request_latency": 2, 
+                "cluster_id": 0, 
+                "to_l1_latency": 1, 
+                "cxx_class": "L2Cache_Controller", 
+                "l2_response_latency": 2, 
+                "recycle_latency": 10, 
+                "clk_domain": "system.ruby.clk_domain", 
+                "version": 0, 
+                "L1RequestFromL2Cache": {
+                    "peer": "system.ruby.network.slave[7]", 
+                    "role": "MASTER"
+                }, 
+                "L2cache": {
+                    "tagArrayBanks": 1, 
+                    "latency": 10, 
+                    "is_icache": false, 
+                    "name": "L2cache", 
+                    "eventq_index": 0, 
+                    "dataArrayBanks": 1, 
+                    "cxx_class": "CacheMemory", 
+                    "tagAccessLatency": 1, 
+                    "replacement_policy": "PSEUDO_LRU", 
+                    "assoc": 20, 
+                    "start_index_bit": 6, 
+                    "dataAccessLatency": 14, 
+                    "path": "system.ruby.l2_cntrl0.L2cache", 
+                    "resourceStalls": false, 
+                    "type": "RubyCache", 
+                    "size": 41943040
+                }, 
+                "eventq_index": 0, 
+                "number_of_TBEs": 256, 
+                "DirRequestFromL2Cache": {
+                    "peer": "system.ruby.network.slave[6]", 
+                    "role": "MASTER"
+                }, 
+                "transitions_per_cycle": 4, 
+                "buffer_size": 0, 
+                "ruby_system": "system.ruby", 
+                "name": "l2_cntrl0", 
+                "type": "L2Cache_Controller", 
+                "responseFromL2Cache": {
+                    "peer": "system.ruby.network.slave[8]", 
+                    "role": "MASTER"
+                }, 
+                "unblockToL2Cache": {
+                    "peer": "system.ruby.network.master[4]", 
+                    "role": "SLAVE"
+                }, 
+                "path": "system.ruby.l2_cntrl0", 
+                "responseToL2Cache": {
+                    "peer": "system.ruby.network.master[6]", 
+                    "role": "SLAVE"
+                }
+            }, 
+            "clk_domain": {
+                "name": "clk_domain", 
+                "clock": [
+                    500
+                ], 
+                "init_perf_level": 0, 
+                "voltage_domain": "system.voltage_domain", 
+                "eventq_index": 0, 
+                "cxx_class": "SrcClockDomain", 
+                "path": "system.ruby.clk_domain", 
+                "type": "SrcClockDomain", 
+                "domain_id": -1
+            }, 
+            "randomization": false, 
+            "eventq_index": 0, 
+            "l0_cntrl1": {
+                "response_latency": 2, 
+                "system": "system", 
+                "cluster_id": 0, 
+                "sequencer": {
+                    "system": "system", 
+                    "support_inst_reqs": true, 
+                    "icache": "system.ruby.l0_cntrl1.Icache", 
+                    "slave": {
+                        "peer": [
+                            "system.cpu1.icache_port", 
+                            "system.cpu1.dcache_port", 
+                            "system.cpu1.interrupts.int_master", 
+                            "system.cpu1.itb.walker.port", 
+                            "system.cpu1.dtb.walker.port"
+                        ], 
+                        "role": "SLAVE"
+                    }, 
+                    "name": "sequencer", 
+                    "eventq_index": 0, 
+                    "max_outstanding_requests": 16, 
+                    "support_data_reqs": true, 
+                    "clk_domain": "system.cpu_clk_domain", 
+                    "access_backing_store": false, 
+                    "deadlock_threshold": 500000, 
+                    "zcache": "system.ruby.l0_cntrl1.Zcache", 
+                    "version": 0, 
+                    "dcache": "system.ruby.l0_cntrl1.Dcache", 
+                    "using_ruby_tester": false, 
+                    "cxx_class": "Sequencer", 
+                    "path": "system.ruby.l0_cntrl1.sequencer", 
+                    "master": {
+                        "peer": [
+                            "system.cpu1.interrupts.pio", 
+                            "system.cpu1.interrupts.int_slave"
+                        ], 
+                        "role": "MASTER"
+                    }, 
+                    "using_network_tester": false, 
+                    "type": "RubySequencer", 
+                    "ruby_system": "system.ruby"
+                }, 
+                "cxx_class": "L0Cache_Controller", 
+                "bufferToL1": {
+                    "peer": "system.ruby.l1_cntrl1.bufferFromL0", 
+                    "role": "MASTER"
+                }, 
+                "Icache": {
+                    "tagArrayBanks": 1, 
+                    "latency": 1, 
+                    "is_icache": true, 
+                    "name": "Icache", 
+                    "eventq_index": 0, 
+                    "dataArrayBanks": 1, 
+                    "cxx_class": "CacheMemory", 
+                    "tagAccessLatency": 1, 
+                    "replacement_policy": "LRU", 
+                    "assoc": 8, 
+                    "start_index_bit": 6, 
+                    "dataAccessLatency": 1, 
+                    "path": "system.ruby.l0_cntrl1.Icache", 
+                    "resourceStalls": false, 
+                    "type": "RubyCache", 
+                    "size": 65536
+                }, 
+                "recycle_latency": 10, 
+                "clk_domain": "system.cpu_clk_domain", 
+                "Zcache": {
+                    "tagArrayBanks": 1, 
+                    "latency": 1, 
+                    "is_icache": false, 
+                    "name": "Zcache", 
+                    "eventq_index": 0, 
+                    "dataArrayBanks": 1, 
+                    "cxx_class": "CacheMemory", 
+                    "tagAccessLatency": 1, 
+                    "replacement_policy": "LRU", 
+                    "assoc": 8, 
+                    "start_index_bit": 6, 
+                    "dataAccessLatency": 1, 
+                    "path": "system.ruby.l0_cntrl1.Zcache", 
+                    "resourceStalls": false, 
+                    "type": "RubyCache", 
+                    "size": 65536
+                }, 
+                "version": 1, 
+                "eventq_index": 0, 
+                "number_of_TBEs": 256, 
+                "transitions_per_cycle": 32, 
+                "bufferFromL1": {
+                    "peer": "system.ruby.l1_cntrl1.bufferToL0", 
+                    "role": "SLAVE"
+                }, 
+                "buffer_size": 0, 
+                "send_evictions": true, 
+                "ruby_system": "system.ruby", 
+                "name": "l0_cntrl1", 
+                "type": "L0Cache_Controller", 
+                "Dcache": {
+                    "tagArrayBanks": 1, 
+                    "latency": 1, 
+                    "is_icache": false, 
+                    "name": "Dcache", 
+                    "eventq_index": 0, 
+                    "dataArrayBanks": 1, 
+                    "cxx_class": "CacheMemory", 
+                    "tagAccessLatency": 1, 
+                    "replacement_policy": "LRU", 
+                    "assoc": 8, 
+                    "start_index_bit": 6, 
+                    "dataAccessLatency": 1, 
+                    "path": "system.ruby.l0_cntrl1.Dcache", 
+                    "resourceStalls": false, 
+                    "type": "RubyCache", 
+                    "size": 65536
+                }, 
+                "request_latency": 2, 
+                "path": "system.ruby.l0_cntrl1"
+            }, 
+            "l0_cntrl0": {
+                "response_latency": 2, 
+                "system": "system", 
+                "cluster_id": 0, 
+                "sequencer": {
+                    "system": "system", 
+                    "support_inst_reqs": true, 
+                    "icache": "system.ruby.l0_cntrl0.Icache", 
+                    "slave": {
+                        "peer": [
+                            "system.cpu0.icache_port", 
+                            "system.cpu0.dcache_port", 
+                            "system.cpu0.interrupts.int_master", 
+                            "system.cpu0.itb.walker.port", 
+                            "system.cpu0.dtb.walker.port"
+                        ], 
+                        "role": "SLAVE"
+                    }, 
+                    "name": "sequencer", 
+                    "eventq_index": 0, 
+                    "max_outstanding_requests": 16, 
+                    "support_data_reqs": true, 
+                    "clk_domain": "system.cpu_clk_domain", 
+                    "access_backing_store": false, 
+                    "deadlock_threshold": 500000, 
+                    "zcache": "system.ruby.l0_cntrl0.Zcache", 
+                    "version": 0, 
+                    "dcache": "system.ruby.l0_cntrl0.Dcache", 
+                    "using_ruby_tester": false, 
+                    "cxx_class": "Sequencer", 
+                    "path": "system.ruby.l0_cntrl0.sequencer", 
+                    "master": {
+                        "peer": [
+                            "system.cpu0.interrupts.pio", 
+                            "system.cpu0.interrupts.int_slave"
+                        ], 
+                        "role": "MASTER"
+                    }, 
+                    "using_network_tester": false, 
+                    "type": "RubySequencer", 
+                    "ruby_system": "system.ruby"
+                }, 
+                "cxx_class": "L0Cache_Controller", 
+                "bufferToL1": {
+                    "peer": "system.ruby.l1_cntrl0.bufferFromL0", 
+                    "role": "MASTER"
+                }, 
+                "Icache": {
+                    "tagArrayBanks": 1, 
+                    "latency": 1, 
+                    "is_icache": true, 
+                    "name": "Icache", 
+                    "eventq_index": 0, 
+                    "dataArrayBanks": 1, 
+                    "cxx_class": "CacheMemory", 
+                    "tagAccessLatency": 1, 
+                    "replacement_policy": "LRU", 
+                    "assoc": 8, 
+                    "start_index_bit": 6, 
+                    "dataAccessLatency": 1, 
+                    "path": "system.ruby.l0_cntrl0.Icache", 
+                    "resourceStalls": false, 
+                    "type": "RubyCache", 
+                    "size": 65536
+                }, 
+                "recycle_latency": 10, 
+                "clk_domain": "system.cpu_clk_domain", 
+                "Zcache": {
+                    "tagArrayBanks": 1, 
+                    "latency": 1, 
+                    "is_icache": false, 
+                    "name": "Zcache", 
+                    "eventq_index": 0, 
+                    "dataArrayBanks": 1, 
+                    "cxx_class": "CacheMemory", 
+                    "tagAccessLatency": 1, 
+                    "replacement_policy": "LRU", 
+                    "assoc": 8, 
+                    "start_index_bit": 6, 
+                    "dataAccessLatency": 1, 
+                    "path": "system.ruby.l0_cntrl0.Zcache", 
+                    "resourceStalls": false, 
+                    "type": "RubyCache", 
+                    "size": 65536
+                }, 
+                "version": 0, 
+                "eventq_index": 0, 
+                "number_of_TBEs": 256, 
+                "transitions_per_cycle": 32, 
+                "bufferFromL1": {
+                    "peer": "system.ruby.l1_cntrl0.bufferToL0", 
+                    "role": "SLAVE"
+                }, 
+                "buffer_size": 0, 
+                "send_evictions": true, 
+                "ruby_system": "system.ruby", 
+                "name": "l0_cntrl0", 
+                "type": "L0Cache_Controller", 
+                "Dcache": {
+                    "tagArrayBanks": 1, 
+                    "latency": 1, 
+                    "is_icache": false, 
+                    "name": "Dcache", 
+                    "eventq_index": 0, 
+                    "dataArrayBanks": 1, 
+                    "cxx_class": "CacheMemory", 
+                    "tagAccessLatency": 1, 
+                    "replacement_policy": "LRU", 
+                    "assoc": 8, 
+                    "start_index_bit": 6, 
+                    "dataAccessLatency": 1, 
+                    "path": "system.ruby.l0_cntrl0.Dcache", 
+                    "resourceStalls": false, 
+                    "type": "RubyCache", 
+                    "size": 65536
+                }, 
+                "request_latency": 2, 
+                "path": "system.ruby.l0_cntrl0"
+            }, 
+            "type": "RubySystem", 
+            "random_seed": 1234, 
+            "hot_lines": false, 
+            "path": "system.ruby", 
+            "memctrl_clk_domain": {
+                "name": "memctrl_clk_domain", 
+                "clk_domain": "system.ruby.clk_domain", 
+                "eventq_index": 0, 
+                "cxx_class": "DerivedClockDomain", 
+                "path": "system.ruby.memctrl_clk_domain", 
+                "type": "DerivedClockDomain", 
+                "clk_divider": 3
+            }, 
+            "l1_cntrl1": {
+                "cache": {
+                    "tagArrayBanks": 1, 
+                    "latency": 2, 
+                    "is_icache": false, 
+                    "name": "cache", 
+                    "eventq_index": 0, 
+                    "dataArrayBanks": 1, 
+                    "cxx_class": "CacheMemory", 
+                    "tagAccessLatency": 1, 
+                    "replacement_policy": "PSEUDO_LRU", 
+                    "assoc": 8, 
+                    "start_index_bit": 6, 
+                    "dataAccessLatency": 6, 
+                    "path": "system.ruby.l1_cntrl1.cache", 
+                    "resourceStalls": false, 
+                    "type": "RubyCache", 
+                    "size": 524288
+                }, 
+                "requestToL2": {
+                    "peer": "system.ruby.network.slave[3]", 
+                    "role": "MASTER"
+                }, 
+                "system": "system", 
+                "l2_select_num_bits": 0, 
+                "cluster_id": 0, 
+                "cxx_class": "L1Cache_Controller", 
+                "bufferToL0": {
+                    "peer": "system.ruby.l0_cntrl1.bufferFromL1", 
+                    "role": "MASTER"
+                }, 
+                "l1_request_latency": 2, 
+                "recycle_latency": 10, 
+                "responseToL2": {
+                    "peer": "system.ruby.network.slave[4]", 
+                    "role": "MASTER"
+                }, 
+                "clk_domain": "system.ruby.clk_domain", 
+                "to_l2_latency": 1, 
+                "version": 1, 
+                "eventq_index": 0, 
+                "number_of_TBEs": 256, 
+                "transitions_per_cycle": 32, 
+                "bufferFromL0": {
+                    "peer": "system.ruby.l0_cntrl1.bufferToL1", 
+                    "role": "SLAVE"
+                }, 
+                "requestFromL2": {
+                    "peer": "system.ruby.network.master[2]", 
+                    "role": "SLAVE"
+                }, 
+                "responseFromL2": {
+                    "peer": "system.ruby.network.master[3]", 
+                    "role": "SLAVE"
+                }, 
+                "l1_response_latency": 2, 
+                "buffer_size": 0, 
+                "ruby_system": "system.ruby", 
+                "unblockToL2": {
+                    "peer": "system.ruby.network.slave[5]", 
+                    "role": "MASTER"
+                }, 
+                "name": "l1_cntrl1", 
+                "type": "L1Cache_Controller", 
+                "path": "system.ruby.l1_cntrl1"
+            }, 
+            "name": "ruby", 
+            "block_size_bytes": 64, 
+            "num_of_sequencers": 2, 
+            "dir_cntrl0": {
+                "memory": {
+                    "peer": "system.mem_ctrls.port", 
+                    "role": "MASTER"
+                }, 
+                "recycle_latency": 10, 
+                "name": "dir_cntrl0", 
+                "eventq_index": 0, 
+                "number_of_TBEs": 256, 
+                "transitions_per_cycle": 4, 
+                "cxx_class": "Directory_Controller", 
+                "clk_domain": "system.ruby.clk_domain", 
+                "responseToDir": {
+                    "peer": "system.ruby.network.master[8]", 
+                    "role": "SLAVE"
+                }, 
+                "system": "system", 
+                "requestToDir": {
+                    "peer": "system.ruby.network.master[7]", 
+                    "role": "SLAVE"
+                }, 
+                "to_mem_ctrl_latency": 1, 
+                "cluster_id": 0, 
+                "version": 0, 
+                "buffer_size": 0, 
+                "directory": {
+                    "name": "directory", 
+                    "version": 0, 
+                    "eventq_index": 0, 
+                    "cxx_class": "DirectoryMemory", 
+                    "path": "system.ruby.dir_cntrl0.directory", 
+                    "type": "RubyDirectoryMemory", 
+                    "numa_high_bit": 5, 
+                    "size": 4294967296
+                }, 
+                "path": "system.ruby.dir_cntrl0", 
+                "directory_latency": 6, 
+                "type": "Directory_Controller", 
+                "responseFromDir": {
+                    "peer": "system.ruby.network.slave[9]", 
+                    "role": "MASTER"
+                }, 
+                "ruby_system": "system.ruby"
+            }
+        }, 
+        "dvfs_handler": {
+            "enable": false, 
+            "name": "dvfs_handler", 
+            "sys_clk_domain": "system.clk_domain", 
+            "transition_latency": 100000000, 
+            "eventq_index": 0, 
+            "cxx_class": "DVFSHandler", 
+            "domains": [], 
+            "path": "system.dvfs_handler", 
+            "type": "DVFSHandler"
+        }, 
+        "work_end_exit_count": 0, 
+        "type": "System", 
+        "voltage_domain": {
+            "name": "voltage_domain", 
+            "eventq_index": 0, 
+            "voltage": [
+                "1.0"
+            ], 
+            "cxx_class": "VoltageDomain", 
+            "path": "system.voltage_domain", 
+            "type": "VoltageDomain"
+        }, 
+        "cache_line_size": 64, 
+        "boot_osflags": "a", 
+        "sys_port_proxy": {
+            "support_inst_reqs": true, 
+            "slave": {
+                "peer": [
+                    "system.system_port"
+                ], 
+                "role": "SLAVE"
+            }, 
+            "name": "sys_port_proxy", 
+            "support_data_reqs": true, 
+            "clk_domain": "system.clk_domain", 
+            "access_backing_store": false, 
+            "system": "system", 
+            "version": 0, 
+            "eventq_index": 0, 
+            "using_ruby_tester": false, 
+            "cxx_class": "RubyPortProxy", 
+            "path": "system.sys_port_proxy", 
+            "type": "RubyPortProxy", 
+            "ruby_system": "system.ruby"
+        }, 
+        "work_cpus_ckpt_count": 0, 
+        "work_begin_exit_count": 0, 
+        "path": "system", 
+        "cpu_clk_domain": {
+            "name": "cpu_clk_domain", 
+            "clock": [
+                500
+            ], 
+            "init_perf_level": 0, 
+            "voltage_domain": "system.cpu_voltage_domain", 
+            "eventq_index": 0, 
+            "cxx_class": "SrcClockDomain", 
+            "path": "system.cpu_clk_domain", 
+            "type": "SrcClockDomain", 
+            "domain_id": -1
+        }, 
+        "mem_mode": "timing", 
+        "name": "system", 
+        "init_param": 0, 
+        "system_port": {
+            "peer": "system.sys_port_proxy.slave[0]", 
+            "role": "MASTER"
+        }, 
+        "load_addr_mask": 1099511627775, 
+        "cpu": [
+            {
+                "do_statistics_insts": true, 
+                "numThreads": 1, 
+                "itb": {
+                    "name": "itb", 
+                    "eventq_index": 0, 
+                    "cxx_class": "X86ISA::TLB", 
+                    "walker": {
+                        "name": "walker", 
+                        "clk_domain": "system.cpu_clk_domain", 
+                        "system": "system", 
+                        "eventq_index": 0, 
+                        "cxx_class": "X86ISA::Walker", 
+                        "path": "system.cpu0.itb.walker", 
+                        "type": "X86PagetableWalker", 
+                        "port": {
+                            "peer": "system.ruby.l0_cntrl0.sequencer.slave[3]", 
+                            "role": "MASTER"
+                        }, 
+                        "num_squash_per_cycle": 4
+                    }, 
+                    "path": "system.cpu0.itb", 
+                    "type": "X86TLB", 
+                    "size": 64
+                }, 
+                "system": "system", 
+                "function_trace": false, 
+                "do_checkpoint_insts": true, 
+                "cxx_class": "TimingSimpleCPU", 
+                "max_loads_all_threads": 0, 
+                "apic_clk_domain": {
+                    "name": "apic_clk_domain", 
+                    "clk_domain": "system.cpu_clk_domain", 
+                    "eventq_index": 0, 
+                    "cxx_class": "DerivedClockDomain", 
+                    "path": "system.cpu0.apic_clk_domain", 
+                    "type": "DerivedClockDomain", 
+                    "clk_divider": 16
+                }, 
+                "clk_domain": "system.cpu_clk_domain", 
+                "function_trace_start": 0, 
+                "cpu_id": 0, 
+                "checker": null, 
+                "eventq_index": 0, 
+                "do_quiesce": true, 
+                "type": "TimingSimpleCPU", 
+                "profile": 0, 
+                "icache_port": {
+                    "peer": "system.ruby.l0_cntrl0.sequencer.slave[0]", 
+                    "role": "MASTER"
+                }, 
+                "interrupts": {
+                    "int_master": {
+                        "peer": "system.ruby.l0_cntrl0.sequencer.slave[2]", 
+                        "role": "MASTER"
+                    }, 
+                    "name": "interrupts", 
+                    "pio": {
+                        "peer": "system.ruby.l0_cntrl0.sequencer.master[0]", 
+                        "role": "SLAVE"
+                    }, 
+                    "int_slave": {
+                        "peer": "system.ruby.l0_cntrl0.sequencer.master[1]", 
+                        "role": "SLAVE"
+                    }, 
+                    "pio_latency": 100000, 
+                    "clk_domain": "system.cpu0.apic_clk_domain", 
+                    "system": "system", 
+                    "int_latency": 1000, 
+                    "eventq_index": 0, 
+                    "cxx_class": "X86ISA::Interrupts", 
+                    "path": "system.cpu0.interrupts", 
+                    "pio_addr": 2305843009213693952, 
+                    "type": "X86LocalApic"
+                }, 
+                "dcache_port": {
+                    "peer": "system.ruby.l0_cntrl0.sequencer.slave[1]", 
+                    "role": "MASTER"
+                }, 
+                "socket_id": 0, 
+                "max_insts_all_threads": 0, 
+                "path": "system.cpu0", 
+                "max_loads_any_thread": 0, 
+                "switched_out": false, 
+                "workload": [
+                    {
+                        "uid": 100, 
+                        "pid": 100, 
+                        "kvmInSE": false, 
+                        "cxx_class": "LiveProcess", 
+                        "executable": "/home/tunji/sc-dnn/code/SparseCompute/M5SparseCompute", 
+                        "drivers": [], 
+                        "system": "system", 
+                        "gid": 100, 
+                        "eventq_index": 0, 
+                        "env": [], 
+                        "input": "cin", 
+                        "ppid": 99, 
+                        "type": "LiveProcess", 
+                        "cwd": "/home/tunji/sc-dnn/code/SparseCompute/BackwardProp", 
+                        "simpoint": 0, 
+                        "euid": 100, 
+                        "path": "system.cpu0.workload", 
+                        "max_stack_size": 67108864, 
+                        "name": "workload", 
+                        "cmd": [
+                            "/home/tunji/sc-dnn/code/SparseCompute/M5SparseCompute", 
+                            "--kernel", 
+                            "1", 
+                            "--samples", 
+                            "1", 
+                            "--threads", 
+                            "1", 
+                            "--forwardsparsity", 
+                            "20", 
+                            "--activationcachelinesparsity", 
+                            "15", 
+                            "--backwardsparsity", 
+                            "92", 
+                            "--signalcachelinesparsity", 
+                            "63", 
+                            "--weightupdatesparsity", 
+                            "7", 
+                            "--deltacachelinesparsity", 
+                            "0", 
+                            "--model", 
+                            "IMG22K", 
+                            "--workers", 
+                            "2", 
+                            "--pass", 
+                            "BackwardProp", 
+                            "--outputscale", 
+                            "20"
+                        ], 
+                        "errout": "cerr", 
+                        "useArchPT": false, 
+                        "egid": 100, 
+                        "output": "cout"
+                    }
+                ], 
+                "name": "cpu0", 
+                "dtb": {
+                    "name": "dtb", 
+                    "eventq_index": 0, 
+                    "cxx_class": "X86ISA::TLB", 
+                    "walker": {
+                        "name": "walker", 
+                        "clk_domain": "system.cpu_clk_domain", 
+                        "system": "system", 
+                        "eventq_index": 0, 
+                        "cxx_class": "X86ISA::Walker", 
+                        "path": "system.cpu0.dtb.walker", 
+                        "type": "X86PagetableWalker", 
+                        "port": {
+                            "peer": "system.ruby.l0_cntrl0.sequencer.slave[4]", 
+                            "role": "MASTER"
+                        }, 
+                        "num_squash_per_cycle": 4
+                    }, 
+                    "path": "system.cpu0.dtb", 
+                    "type": "X86TLB", 
+                    "size": 64
+                }, 
+                "simpoint_start_insts": [], 
+                "max_insts_any_thread": 0, 
+                "progress_interval": 0, 
+                "branchPred": null, 
+                "isa": [
+                    {
+                        "eventq_index": 0, 
+                        "path": "system.cpu0.isa", 
+                        "type": "X86ISA", 
+                        "name": "isa", 
+                        "cxx_class": "X86ISA::ISA"
+                    }
+                ], 
+                "tracer": {
+                    "eventq_index": 0, 
+                    "path": "system.cpu0.tracer", 
+                    "type": "ExeTracer", 
+                    "name": "tracer", 
+                    "cxx_class": "Trace::ExeTracer"
+                }
+            }, 
+            {
+                "do_statistics_insts": true, 
+                "numThreads": 1, 
+                "itb": {
+                    "name": "itb", 
+                    "eventq_index": 0, 
+                    "cxx_class": "X86ISA::TLB", 
+                    "walker": {
+                        "name": "walker", 
+                        "clk_domain": "system.cpu_clk_domain", 
+                        "system": "system", 
+                        "eventq_index": 0, 
+                        "cxx_class": "X86ISA::Walker", 
+                        "path": "system.cpu1.itb.walker", 
+                        "type": "X86PagetableWalker", 
+                        "port": {
+                            "peer": "system.ruby.l0_cntrl1.sequencer.slave[3]", 
+                            "role": "MASTER"
+                        }, 
+                        "num_squash_per_cycle": 4
+                    }, 
+                    "path": "system.cpu1.itb", 
+                    "type": "X86TLB", 
+                    "size": 64
+                }, 
+                "system": "system", 
+                "function_trace": false, 
+                "do_checkpoint_insts": true, 
+                "cxx_class": "TimingSimpleCPU", 
+                "max_loads_all_threads": 0, 
+                "apic_clk_domain": {
+                    "name": "apic_clk_domain", 
+                    "clk_domain": "system.cpu_clk_domain", 
+                    "eventq_index": 0, 
+                    "cxx_class": "DerivedClockDomain", 
+                    "path": "system.cpu1.apic_clk_domain", 
+                    "type": "DerivedClockDomain", 
+                    "clk_divider": 16
+                }, 
+                "clk_domain": "system.cpu_clk_domain", 
+                "function_trace_start": 0, 
+                "cpu_id": 1, 
+                "checker": null, 
+                "eventq_index": 0, 
+                "do_quiesce": true, 
+                "type": "TimingSimpleCPU", 
+                "profile": 0, 
+                "icache_port": {
+                    "peer": "system.ruby.l0_cntrl1.sequencer.slave[0]", 
+                    "role": "MASTER"
+                }, 
+                "interrupts": {
+                    "int_master": {
+                        "peer": "system.ruby.l0_cntrl1.sequencer.slave[2]", 
+                        "role": "MASTER"
+                    }, 
+                    "name": "interrupts", 
+                    "pio": {
+                        "peer": "system.ruby.l0_cntrl1.sequencer.master[0]", 
+                        "role": "SLAVE"
+                    }, 
+                    "int_slave": {
+                        "peer": "system.ruby.l0_cntrl1.sequencer.master[1]", 
+                        "role": "SLAVE"
+                    }, 
+                    "pio_latency": 100000, 
+                    "clk_domain": "system.cpu1.apic_clk_domain", 
+                    "system": "system", 
+                    "int_latency": 1000, 
+                    "eventq_index": 0, 
+                    "cxx_class": "X86ISA::Interrupts", 
+                    "path": "system.cpu1.interrupts", 
+                    "pio_addr": 2305843009213693952, 
+                    "type": "X86LocalApic"
+                }, 
+                "dcache_port": {
+                    "peer": "system.ruby.l0_cntrl1.sequencer.slave[1]", 
+                    "role": "MASTER"
+                }, 
+                "socket_id": 0, 
+                "max_insts_all_threads": 0, 
+                "path": "system.cpu1", 
+                "max_loads_any_thread": 0, 
+                "switched_out": false, 
+                "workload": [
+                    "system.cpu0.workload"
+                ], 
+                "name": "cpu1", 
+                "dtb": {
+                    "name": "dtb", 
+                    "eventq_index": 0, 
+                    "cxx_class": "X86ISA::TLB", 
+                    "walker": {
+                        "name": "walker", 
+                        "clk_domain": "system.cpu_clk_domain", 
+                        "system": "system", 
+                        "eventq_index": 0, 
+                        "cxx_class": "X86ISA::Walker", 
+                        "path": "system.cpu1.dtb.walker", 
+                        "type": "X86PagetableWalker", 
+                        "port": {
+                            "peer": "system.ruby.l0_cntrl1.sequencer.slave[4]", 
+                            "role": "MASTER"
+                        }, 
+                        "num_squash_per_cycle": 4
+                    }, 
+                    "path": "system.cpu1.dtb", 
+                    "type": "X86TLB", 
+                    "size": 64
+                }, 
+                "simpoint_start_insts": [], 
+                "max_insts_any_thread": 0, 
+                "progress_interval": 0, 
+                "branchPred": null, 
+                "isa": [
+                    {
+                        "eventq_index": 0, 
+                        "path": "system.cpu1.isa", 
+                        "type": "X86ISA", 
+                        "name": "isa", 
+                        "cxx_class": "X86ISA::ISA"
+                    }
+                ], 
+                "tracer": {
+                    "eventq_index": 0, 
+                    "path": "system.cpu1.tracer", 
+                    "type": "ExeTracer", 
+                    "name": "tracer", 
+                    "cxx_class": "Trace::ExeTracer"
+                }
+            }
+        ], 
+        "cpu_voltage_domain": {
+            "name": "cpu_voltage_domain", 
+            "eventq_index": 0, 
+            "voltage": [
+                "1.0"
+            ], 
+            "cxx_class": "VoltageDomain", 
+            "path": "system.cpu_voltage_domain", 
+            "type": "VoltageDomain"
+        }, 
+        "mem_ctrls": [
+            {
+                "basic_bus_busy_time": 2, 
+                "cxx_class": "RubyMemoryControl", 
+                "null": false, 
+                "port": {
+                    "peer": "system.ruby.dir_cntrl0.memory", 
+                    "role": "SLAVE"
+                }, 
+                "bank_queue_size": 12, 
+                "in_addr_map": true, 
+                "clk_domain": "system.clk_domain", 
+                "eventq_index": 0, 
+                "banks_per_rank": 8, 
+                "mem_random_arbitrate": 0, 
+                "dimms_per_channel": 2, 
+                "type": "RubyMemoryControl", 
+                "tFaw": 0, 
+                "mem_ctl_latency": 12, 
+                "mem_fixed_delay": 0, 
+                "conf_table_reported": true, 
+                "refresh_period": 1560, 
+                "rank_bit_0": 11, 
+                "ranks_per_dimm": 2, 
+                "bank_busy_time": 11, 
+                "name": "mem_ctrls", 
+                "read_write_delay": 2, 
+                "bank_bit_0": 8, 
+                "range": "0:4294967295", 
+                "dimm_bit_0": 12, 
+                "rank_rank_delay": 1, 
+                "path": "system.mem_ctrls"
+            }
+        ], 
+        "num_work_ids": 16, 
+        "work_item_id": -1, 
+        "work_begin_cpu_id_exit": -1
+    }, 
+    "time_sync_period": 100000000000, 
+    "eventq_index": 0, 
+    "time_sync_spin_threshold": 100000000, 
+    "cxx_class": "Root", 
+    "path": "root", 
+    "time_sync_enable": false, 
+    "type": "Root", 
+    "full_system": false
+}
