@@ -23,14 +23,14 @@ Prior software~\cite{Eisenstat82, IntelSparseMatrix} and hardware~\cite{Carter99
 
 Our approach consists of processor and memory system techniques for reducing sparse data computation overheads.  Our processor extensions are based on ``zero-optimizable'' instructions, which are arithmetic instructions (e.g., multiplication) with predetermined results and side effects when an input operand is zero. Our optimizations reduce execution cycles and processor resource pressure by skipping instructions (including entire loops) that become redundant because of a zero input to a zero-optimizable instruction.  Our memory system extensions efficiently track zero data at cache line granularity to avoid the storage and bandwidth costs of zero cache lines.  Our approach is transparent to software and therefore benefits existing binaries. 
 
-We evaluate our proposed hardware extensions in a simulation environment using real-world DNN training workloads for image recognition. The results show significant improvements in training time in single threaded, multi-threaded, and model-parallelism scenarios.
+We evaluate our proposed hardware extensions on real and simulated hardware using real-world DNN training workloads for image recognition. The results show that our optiimizations improve training performance by up to $3X$ for single-threaded training and up to $6X$ for multi-threaded training. 
 
 This paper makes the following contributions.
 \begin{itemize}
 
 \item We propose new hardware techniques for improving the performance and scalability of DNN training by reducing computational requirements of sparse data computations, without requiring software changes.  We present a detailed design of our proposed hardware extensions, which add negligible logic on the critical path of processor execution and memory accesses. 
 \item We study the impact of sparse data on computation in a real-world DNN training for an image recognition task. We show that eliminating such unnecessary computations can greatly improve performance and scalability of such a real-world workload.
-\item We quantitatively evaluate how our optimizations improve DNN training peformance and scalability using standard image recognition workloads. 
+\item We quantitatively evaluate how our optimizations improve DNN training peformance and scalability using standard image recognition workloads. We show up to $6X$ training speedup with low hardware cost. 
 
 \end{itemize}
 

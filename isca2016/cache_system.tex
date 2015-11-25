@@ -1,9 +1,9 @@
 \section{Cache Optimizations}
 \label{sec:cache_opt}
 
-Our cache optimizations for DNN training are based on the sparse nature of the performance critical data (e.g., activations, errors, etc.).  Our approach improves cache performance through a compact representation of cache lines containing only zeroes (a.k.a. \emph{zero cache lines}) in the caches, which helps to avoid  the normal bandwidth and storage costs of zero cache lines. These optimizations enable efficient scaling of model size and training threads.  
+Our cache optimizations for DNN training are based on the sparse nature of the performance critical data (in Figure~\ref{fig:cifar-10_data_sparsity}).  Our approach improves cache performance through a compact representation of cache lines containing only zeroes (a.k.a. \emph{zero cache lines}) in the caches, which helps to avoid  the normal bandwidth and storage costs of zero cache lines. These optimizations enable efficient scaling of model size and training threads.  
 
-Managing zero data at cache line granularity enables implementation of our optimizations through simple and efficient extensions of existing memory systems.  Our current design comprises of mechanisms for achieving the following: (i) compact representation of zero cache lines, (ii) a decoupled cache hierarchy for zero cache lines, and (iii) tracking zero cache lines in the memory system.  We describe these mechanims in the rest of this section.
+Managing zero data at cache line granularity enables implementation of our optimizations through simple and efficient extensions of existing memory systems.  Our design comprises of new mechanisms for: (i) compact representation of zero cache lines, (ii) a decoupled cache hierarchy for zero cache lines, and (iii) tracking zero cache lines in the memory system.  We describe these mechanims in the rest of this section.
 
 \begin{figure}[!t]
 \centering
@@ -14,7 +14,7 @@ Managing zero data at cache line granularity enables implementation of our optim
 
 \subsection{Zero Cache Line Representation}
 
-Our compact representation exploits the fact that the data bytes of a zero cache line are not required to represent the line in cache, the cache tag is sufficient for this purpose. Also, it is not neccesary to transfer the data bytes of a zero cache line across the caches since they can be synthesized in the processor (read) or main memory (on a writeback) as appropriate.  However, in event of a cache hit, we must quickly determine whether it is a zero cache line that is referenced so that the appropriate data transfer is done promptly. We consider two alternatives for handling this: (i) an extra bit in the cache tags to identify zero cache lines, or (ii) a decoupled hierarchy of cache tags for zero cache lines.  Although the first option avoids the extra cost of zero cache line tags, the data bytes space of zero cache lines are unused.  To avoid this waste, we adopt the second option in our current work. 
+Our compact representation exploits the fact that the data bytes of a zero cache line are not required to represent the line in cache.  The cache tag is sufficient for this purpose. Also, it is not neccesary to transfer the data bytes of a zero cache line across the caches since they can be synthesized in the processor (read) or main memory (on a writeback) as appropriate.  However, in the event of a cache hit, we must quickly determine whether it is a zero cache line that is referenced so that the appropriate data transfer, if need (i.e., non-zero),  is done promptly. We consider two alternatives for handling this: (i) an extra bit in the cache tag to identify a zero cache line or (ii) a decoupled hierarchy of cache tags for zero cache lines.  Although the first option avoids the extra cost of zero cache line tags, the data store space of zero cache lines goes unused.  To avoid this waste, we adopt the second option in our current work. 
 
 \begin{figure}[!t]
 \centering

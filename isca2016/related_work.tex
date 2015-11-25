@@ -1,8 +1,11 @@
 \section{Related Work}
 \label{sec:related}
 
-Our work is related to prior work on 
+To our knowledge this is first work to explore processor and memory system optimizations for exploiting computation and data sparsity to improve DNN training performance in commodity systems.   More generally, our work is related to prior work on efficient sparse matrix computations~\cite{Eisenstat82, IntelSparseMatrix, Carter99, Srinidhi12, Fowers13, Seshadri15}, reducing overheads of zero values in the cache~\cite{Villa00, Zhang00, Dusser09, Islam09} and physical register files~\cite{Jourdan98, Balakrishnan03}, and dynamic elimination of redundant computations~\cite{Connors00, Collins01, Butts02, Sassone04}.
 
+Prior work on sparse matrix computations, including software~\cite{Eisenstat82, IntelSparseMatrix} and hardware support~\cite{Carter99, Srinidhi12, Fowers13, Seshadri15}, are unlikely to be efficient for DNN training due to the dynamic nature of the sparse data structures (e.g., error gradients), and relatively lower sparsity levels that what they are turned for ($>95\%$).   Prior work on reducing overheads of zero values in caches~\cite{Villa00, Zhang00, Dusser09, Islam09} treat the zero cache differently from the regular data caches (e.g., not part of coherence protocol, or accepting writes).  In contrast, in this work the zero cache is treated exactly like the data caches (save for not having data bytes), and we further consider the impact on multi-threaded workloads.  Reducing overheads of zero values in physical register files is complementary to our work.  Some of the ideas in our loop optimizations are similar to prior work on dynamically eliminating redundant computations.  However, ours is the first to consider these ideas for DNN training workloads. 
+
+\begin{comment}
 \begin{itemize}
 \item efficient sparse marix-vector computations~\cite{Eisenstat82, IntelSparseMatrix, Carter99, Srinidhi12, Fowers13, Seshadri15}, 
 
@@ -11,3 +14,4 @@ Our work is related to prior work on
 \item dynamic elimination of redundant computations~\cite{Connors00, Collins01, Butts02, Sassone04}.
 
 \end{itemize}
+\end{comment}
