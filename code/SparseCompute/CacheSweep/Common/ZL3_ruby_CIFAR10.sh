@@ -11,5 +11,5 @@ SIMDIR=/home/tunji/sc-dnn/code/gem5-stable
 gem5Bin="$SIMDIR/build/X86_ZMESI_Three_Level/gem5.opt"
 cacheType="ZL3"
 
-. ./GEM5_ruby_CIFAR10.sh 
+. ${commonDir}/GEM5_ruby_CIFAR10.sh 
 

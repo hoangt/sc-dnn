@@ -20,10 +20,10 @@ if [ $# -gt 3 ]; then
   cacheScale=$4
 fi
 
-. ./CIFAR10_Sparse.sh 
-progOpts="--samples $sampleCount --threads $tc $sparsityOpts --model ${model} --workers ${workerCount} --pass ForwardProp "
+. ${commonDir}/CIFAR10_Sparse.sh 
+progOpts="--samples $sampleCount --threads $tc $sparsityOpts --model ${model} --workers ${workerCount} --pass ${pass} "
 
-. ./cacheSpecs.sh $cacheScale
+. ${commonDir}/cacheSpecs.sh $cacheScale
 cacheOpts="--l1d_size=${l1Size} --l1i_size=${l1Size} --l2_size=${l2Size} --l3_size=${l3Size}"
 
 simOpts="--ruby --cpu-type=timing --caches --l2cache --num-l3caches=1 ${cacheOpts} --num-cpus=$cpus --mem-size=2GB --mem-type=ruby_memory"
