@@ -6,7 +6,7 @@ fi
 
 commonDir="../Common"
 pass="WeightUpdate"
-for i in 1 2 4 5 8 10 20; do
+for i in 1 2 4 5 8 10 ; do
   . ${commonDir}/L3_ruby_CIFAR10.sh ${t1} ${t1} 1 ${i} > nohup-L3_CIFAR10_T${t1}_S${t1}_C${i}.txt & 
 done
  
