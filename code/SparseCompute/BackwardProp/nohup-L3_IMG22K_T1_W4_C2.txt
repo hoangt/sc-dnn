@@ -1,0 +1,49 @@
+MODELOPTS=--forwardsparsity 20 --activationcachelinesparsity 15 --backwardsparsity 92 --signalcachelinesparsity 63 --weightupdatesparsity 7 --deltacachelinesparsity 0 --model IMG22K
+CacheSizeOpts=--l1i_size=64kB --l1d_size=64kB --l2_size=512kB --l3_size=40MB
+Run SparseCompute in GEM5-Ruby
+GEM5=/home/tunji/sc-dnn/code/gem5-stable/build/X86_MESI_Three_Level/gem5.opt
+SCRIPT=/home/tunji/sc-dnn/code/gem5-stable/configs/example/se.py
+PROGDIR=/home/tunji/sc-dnn/code/SparseCompute
+PROGOPTS=--samples 1 --threads 1 --forwardsparsity 20 --activationcachelinesparsity 15 --backwardsparsity 92 --signalcachelinesparsity 63 --weightupdatesparsity 7 --deltacachelinesparsity 0 --model IMG22K --workers 4 --pass BackwardProp --outputscale 20
+SIMOPTS=--ruby --cpu-type=timing --caches --l2cache --num-l3caches=1 --l1d_size=64kB --l1i_size=64kB --l2_size=512kB --l3_size=40MB --num-cpus=2 --mem-size=4GB --mem-type=ruby_memory
+gem5 Simulator System.  http://gem5.org
+gem5 is copyrighted software; use the --copyright option for details.
+
+gem5 compiled Nov 19 2015 16:07:41
+gem5 started Nov 23 2015 09:13:42
+gem5 executing on tunji-Virtual-Machine
+command line: /home/tunji/sc-dnn/code/gem5-stable/build/X86_MESI_Three_Level/gem5.opt -d Output/IMG22K_4W-L3-S1_T1_C2/ /home/tunji/sc-dnn/code/gem5-stable/configs/example/se.py --ruby --cpu-type=timing --caches --l2cache --num-l3caches=1 --l1d_size=64kB --l1i_size=64kB --l2_size=512kB --l3_size=40MB --num-cpus=2 --mem-size=4GB --mem-type=ruby_memory -c /home/tunji/sc-dnn/code/SparseCompute/M5SparseCompute -o --kernel 1 --samples 1 --threads 1 --forwardsparsity 20 --activationcachelinesparsity 15 --backwardsparsity 92 --signalcachelinesparsity 63 --weightupdatesparsity 7 --deltacachelinesparsity 0 --model IMG22K --workers 4 --pass BackwardProp --outputscale 20
+Global frequency set at 1000000000000 ticks per second
+0: system.remote_gdb.listener: listening for remote gdb #0 on port 7000
+0: system.remote_gdb.listener: listening for remote gdb #1 on port 7001
+**** REAL SIMULATION ****
+info: Entering event queue @ 0.  Starting simulation...
+info: Increasing stack size by one page.
+warn: ignoring syscall access(5373889, ...)
+Model: IMG22K 
+Pass: BackwardProp 
+WorkerCount: 4 
+ThreadCount: 1 
+SampleCount: 1 
+ThreadModel: 1 
+OutputScale: 20
+KernelVersion: UNROLL
+FeedForwardSparsity: 20
+ActivationCacheLineSparsity: 15
+BackPropSparsity: 92
+SignalCacheLineSparsity: 63
+WeightUpdateSparsity: 7
+DeltaCacheLineSparsity: 0
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+BackwardProp: 70.43 msecs
+         0          1       1.42  19.782000 28005264
+         1          1       1.52  37.225000 56448000
+         2          1       1.72   5.229000 9000000
+         3          1       1.71   3.040000 5184000
+         4          1       1.56   0.553000 864000
+         5          1       1.54   0.115000 177600
+         6          1       1.55   0.143000 222000
+         7          1       1.52   4.345750 6600000
+Pass_run_time: 0.083474secs
+Total_run_time: 0.083474secs
+Exiting @ tick 1037401927000 because target called exit()

@@ -11,7 +11,6 @@
 #define START_TIMER(t)        (t.StartTimer())
 #define STOP_TIMER(t)         (t.StopTimer())
 #define ELAPSED_USEC_TIME(t)  (t.ElapsedUsecTime())
-#define ATOMIC_INCREMENT64(v) (__atomic_fetch_add(&v, 1, __ATOMIC_SEQ_CST))
 #define CASE_INSENSITIVE_STRCMP(a,b) strcasecmp(a,b)
 
 typedef long long INT64;
@@ -22,7 +21,6 @@ enum ModelType {NO_MODEL = 0, MNIST_MODEL = 1, IMAGENET_1K_MODEL, IMAGENET_22K_M
 enum DNNPass {DNN_FORWARD = 0, DNN_BACKWARD, DNN_WEIGHTUPDATE, NUM_DNN_PASS};
 
 #else // WINDOWS_BUILD 
-
 #include "stdafx.h"
 #include "paramparser.h"
 #include "xstring.h"
@@ -33,7 +31,6 @@ enum DNNPass {DNN_FORWARD = 0, DNN_BACKWARD, DNN_WEIGHTUPDATE, NUM_DNN_PASS};
 #define START_TIMER(t) t.Start()
 #define STOP_TIMER(t) t.Stop()
 #define ELAPSED_USEC_TIME(t) t.GetElapsedMicroSecs()
-#define ATOMIC_INCREMENT64(v) InterlockedIncrement64(&v)
 #define CASE_INSENSITIVE_STRCMP(a,b) _strcmpi(a,b)
 
 typedef enum WorkerCount {ZERO_WORKER = 0, ONE_WORKER, TWO_WORKER, THREE_WORKER, FOUR_WORKER, NUM_WORKER_COUNT} WorkerCount;
@@ -150,6 +147,7 @@ typedef struct ThreadLayerState {
   
   void Init(const int, const DNN&);
   void InitData();
+  void PrintSparsity();
   void FiniData();
   void ResetStats();
   void Fini(void);

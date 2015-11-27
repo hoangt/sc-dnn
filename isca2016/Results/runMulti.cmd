@@ -14,5 +14,7 @@ set GOPT=-e "forwardFile='%forwardFile%'; backwardFile='%backwardFile%'; weightF
 
 %GPLOT% %GOPT% %PYSCRIPT%
 
+start %outFile%
+
 endlocal
 goto :eof

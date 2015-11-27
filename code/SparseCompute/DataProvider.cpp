@@ -115,5 +115,11 @@ void PrintSparseStatistics(const char* tag, const std::vector<const float*>& spa
 
     float averageSparsity = static_cast<float>(totalSparseCount) / static_cast<float>(dataCount);
     float averageCacheLineSparsity = static_cast<float>(totalCacheLineSparseCount) / static_cast<float> (cacheLineDataCount);
+#ifdef M5_BUILD 
+    int percentSparsity = static_cast<int>(averageSparsity * 100);
+    int percentCacheLineSparsity = static_cast<int>(averageCacheLineSparsity * 100);
+    printf("SparseStatistics: %s Word:%d%% Line:%d%%\n", tag, percentSparsity, percentCacheLineSparsity);
+#else
     printf("SparseStatistics: %s Word:%5.2f $Line:%5.2f\n", tag, averageSparsity, averageCacheLineSparsity);
+#endif
 }

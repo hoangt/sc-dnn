@@ -13,5 +13,7 @@ set GOPT=-e "wordFile='%wordFile%'; cacheLineFile='%cacheLineFile%'; outFile='%o
 
 %GPLOT% %GOPT% %PYSCRIPT%
 
+start %outFile%
+
 endlocal
 goto :eof

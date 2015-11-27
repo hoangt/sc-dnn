@@ -209,6 +209,9 @@ void ThreadLayerState::Init (const int tNum, const DNN& model)
   MY_ASSERT(_startLayer < _numLayers);
   ResetStats();
   InitData();
+#ifndef M5_BUILD 
+ PrintSparsity();
+#endif
 }
 
 void ThreadLayerState::ResetStats()
@@ -246,27 +249,29 @@ void ThreadLayerState::InitData()
         Sparsify(_weightDeltas[i], alignedWeightSize, G_WEIGHTUPDATE_SPARSITY, G_DELTA_CACHELINE_SPARSITY);
         Sparsify(_LayerState[i]._Weights, alignedWeightSize, 0, 0);
     }
+}
 
-    std::vector<const float*> activations(_numLayers);
-    std::vector<const float*> errors(_numLayers);
-    std::vector<const float*> deltas(_numLayers);
-    std::vector<int> activationSize(_numLayers);
-    std::vector<int> errorSize(_numLayers);
-    std::vector<int> deltaSize(_numLayers);
-    for (int i = _startLayer; i < _numLayers; i++)
-    {
-        activations[i] = _inputActivation[i];
-        activationSize[i] = CACHELINE_ALIGN(_LayerState[i]._InputSize);
-        errors[i] = _inputError[i];
-        errorSize[i] = CACHELINE_ALIGN(_LayerState[i]._OutputSize);
-        deltas[i] = _weightDeltas[i];
-        deltaSize[i] = CACHELINE_ALIGN(_LayerState[i]._WeightSize);
-    }
-/*
-    PrintSparseStatistics("InputActivations", activations, activationSize);
-    PrintSparseStatistics("InputErrors", errors, errorSize);
-    PrintSparseStatistics("WeightDeltas", deltas, deltaSize);
-*/
+void ThreadLayerState::PrintSparsity()
+{
+	std::vector<const float*> activations(_numLayers);
+	std::vector<const float*> errors(_numLayers);
+	std::vector<const float*> deltas(_numLayers);
+	std::vector<int> activationSize(_numLayers);
+	std::vector<int> errorSize(_numLayers);
+	std::vector<int> deltaSize(_numLayers);
+	for (int i = _startLayer; i < _numLayers; i++)
+	{
+		activations[i] = _inputActivation[i];
+		activationSize[i] = CACHELINE_ALIGN(_LayerState[i]._InputSize);
+		errors[i] = _inputError[i];
+		errorSize[i] = CACHELINE_ALIGN(_LayerState[i]._OutputSize);
+		deltas[i] = _weightDeltas[i];
+		deltaSize[i] = CACHELINE_ALIGN(_LayerState[i]._WeightSize);
+	}
+	
+	PrintSparseStatistics("InputActivations", activations, activationSize);
+	PrintSparseStatistics("InputErrors", errors, errorSize);
+	PrintSparseStatistics("WeightDeltas", deltas, deltaSize);
 }
 
 void ThreadLayerState::FiniData()

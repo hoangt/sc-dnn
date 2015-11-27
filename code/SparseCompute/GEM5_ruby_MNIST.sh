@@ -44,7 +44,7 @@ for k in 1  ; do
 
   outDir="${model}_${workerCount}W-${cacheType}-${dirSuffix}/ruby-k$k"
   
-  ${gem5Bin} -d $outDir ${gem5Script} $simOpts -c "$prog"  -o "--kernel $k ${progOpts}" | tee ${model}_${cacheType}_${workerCount}W_${threadCount}T.txt
+  echo ${gem5Bin} -d $outDir ${gem5Script} $simOpts -c "$prog"  -o "--kernel $k ${progOpts}" | tee ${model}_${cacheType}_${workerCount}W_${threadCount}T.txt
 done
 
 

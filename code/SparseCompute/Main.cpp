@@ -2,6 +2,7 @@
 #include "DataProvider.h"
 #include <iostream>
 #include <vector>
+#include<atomic>
 
 using namespace std;
 
@@ -35,7 +36,8 @@ LayerConfig *ModelConfig[NUM_MODEL_TYPE][NUM_WORKER_COUNT] = {
 int ModelLayerCount[NUM_MODEL_TYPE] = {0, 5, 7, 8, 5, 8};
 const char *ModelName[NUM_MODEL_TYPE] = {"NO MODEL", "MNIST", "IMG1K", "IMG22K", "CIFAR10", "IMGKZ1K"};
 
-long long g_CurrentSamplePos;
+//long long g_CurrentSamplePos;
+std::atomic<long long> g_CurrentSamplePos;
 
 CanonicalConfig g_CanonicalConfig;
 
@@ -54,7 +56,9 @@ DWORD DNNModelThreadForward(ThreadLayerState *tl)
 {
     SetTrainingThreadAffinity(tl->_threadNum);
 
-#ifndef PREALLOCATE_THREAD_BUFFERS
+#ifdef PREALLOCATE_THREAD_BUFFERS
+//	tl->PrintSparsity();
+#else
     float **inputActivation = new float *[tl->_numLayers];
     float **outputActivation = new float *[tl->_numLayers];
     for (int i = tl->_startLayer; i < tl->_numLayers; i++)
@@ -66,8 +70,8 @@ DWORD DNNModelThreadForward(ThreadLayerState *tl)
 
     while (true)
     {
-        INT64 sampleId = ATOMIC_INCREMENT64(g_CurrentSamplePos);
-        if (sampleId >= G_SAMPLE_COUNT) break;
+		INT64 sampleId = g_CurrentSamplePos.fetch_add(1);
+		if (sampleId >= G_SAMPLE_COUNT) break;
         int numLayers = ((sampleId % G_WORKER_COUNT) == 0) ? tl->_numLayers : tl->_numLayers-1;
         for (int l = tl->_startLayer; l < numLayers; l++) {
             
@@ -126,8 +130,8 @@ DWORD DNNModelThreadBackward(ThreadLayerState *tl)
 
     while (true)
     {
-        INT64 sampleId = ATOMIC_INCREMENT64(g_CurrentSamplePos);
-        if (sampleId >= G_SAMPLE_COUNT) break;
+		INT64 sampleId = g_CurrentSamplePos.fetch_add(1);
+		if (sampleId >= G_SAMPLE_COUNT) break;
         int numLayers = ((sampleId % G_WORKER_COUNT) == 0) ? tl->_numLayers : tl->_numLayers-1;
         for (int l = tl->_startLayer; l < numLayers; l++)
         {
@@ -191,8 +195,8 @@ DWORD DNNModelThreadDeltaWeightUpdate(ThreadLayerState *tl)
 
     while (true)
     {
-            INT64 sampleId = ATOMIC_INCREMENT64(g_CurrentSamplePos);
-            if (sampleId >= G_SAMPLE_COUNT) break;
+		INT64 sampleId = g_CurrentSamplePos.fetch_add(1);
+		if (sampleId >= G_SAMPLE_COUNT) break;
             int numLayers = ((sampleId % G_WORKER_COUNT) == 0) ? tl->_numLayers : tl->_numLayers-1;
             for (int l = tl->_startLayer; l < numLayers; l++) 
             {
@@ -272,8 +276,8 @@ DWORD DNNModelThreadWeightUpdate(ThreadLayerState *tl)
 
     while (true)
     {
-        INT64 sampleId = ATOMIC_INCREMENT64(g_CurrentSamplePos);
-        if (sampleId >= G_SAMPLE_COUNT) break;
+		INT64 sampleId = g_CurrentSamplePos.fetch_add(1);
+		if (sampleId >= G_SAMPLE_COUNT) break;
         int numLayers = ((sampleId % G_WORKER_COUNT) == 0) ? tl->_numLayers : tl->_numLayers-1;
         for (int l = tl->_startLayer; l < numLayers; l++)
         {
@@ -324,21 +328,25 @@ DWORD DNNModelThreadWeightUpdate(ThreadLayerState *tl)
 
 void PrintComputeStats(int numThreads, ThreadLayerState *tl, DNNPass dp)
 {
-    int *sampleCount = new int[DNNModel._nLayers];
     double *averageSampleTime = new double[DNNModel._nLayers];
     double totalPassTime = 0.0f;
-    for (int i = G_START_LAYER; i < DNNModel._nLayers; i++)
-    {
-        averageSampleTime[i] = 0;
-        sampleCount[i] = 0;
-        for (int j = 0; j < numThreads; j++)
-        {
-            averageSampleTime[i] += (INT64)(tl[j]._FLOPTime[i]);
-            sampleCount[i] += tl[j]._SampleCount[i];
-        }
-        averageSampleTime[i] /=  (DNNModel._Replicated[i] == true) ? (DNNModel._nWorkers  * DNNModel._nThreads[i] * sampleCount[i]) : (DNNModel._nThreads[i] * sampleCount[i]);
-        totalPassTime += averageSampleTime[i];
-    }
+	if (G_SAMPLE_COUNT > 0)
+	{
+		int *sampleCount = new int[DNNModel._nLayers];
+		for (int i = G_START_LAYER; i < DNNModel._nLayers; i++)
+		{
+			averageSampleTime[i] = 0;
+			sampleCount[i] = 0;
+			for (int j = 0; j < numThreads; j++)
+			{
+				averageSampleTime[i] += (INT64)(tl[j]._FLOPTime[i]);
+				sampleCount[i] += tl[j]._SampleCount[i];
+			}
+			averageSampleTime[i] /= (DNNModel._Replicated[i] == true) ? (DNNModel._nWorkers  * DNNModel._nThreads[i] * sampleCount[i]) : (DNNModel._nThreads[i] * sampleCount[i]);
+			totalPassTime += averageSampleTime[i];
+		}
+		delete[] sampleCount;
+	}
 
     printf("%s: %5.2f msecs\n", DNNPassName[dp], totalPassTime/(1E3));
     for (int i = G_START_LAYER; i < DNNModel._nLayers; i++)
@@ -349,14 +357,13 @@ void PrintComputeStats(int numThreads, ThreadLayerState *tl, DNNPass dp)
     }
 
     fflush(stdout);
-    delete [] sampleCount;
     delete [] averageSampleTime;
 }
 
 double runDNNModelThreads (int numThreads, DNNPass dp)
 {
     ThreadLayerState *tl = new ThreadLayerState[numThreads];
-    g_CurrentSamplePos = -1;
+    g_CurrentSamplePos = 0;
     for (int i = 0; i < numThreads; i++)
     {
 
@@ -533,7 +540,9 @@ int main(int argc, char *argv[])
 
 
     DNNModel.Init(ModelLayerCount[(int)G_MODEL_TYPE], lc, G_WORKER_COUNT, G_REPLICATED_OUTPUT_LAYER);
-    //DNNModel.Print( ModelName[g_CanonicalConfig._modelType]);
+#ifndef M5_BUILD
+    DNNModel.Print( ModelName[g_CanonicalConfig._modelType]);
+#endif
 
 #ifdef PREPARE_COMPUTE_DATA
     PrepareComputeData(DNNModel);
