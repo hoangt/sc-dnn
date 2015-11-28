@@ -43,6 +43,7 @@ static struct option long_options[] = {
   {"pass", required_argument, 0, 'h'},
   { "outputscale", required_argument, 0, 'x' },
   { "threadmodel", required_argument, 0, 'z' },
+  {"usemainthread", no_argument, 0, 'q'},
   {0, 0, 0, 0}
 };
 
@@ -55,6 +56,9 @@ void SetCanonicalConfig(int argc, char* argv[], CanonicalConfig& config)
       break;
     }
     switch (c) {
+    case 'q':
+	config._useMainThread = true;
+	break;
     case 'x':
         config._outputScale = atoi(optarg);
         break;
