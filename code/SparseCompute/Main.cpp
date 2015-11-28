@@ -541,7 +541,7 @@ int main(int argc, char *argv[])
 
     DNNModel.Init(ModelLayerCount[(int)G_MODEL_TYPE], lc, G_WORKER_COUNT, G_REPLICATED_OUTPUT_LAYER);
 #ifndef M5_BUILD
-    DNNModel.Print( ModelName[g_CanonicalConfig._modelType]);
+    //DNNModel.Print( ModelName[g_CanonicalConfig._modelType]);
 #endif
 
 #ifdef PREPARE_COMPUTE_DATA
