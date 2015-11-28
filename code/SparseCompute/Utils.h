@@ -67,6 +67,7 @@ extern CanonicalConfig g_CanonicalConfig;
 #define G_DNN_PASS_ENABLED(p) g_CanonicalConfig._enablePass[p]
 #define G_THREAD_MODEL g_CanonicalConfig._threadModel
 #define G_OUTPUT_SCALE g_CanonicalConfig._outputScale
+#define G_USE_MAIN_THREAD g_CanonicalConfig._useMainThread
 
 typedef struct LayerConfig {
     int _OutputFeature;
@@ -182,7 +183,7 @@ void SetTrainingThreadAffinity(int);
 void SetCanonicalConfig(int argc, char *argv[], CanonicalConfig& config);
 ModelType ProcessModelParam(const char *modelString);
 void ProcessPassParam(const char* passString);
-void DoModelCompute(int numThreads, ThreadLayerState *tl, DNNPass dp);
+void DoModelCompute(const int numThreads, ThreadLayerState *tl, const DNNPass dp);
 
 DWORD DNNModelThreadWeightUpdate(ThreadLayerState *tl);
 DWORD DNNModelThreadDeltaWeightUpdate(ThreadLayerState *tl);
@@ -199,6 +200,7 @@ DWORD DNNModelThreadForward(ThreadLayerState *tl);
 #define DEFAULT_KERNEL_VERSION (int) KernelVersion::BASELINE
 #define DEFAULT_THREAD_MODEL 1
 #define DEFAULT_OUTPUT_SCALE 1
+#define DEFAULT_USE_MAIN_THREAD false
 
 struct CanonicalConfig {
     int _threadCount;
@@ -224,6 +226,7 @@ struct CanonicalConfig {
     const char* _passName;
     int _threadModel;
     int _outputScale;
+	bool _useMainThread;
 
     void Init();
     void Print();

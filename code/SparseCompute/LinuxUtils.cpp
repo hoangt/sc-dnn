@@ -151,7 +151,43 @@ static void* s_DNNModelThreadWeightUpdate(void *arg)
   return NULL;
 }
 
-void DoModelCompute(int numThreads, ThreadLayerState *tl, DNNPass dp)
+void DoModelComputeWithMainThread(const int numThreads, ThreadLayerState *tl, const DNNPass dp)
+{
+	const int numWorkerThreads = numThreads - 1;
+	pthread_t* helperThreads = new pthread_t[numWorkerThreads];
+	int* errors = new int[numWorkerThreads];
+
+	for (int i = 0; i < numWorkerThreads; i++) {
+
+		if (dp == DNN_FORWARD)
+			errors[i] = pthread_create(&helperThreads[i], NULL, &s_DNNModelThreadForward, (void*)(tl + i));
+		else if (dp == DNN_BACKWARD)
+			errors[i] = pthread_create(&helperThreads[i], NULL, &s_DNNModelThreadBackward, (void*)(tl + i));
+		else
+			errors[i] = pthread_create(&helperThreads[i], NULL, &s_DNNModelThreadWeightUpdate, (void*)(tl + i));
+	}
+
+	if (dp == DNN_FORWARD)
+	{
+		s_DNNModelThreadForward((void*)(tl + numWorkerThreads));
+	}
+	else if (dp == DNN_BACKWARD)
+	{
+		s_DNNModelThreadBackward((void*)(tl + numWorkerThreads));
+	}
+	else
+	{
+		s_DNNModelThreadWeightUpdate((void*)(tl + numWorkerThreads));
+	}
+
+	for (int i = 0; i < numWorkerThreads; i++) {
+		if (errors[i] == 0) {
+			errors[i] = pthread_join(helperThreads[i], NULL);
+		}
+	}
+}
+
+void DoModelComputeWithoutMainThread(const int numThreads, ThreadLayerState *tl, const DNNPass dp)
 {
   pthread_t* helperThreads = new pthread_t [numThreads];
   int* errors = new int[numThreads];
@@ -171,4 +207,12 @@ void DoModelCompute(int numThreads, ThreadLayerState *tl, DNNPass dp)
       errors[i] = pthread_join(helperThreads[i], NULL);
     }
   }
+}
+
+void DoModelCompute(const int numThreads, ThreadLayerState *tl, const DNNPass dp)
+{
+	if (G_USE_MAIN_THREAD)
+		DoModelComputeWithMainThread(numThreads, tl, dp);
+	else
+		DoModelComputeWithoutMainThread(numThreads, tl, dp);
 }

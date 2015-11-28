@@ -28,7 +28,7 @@ class CachePerf:
 				self.accesses = stats
 
 	def IntStat(self, stats):
-		return "{:>10}".format(stats/1000)
+		return "{:>10}".format(stats)
 	
 	
 	def Print(self):

@@ -23,6 +23,7 @@ void CanonicalConfig::Init()
   _zeroSignalOpt = true;
   _threadModel = DEFAULT_THREAD_MODEL;
   _outputScale = DEFAULT_OUTPUT_SCALE;
+  _useMainThread = DEFAULT_USE_MAIN_THREAD;
   EnableAllPasses();
 }
 
@@ -57,6 +58,7 @@ void CanonicalConfig::Print()
      "SampleCount: %d \n"
      "ThreadModel: %d \n"
      "OutputScale: %d\n"
+	 "UseMainThread: %s\n"
      /*     "OutputLayer: %s \n"
      "DeltWeightOpt: %s\n"
      "Momentum: %s \n"
@@ -80,6 +82,7 @@ void CanonicalConfig::Print()
      _sampleCount, 
      _threadModel,
      _outputScale,
+	 (_useMainThread ? "Yes" : "No"),
      /*     (_replicatedOutputLayer ? "Replicated" : "Partitioned"),
      (_deltaWeightOpt ? "enabled" : "disabled"),
      (_deltaWeightOpt ? "enabled" : "disabled"),

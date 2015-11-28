@@ -39,6 +39,8 @@ void ProcessParams(CParamParser& pparser, CanonicalConfig& config)
     config._activationCacheLineSparsity = pparser.IsParamExist(TEXT("activationcachelinesparsity")) ? pparser.ParamInt(TEXT("activationcachelinesparsity")) : DEFAULT_SPARSITY;
     config._threadModel = pparser.IsParamExist(TEXT("threadmodel")) ? pparser.ParamInt(TEXT("threadmodel")) : DEFAULT_THREAD_MODEL;
     config._outputScale = pparser.IsParamExist(TEXT("outputscale")) ? pparser.ParamInt(TEXT("outputscale")) : DEFAULT_OUTPUT_SCALE;
+	config._useMainThread = pparser.IsParamExist(TEXT("usemainthread"));
+
     int kernelVersion = pparser.IsParamExist(TEXT("kernel")) ? pparser.ParamInt(TEXT("kernel")) : DEFAULT_KERNEL_VERSION;
     assert(kernelVersion < (int)KernelVersion::KERNEL_VERSION_COUNT);
     config._kernelVersion = static_cast<KernelVersion>(kernelVersion);
@@ -96,11 +98,49 @@ DWORD WINAPI s_DNNModelThreadWeightUpdate(LPVOID lp)
     return DNNModelThreadWeightUpdate((ThreadLayerState *)lp);
 }
 
-void DoModelCompute(int numThreads, ThreadLayerState *tl, DNNPass dp)
+static void DoModelComputeWithMainThread(const int numThreads, ThreadLayerState* tl, const DNNPass dp)
 {
-  HANDLE *helperThreads = new HANDLE[numThreads];
+	const int numWorkerThreads = numThreads - 1;
+	HANDLE *helperThreads = new HANDLE[numWorkerThreads];
 
-    for (int i = 0; i < numThreads; i++)
+	for (int i = 0; i < numWorkerThreads; i++)
+	{
+		if (dp == DNN_FORWARD)
+			helperThreads[i] = CreateThread(NULL, 0, s_DNNModelThreadForward, (LPVOID)(tl + i), 0, NULL);
+		else if (dp == DNN_BACKWARD)
+			helperThreads[i] = CreateThread(NULL, 0, s_DNNModelThreadBackward, (LPVOID)(tl + i), 0, NULL);
+		else
+			helperThreads[i] = CreateThread(NULL, 0, s_DNNModelThreadWeightUpdate, (LPVOID)(tl + i), 0, NULL);
+	}
+
+	if (dp == DNN_FORWARD)
+	{
+		s_DNNModelThreadForward((LPVOID)(tl + numWorkerThreads));
+	} 
+	else if (dp == DNN_BACKWARD)
+	{
+		s_DNNModelThreadBackward((LPVOID)(tl + numWorkerThreads));
+	}
+	else
+	{
+		s_DNNModelThreadWeightUpdate((LPVOID)(tl + numWorkerThreads));
+	}
+
+	WaitForMultipleObjects(numWorkerThreads, helperThreads, TRUE, INFINITE);
+
+	for (int i = 0; i < numWorkerThreads; i++)
+	{
+		CloseHandle(helperThreads[i]);
+	}
+
+	delete[] helperThreads;
+}
+
+static void DoModelComputeWithoutMainThread(const int numThreads, ThreadLayerState *tl, const DNNPass dp)
+{
+	HANDLE *helperThreads = new HANDLE[numThreads];
+
+	for (int i = 0; i < numThreads; i++)
     {
         if (dp == DNN_FORWARD)
             helperThreads[i] = CreateThread(NULL, 0, s_DNNModelThreadForward, (LPVOID)(tl+i), 0, NULL);
@@ -109,11 +149,21 @@ void DoModelCompute(int numThreads, ThreadLayerState *tl, DNNPass dp)
         else 
             helperThreads[i] = CreateThread(NULL, 0, s_DNNModelThreadWeightUpdate, (LPVOID)(tl+i), 0, NULL);
     }
-    WaitForMultipleObjects(numThreads, helperThreads, TRUE, INFINITE);
+
+	WaitForMultipleObjects(numThreads, helperThreads, TRUE, INFINITE);
     
-    for (int i = 0; i < numThreads; i++)
+	for (int i = 0; i < numThreads; i++)
     {
         CloseHandle(helperThreads[i]);
     }
+
     delete [] helperThreads;
+}
+
+void DoModelCompute(const int numThreads, ThreadLayerState *tl, const DNNPass dp)
+{
+	if (G_USE_MAIN_THREAD)
+		DoModelComputeWithMainThread(numThreads, tl, dp);
+	else
+		DoModelComputeWithoutMainThread(numThreads, tl, dp);
 }
