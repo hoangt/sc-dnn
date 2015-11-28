@@ -1,0 +1,43 @@
+MODELOPTS=--forwardsparsity 24 --activationcachelinesparsity 8 --backwardsparsity 84 --signalcachelinesparsity 83 --weightupdatesparsity 89 --deltacachelinesparsity 67 --model CIFAR10
+CacheSizeOpts=--l1i_size=32kB --l1d_size=32kB --l2_size=256kB --l3_size=20MB
+Run SparseCompute in GEM5-Ruby
+GEM5=/home/tunji/sc-dnn/code/gem5-stable/build/X86_ZMESI_Three_Level/gem5.opt
+SCRIPT=/home/tunji/sc-dnn/code/gem5-stable/configs/example/se.py
+PROGDIR=/home/tunji/sc-dnn/code/SparseCompute
+PROGOPTS=--samples 2 --threads 2 --forwardsparsity 24 --activationcachelinesparsity 8 --backwardsparsity 84 --signalcachelinesparsity 83 --weightupdatesparsity 89 --deltacachelinesparsity 67 --model CIFAR10 --workers 1 --pass ForwardProp
+SIMOPTS=--ruby --cpu-type=timing --caches --l2cache --num-l3caches=1 --l1d_size=32kB --l1i_size=32kB --l2_size=256kB --l3_size=20MB --num-cpus=3 --mem-size=2GB --mem-type=ruby_memory
+gem5 Simulator System.  http://gem5.org
+gem5 is copyrighted software; use the --copyright option for details.
+
+gem5 compiled Nov 19 2015 16:23:03
+gem5 started Nov 27 2015 01:29:00
+gem5 executing on tunji-Virtual-Machine
+command line: /home/tunji/sc-dnn/code/gem5-stable/build/X86_ZMESI_Three_Level/gem5.opt -d Output/CIFAR10_1W-ZL3-S2_T2_C10/ /home/tunji/sc-dnn/code/gem5-stable/configs/example/se.py --ruby --cpu-type=timing --caches --l2cache --num-l3caches=1 --l1d_size=32kB --l1i_size=32kB --l2_size=256kB --l3_size=20MB --num-cpus=3 --mem-size=2GB --mem-type=ruby_memory -c /home/tunji/sc-dnn/code/SparseCompute/M5SparseCompute -o --kernel 1 --samples 2 --threads 2 --forwardsparsity 24 --activationcachelinesparsity 8 --backwardsparsity 84 --signalcachelinesparsity 83 --weightupdatesparsity 89 --deltacachelinesparsity 67 --model CIFAR10 --workers 1 --pass ForwardProp 
+Global frequency set at 1000000000000 ticks per second
+**** REAL SIMULATION ****
+info: Entering event queue @ 0.  Starting simulation...
+info: Increasing stack size by one page.
+Model: CIFAR10 
+Pass: ForwardProp 
+WorkerCount: 1 
+ThreadCount: 2 
+SampleCount: 2 
+ThreadModel: 1 
+OutputScale: 1
+KernelVersion: UNROLL
+FeedForwardSparsity: 24
+ActivationCacheLineSparsity: 8
+BackPropSparsity: 84
+SignalCacheLineSparsity: 83
+WeightUpdateSparsity: 89
+DeltaCacheLineSparsity: 67
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp: 66.62 msecs
+         0          2       0.89  11.029750 9830400
+         1          2       0.93  31.588250 29491200
+         2          2       0.69  12.024500 8331264
+         3          2       0.71  11.870500 8388608
+         4          2       0.37   0.109500 40960
+Pass_run_time: 0.13325secs
+Total_run_time: 0.13325secs
+Exiting @ tick 2901513221000 because target called exit()
