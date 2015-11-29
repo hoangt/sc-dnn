@@ -6,8 +6,8 @@ import subprocess
 import collections
 from array import array
 
-g_CacheNames = ["l0_cntrl1.Dcache", "l0_cntrl1.Zcache", 
-				"l1_cntrl1.cache", "l1_cntrl1.zcache", 
+g_CacheNames = ["l0_cntrl0.Dcache", "l0_cntrl0.Zcache", 
+				"l1_cntrl0.cache", "l1_cntrl0.zcache", 
 				"l2_cntrl0.L2cache", "l2_cntrl0.ZL2cache"]
 
 class CachePerf:

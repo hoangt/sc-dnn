@@ -715,7 +715,7 @@ machine(L1Cache, "ZMESI Directory L1 Cache CMP")
     	cache_entry.DataBlk := in_msg.DataBlk;
     	cache_entry.Dirty := in_msg.Dirty;		
 
-		if (in_msg.Dirty) {
+//		if (in_msg.Dirty) {
 			if (cache.isZeroDataBlock(cache_entry.DataBlk)) {
 				if (false == cache_entry.Zero) {
 					cache.remove(address);
@@ -730,7 +730,7 @@ machine(L1Cache, "ZMESI Directory L1 Cache CMP")
 					cache_entry.Zero := false;
 				}
 			}
-		}
+//		}
 
     }
   }
@@ -741,7 +741,7 @@ machine(L1Cache, "ZMESI Directory L1 Cache CMP")
       cache_entry.DataBlk := in_msg.DataBlk;
       cache_entry.Dirty := in_msg.Dirty;
 
-		if (in_msg.Dirty) {
+//		if (in_msg.Dirty) {
 			if (cache.isZeroDataBlock(cache_entry.DataBlk)) {
 				if (false == cache_entry.Zero) {
 					cache.remove(address);
@@ -756,7 +756,7 @@ machine(L1Cache, "ZMESI Directory L1 Cache CMP")
 					cache_entry.Zero := false;
 				}
 			}
-		}
+//		}
 
     }
   }
@@ -767,7 +767,7 @@ machine(L1Cache, "ZMESI Directory L1 Cache CMP")
     	cache_entry.DataBlk := in_msg.DataBlk;
       	cache_entry.Dirty := in_msg.Dirty;
 
-		if (in_msg.Dirty) {
+//		if (in_msg.Dirty) {
 			if (cache.isZeroDataBlock(cache_entry.DataBlk)) {
 				if (false == cache_entry.Zero) {
 					cache.remove(address);
@@ -782,7 +782,7 @@ machine(L1Cache, "ZMESI Directory L1 Cache CMP")
 					cache_entry.Zero := false;
 				}
 			}
-		}
+//		}
 
     }
   }

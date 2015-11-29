@@ -13,7 +13,7 @@ fi
 sampleCount=$1
 tc=$2
 workerCount=$3
-cpus=$((tc + 1))
+cpus=$tc
 cacheScale=1
 
 if [ $# -gt 3 ]; then
@@ -21,7 +21,12 @@ if [ $# -gt 3 ]; then
 fi
 
 . ${commonDir}/CIFAR10_Sparse.sh 
-progOpts="--samples $sampleCount --threads $tc $sparsityOpts --model ${model} --workers ${workerCount} --pass ${pass} "
+
+if [ ! -v outputScale ]; then
+ outputScale=1
+fi
+
+progOpts="--samples $sampleCount --threads $tc $sparsityOpts --model ${model} --workers ${workerCount} --pass ${pass} --usemainthread --outputscale ${outputScale}"
 
 . ${commonDir}/cacheSpecs.sh $cacheScale
 cacheOpts="--l1d_size=${l1Size} --l1i_size=${l1Size} --l2_size=${l2Size} --l3_size=${l3Size}"
