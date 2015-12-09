@@ -39,7 +39,7 @@ sampleRep="s/samples 1/samples ${threads}/g"
 sed -e "${l1Rep}" -e "${l2Rep}" -e "${l3Rep}" -e "${threadRep}" -e "${sampleRep}" ${config} > ${tgtDir}/ScaleConfig.cfg 
 
 pushd ${tgtDir}
- ${ZSIM} ScaleConfig.cfg | tee run.out 
+ ${ZSIM} ScaleConfig.cfg | tee run.txt 
 popd
 
 
