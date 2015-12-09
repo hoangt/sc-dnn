@@ -8,17 +8,17 @@
 
 using namespace std;
 
-//long numOnlineCPUs = sysconf(_SC_NPROCESSORS_ONLN);
+long numOnlineCPUs = sysconf(_SC_NPROCESSORS_ONLN);
 
 void SetTrainingThreadAffinity(int threadNum)
 {
-/*
+#ifndef M5_BUILD 
   cpu_set_t cpuset;
   
   CPU_ZERO(&cpuset);
   CPU_SET((threadNum % numOnlineCPUs), &cpuset);
   pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
-*/
+#endif
 
 }
 
