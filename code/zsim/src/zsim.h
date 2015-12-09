@@ -77,6 +77,13 @@ struct GlobSimInfo {
     uint32_t numCores;
     uint32_t lineSize;
 
+    // Zero-Opt Arch options
+    bool zeroProcessor;
+    bool zeroCache;
+    uint32_t l1dCacheScale;
+    uint32_t l2CacheScale;
+    uint32_t l3CacheScale;
+
     //Cores
     Core** cores;
 

@@ -390,8 +390,11 @@ CacheGroup* BuildCacheGroup(Config& config, const string& name, bool isTerminal)
         }
         return cgp;
     }
+    string scalePrefix = "sim." + name + "CacheScale";
+    uint32_t cacheScale = config.get<uint32_t>(scalePrefix, 1);
+    info("Cache/Scale %s %u", scalePrefix.c_str(), cacheScale);
 
-    uint32_t size = config.get<uint32_t>(prefix + "size", 64*1024);
+    uint32_t size = config.get<uint32_t>(prefix + "size", 64*1024) * cacheScale;
     uint32_t banks = config.get<uint32_t>(prefix + "banks", 1);
     uint32_t caches = config.get<uint32_t>(prefix + "caches", 1);
 
@@ -399,6 +402,8 @@ CacheGroup* BuildCacheGroup(Config& config, const string& name, bool isTerminal)
     if (size % banks != 0) {
         panic("%s: banks (%d) does not divide the size (%d bytes)", name.c_str(), banks, size);
     }
+
+    info ("Cache/Size/Banks %s %d %d", name.c_str(), size, banks);
 
     cg.resize(caches);
     for (vector<BaseCache*>& bg : cg) bg.resize(banks);
@@ -864,6 +869,16 @@ void SimInit(const char* configFile, const char* outputDir, uint32_t shmid) {
     zinfo->statsBackends = new g_vector<StatsBackend*>();
 
     Config config(configFile);
+
+    // Hardware optimizations for sparse data and computation
+    zinfo->zeroProcessor = config.get<bool>("sim.zeroProcessor", false);
+    zinfo->zeroCache = config.get<bool>("sim.zeroCache", false);
+    zinfo->l1dCacheScale = config.get<uint32_t>("sim.l1dCacheScale", 1);
+    zinfo->l2CacheScale = config.get<uint32_t>("sim.l2CacheScale", 1);
+    zinfo->l3CacheScale = config.get<uint32_t>("sim.l3CacheScale", 1);
+    info("Zero-HW-Opts[CPU,Cache,L1D,L2,L3] %s %s %u %u %u", 
+	 (zinfo->zeroProcessor ? "True" : "False"), (zinfo->zeroCache ? "True" : "False"),
+	 zinfo->l1dCacheScale, zinfo->l2CacheScale, zinfo->l3CacheScale);
 
     //Debugging
     //NOTE: This should be as early as possible, so that we can attach to the debugger before initialization.
