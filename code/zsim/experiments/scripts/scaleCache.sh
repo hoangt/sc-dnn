@@ -13,9 +13,9 @@ machineName=$1
 benchmarkName=$2
 nohupDir=nohupOut
 mkdir -p ${nohupDir}
-outputFile=${nohupDir}/${machineName}_${benchmarkName}.txt
 
 for i in 1 2 4 8 16 32 64; do 
+  outputFile=${nohupDir}/${machineName}_${benchmarkName}_C${i}.txt
   nohup ${threadScript} ${machineName} ${benchmarkName} $i > ${outputFile} & 
 done
 
