@@ -27,7 +27,7 @@ benchmarkConfig=${experimentDir}/benchmarks/${benchmarkName}.cfg
 CheckFileExists ${machineConfig}
 CheckFileExists ${benchmarkConfig}
 
-resultsDir=${experimentDir}/${machineName}_${benchmarkName}/${machineName}/ThreadScaling/L1Cache_${l3CacheScale}
+resultsDir=${experimentDir}/${machineName}_${benchmarkName}/L1Cache_${l3CacheScale}
 baseConfig=${resultsDir}/BaseConfig.cfg
 
 mkdir -p ${resultsDir}
