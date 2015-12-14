@@ -1,0 +1,102 @@
+[H] Starting zsim, built Tue Dec  8 23:30:09 PST 2015 (rev no git repo)
+[H] Creating global segment, 1024 MBs
+[H] Global segment shmid = 4259854
+[H] Deadlock detection ON
+[S 0] Started instance
+[S 0] Zero-HW-Opts[CPU,Cache,L1D,L2,L3] False False 1 1 64
+[S 0] Started RR scheduler, quantum=10000 phases
+[S 0] Cache/Scale sim.l3CacheScale 64
+[S 0] Cache/Size/Banks l3 134217728 8
+[S 0] Cache/Scale sim.l2CacheScale 1
+[S 0] Cache/Size/Banks l2 65536 1
+[S 0] Cache/Scale sim.l1iCacheScale 1
+[S 0] Cache/Size/Banks l1i 32768 1
+[S 0] Cache/Scale sim.l1dCacheScale 1
+[S 0] Cache/Size/Banks l1d 32768 1
+[S 0] mem-0: domain 0, 4 ranks/ch 8 banks/rank, tech DDR3-1333-CL10, boundLat 90 rd / 40 wr
+[S 0] mem-0: Address mapping rank:col:bank row 63:15 col 12:3 rank 14:13 bank 2:0
+[S 0] mem-1: domain 0, 4 ranks/ch 8 banks/rank, tech DDR3-1333-CL10, boundLat 90 rd / 40 wr
+[S 0] mem-1: Address mapping rank:col:bank row 63:15 col 12:3 rank 14:13 bank 2:0
+[S 0] mem-2: domain 0, 4 ranks/ch 8 banks/rank, tech DDR3-1333-CL10, boundLat 90 rd / 40 wr
+[S 0] mem-2: Address mapping rank:col:bank row 63:15 col 12:3 rank 14:13 bank 2:0
+[S 0] Initialized system
+[S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_IMG1K_WU/L1Cache_64/T6_CacheScale_1_1_64/zsim.h5
+[S 0] HDF5 backend: Created table, 22520 bytes/record, 47 records/write
+[S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_IMG1K_WU/L1Cache_64/T6_CacheScale_1_1_64/zsim-ev.h5
+[S 0] HDF5 backend: Created table, 22520 bytes/record, 6 records/write
+[S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_IMG1K_WU/L1Cache_64/T6_CacheScale_1_1_64/zsim-cmp.h5
+[S 0] HDF5 backend: Created table, 3408 bytes/record, 1 records/write
+[S 0] Initialization complete
+[S 0] Started process, PID 12271
+[S 0] procMask: 0x0
+[S 0] [0] Adjusting clocks, domain 0, de-ffwd 0
+[H] Attached to global heap
+[S 0] Thread 0 starting
+[S 0] Started scheduler watchdog thread
+[S 0] FF control Thread TID 12276
+[S 0] Started contention simulation thread 0
+Model: IMG1K 
+Pass: WeightUpdate 
+WorkerCount: 1 
+ThreadCount: 6 
+SampleCount: 6 
+ThreadModel: 1 
+OutputScale: 1
+UseMainThread: Yes
+KernelVersion: UNROLL
+FeedForwardSparsity: 37
+ActivationCacheLineSparsity: 17
+BackPropSparsity: 93
+SignalCacheLineSparsity: 54
+WeightUpdateSparsity: 31
+DeltaCacheLineSparsity: 5
+[S 0] Thread 4 starting
+[S 0] Thread 5 starting
+[S 0] [4] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7fffc4b6fbb0
+[S 0] [5] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7fffc3a65bb0
+[S 0] Thread 6 starting
+[S 0] Thread 7 starting
+[S 0] Thread 8 starting
+[S 0] Thread 7 finished
+[S 0] Thread 5 finished
+[S 0] Thread 8 finished
+[S 0] Detected possible stall due to fake leaves (1 current)
+[S 0]  [0/0] accept (202) @ 0x45dbf2
+[S 0] Blacklisting from future fake leaves: [0] accept @ 0x45dbf2 | arg0 0x7fffc4b709d0 arg1 0x0
+[S 0] Thread 6 finished
+[S 0] Thread 4 finished
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+SparseStatistics: InputActivations Word: 0.37 $Line: 0.17
+SparseStatistics: InputErrors Word: 0.93 $Line: 0.57
+SparseStatistics: WeightDeltas Word: 0.31 $Line: 0.05
+SparseStatistics: InputActivations Word: 0.37 $Line: 0.17
+SparseStatistics: InputErrors Word: 0.93 $Line: 0.57
+SparseStatistics: WeightDeltas Word: 0.31 $Line: 0.05
+SparseStatistics: InputActivations Word: 0.37 $Line: 0.17
+SparseStatistics: InputErrors Word: 0.93 $Line: 0.57
+SparseStatistics: WeightDeltas Word: 0.31 $Line: 0.05
+SparseStatistics: InputActivations Word: 0.37 $Line: 0.17
+SparseStatistics: InputErrors Word: 0.93 $Line: 0.57
+SparseStatistics: WeightDeltas Word: 0.31 $Line: 0.05
+SparseStatistics: InputActivations Word: 0.37 $Line: 0.17
+SparseStatistics: InputErrors Word: 0.93 $Line: 0.57
+SparseStatistics: WeightDeltas Word: 0.31 $Line: 0.05
+SparseStatistics: InputActivations Word: 0.37 $Line: 0.17
+SparseStatistics: InputErrors Word: 0.93 $Line: 0.57
+SparseStatistics: WeightDeltas Word: 0.31 $Line: 0.05
+WeightUpdate: 59.82 msecs
+         0          6      22.51  18.717917 421362000
+         1          6      23.79  25.217639 600000000
+         2          6      23.01   5.007083 115200000
+         3          6      22.42   6.936694 155520000
+         4          6       3.45   3.129750 10800000
+         5          6       5.17   0.386528 2000000
+         6          6       4.70   0.425944 2000000
+Pass_run_time: 0.359037secs
+Total_run_time: 0.359037secs
+[S 0] Thread 0 finished
+[S 0] Finished, code 0
+[S 0] Dumping termination stats
+[S 0] Finished scheduler watchdog thread
+[H] Child 12270 done
+[H] All children done, exiting
