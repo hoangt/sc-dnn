@@ -17,11 +17,11 @@ for var in "${@:2}"; do
 	${cacheScaleScript} ${machineName} ${var}
 # Wait for processes to start
 	echo "Waiting for ${var} simulations to start"
-	sleep 5
+	sleep 10
 # Wait for processes to end
 	echo "Waiting for ${var} simulations to end"	
 	while pgrep ${progName} > /dev/null; do 
-		sleep 5
+		sleep 10 
 	done
 	echo "All ${var} simulations have ended"
 done
