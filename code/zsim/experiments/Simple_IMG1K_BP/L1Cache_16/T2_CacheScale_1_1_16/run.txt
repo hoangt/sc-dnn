@@ -1,0 +1,78 @@
+[H] Starting zsim, built Wed Dec  9 10:53:08 PST 2015 (rev no git repo)
+[H] Creating global segment, 1024 MBs
+[H] Global segment shmid = 3866636
+[H] Deadlock detection ON
+[S 0] Started instance
+[S 0] Zero-HW-Opts[CPU,Cache,L1D,L2,L3] False False 1 1 16
+[S 0] Started RR scheduler, quantum=10000 phases
+[S 0] Cache/Scale sim.l3CacheScale 16
+[S 0] Cache/Size/Banks l3 33554432 8
+[S 0] Cache/Scale sim.l2CacheScale 1
+[S 0] Cache/Size/Banks l2 65536 1
+[S 0] Cache/Scale sim.l1iCacheScale 1
+[S 0] Cache/Size/Banks l1i 32768 1
+[S 0] Cache/Scale sim.l1dCacheScale 1
+[S 0] Cache/Size/Banks l1d 32768 1
+[S 0] mem-0: domain 0, 4 ranks/ch 8 banks/rank, tech DDR3-1333-CL10, boundLat 90 rd / 40 wr
+[S 0] mem-0: Address mapping rank:col:bank row 63:15 col 12:3 rank 14:13 bank 2:0
+[S 0] mem-1: domain 0, 4 ranks/ch 8 banks/rank, tech DDR3-1333-CL10, boundLat 90 rd / 40 wr
+[S 0] mem-1: Address mapping rank:col:bank row 63:15 col 12:3 rank 14:13 bank 2:0
+[S 0] mem-2: domain 0, 4 ranks/ch 8 banks/rank, tech DDR3-1333-CL10, boundLat 90 rd / 40 wr
+[S 0] mem-2: Address mapping rank:col:bank row 63:15 col 12:3 rank 14:13 bank 2:0
+[S 0] Initialized system
+[S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_IMG1K_BP/L1Cache_16/T2_CacheScale_1_1_16/zsim.h5
+[S 0] HDF5 backend: Created table, 22520 bytes/record, 47 records/write
+[S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_IMG1K_BP/L1Cache_16/T2_CacheScale_1_1_16/zsim-ev.h5
+[S 0] HDF5 backend: Created table, 22520 bytes/record, 6 records/write
+[S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_IMG1K_BP/L1Cache_16/T2_CacheScale_1_1_16/zsim-cmp.h5
+[S 0] HDF5 backend: Created table, 3408 bytes/record, 1 records/write
+[S 0] Initialization complete
+[S 0] Started process, PID 10945
+[S 0] procMask: 0x0
+[S 0] [0] Adjusting clocks, domain 0, de-ffwd 0
+[H] Attached to global heap
+[S 0] Thread 0 starting
+[S 0] Started scheduler watchdog thread
+[S 0] Started contention simulation thread 0
+[S 0] FF control Thread TID 10948
+Model: IMG1K 
+Pass: BackwardProp 
+WorkerCount: 1 
+ThreadCount: 2 
+SampleCount: 2 
+ThreadModel: 1 
+OutputScale: 1
+UseMainThread: Yes
+KernelVersion: UNROLL
+FeedForwardSparsity: 37
+ActivationCacheLineSparsity: 17
+BackPropSparsity: 93
+SignalCacheLineSparsity: 54
+WeightUpdateSparsity: 31
+DeltaCacheLineSparsity: 5
+[S 0] [0] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7fffffffd960
+[S 0] Thread 4 starting
+[S 0] Thread 4 finished
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+SparseStatistics: InputActivations Word: 0.37 $Line: 0.17
+SparseStatistics: InputErrors Word: 0.93 $Line: 0.57
+SparseStatistics: WeightDeltas Word: 0.31 $Line: 0.05
+SparseStatistics: InputActivations Word: 0.37 $Line: 0.17
+SparseStatistics: InputErrors Word: 0.93 $Line: 0.57
+SparseStatistics: WeightDeltas Word: 0.31 $Line: 0.05
+BackwardProp: 145.75 msecs
+         0          2       8.69  48.477000 421362000
+         1          2       9.43  63.623000 600000000
+         2          2       9.25  12.457000 115200000
+         3          2       9.10  17.087500 155520000
+         4          2       3.59   3.012500 10800000
+         5          2       3.62   0.553000 2000000
+         6          2       3.67   0.545000 2000000
+Pass_run_time: 0.291517secs
+Total_run_time: 0.291517secs
+[S 0] Thread 0 finished
+[S 0] Finished, code 0
+[S 0] Dumping termination stats
+[S 0] Finished scheduler watchdog thread
+[H] Child 10944 done
+[H] All children done, exiting
