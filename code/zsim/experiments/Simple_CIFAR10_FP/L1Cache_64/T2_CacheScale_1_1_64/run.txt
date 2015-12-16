@@ -1,12 +1,12 @@
 [H] Starting zsim, built Tue Dec  8 23:38:49 PST 2015 (rev no git repo)
 [H] Creating global segment, 1024 MBs
-[H] Global segment shmid = 4390928
+[H] Global segment shmid = 6815757
 [H] Deadlock detection ON
 [S 0] Started instance
 [S 0] Zero-HW-Opts[CPU,Cache,L1D,L2,L3] False False 1 1 64
 [S 0] Started RR scheduler, quantum=10000 phases
 [S 0] Cache/Scale sim.l3CacheScale 64
-[S 0] Cache/Size/Banks l3 134217728 8
+[S 0] Cache/Size/Banks l3 67108864 8
 [S 0] Cache/Scale sim.l2CacheScale 1
 [S 0] Cache/Size/Banks l2 65536 1
 [S 0] Cache/Scale sim.l1iCacheScale 1
@@ -27,14 +27,14 @@
 [S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_CIFAR10_FP/L1Cache_64/T2_CacheScale_1_1_64/zsim-cmp.h5
 [S 0] HDF5 backend: Created table, 3408 bytes/record, 1 records/write
 [S 0] Initialization complete
-[S 0] Started process, PID 11663
+[S 0] Started process, PID 19020
 [S 0] procMask: 0x0
 [S 0] [0] Adjusting clocks, domain 0, de-ffwd 0
 [H] Attached to global heap
 [S 0] Thread 0 starting
-[S 0] Started scheduler watchdog thread
 [S 0] Started contention simulation thread 0
-[S 0] FF control Thread TID 11666
+[S 0] Started scheduler watchdog thread
+[S 0] FF control Thread TID 19032
 Model: CIFAR10 
 Pass: ForwardProp 
 WorkerCount: 1 
@@ -52,9 +52,6 @@ WeightUpdateSparsity: 89
 DeltaCacheLineSparsity: 67
 [S 0] [0] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7fffffffd950
 [S 0] Thread 4 starting
-[S 0] Detected possible stall due to fake leaves (1 current)
-[S 0]  [0/0] accept (202) @ 0x45dbf2
-[S 0] Blacklisting from future fake leaves: [0] accept @ 0x45dbf2 | arg0 0x7fffdd03a9d0 arg1 0x0
 [S 0] Thread 4 finished
 Layers     Threads    GFLOP/s    MSec       FLOPs     
 SparseStatistics: InputActivations Word: 0.24 $Line: 0.08
@@ -63,16 +60,16 @@ SparseStatistics: WeightDeltas Word: 0.89 $Line: 0.67
 SparseStatistics: InputActivations Word: 0.23 $Line: 0.08
 SparseStatistics: InputErrors Word: 0.84 $Line: 0.83
 SparseStatistics: WeightDeltas Word: 0.89 $Line: 0.67
-ForwardProp:  5.57 msecs
-         0          2       8.38   1.173000 9830400
-         1          2      10.60   2.782250 29491200
-         2          2      10.44   0.797750 8331264
-         3          2      10.43   0.804250 8388608
-         4          2       3.03   0.013500 40960
-Pass_run_time: 0.011154secs
-Total_run_time: 0.011154secs
+ForwardProp:  7.20 msecs
+         0          2       8.24   1.193000 9830400
+         1          2      10.34   2.852000 29491200
+         2          2       5.30   1.573000 8331264
+         3          2       5.38   1.558250 8388608
+         4          2       1.97   0.020750 40960
+Pass_run_time: 0.0144secs
+Total_run_time: 0.0144secs
 [S 0] Thread 0 finished
 [S 0] Finished, code 0
 [S 0] Dumping termination stats
-[H] Child 11662 done
+[H] Child 19019 done
 [H] All children done, exiting

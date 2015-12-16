@@ -1,12 +1,12 @@
 [H] Starting zsim, built Tue Dec  8 23:38:49 PST 2015 (rev no git repo)
 [H] Creating global segment, 1024 MBs
-[H] Global segment shmid = 5242895
+[H] Global segment shmid = 7733263
 [H] Deadlock detection ON
 [S 0] Started instance
 [S 0] Zero-HW-Opts[CPU,Cache,L1D,L2,L3] False False 1 1 16
 [S 0] Started RR scheduler, quantum=10000 phases
 [S 0] Cache/Scale sim.l3CacheScale 16
-[S 0] Cache/Size/Banks l3 33554432 8
+[S 0] Cache/Size/Banks l3 16777216 8
 [S 0] Cache/Scale sim.l2CacheScale 1
 [S 0] Cache/Size/Banks l2 65536 1
 [S 0] Cache/Scale sim.l1iCacheScale 1
@@ -27,14 +27,14 @@
 [S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_CIFAR10_FP/L1Cache_16/T8_CacheScale_1_1_16/zsim-cmp.h5
 [S 0] HDF5 backend: Created table, 3408 bytes/record, 1 records/write
 [S 0] Initialization complete
-[S 0] Started process, PID 12207
+[S 0] Started process, PID 19596
 [S 0] procMask: 0x0
 [S 0] [0] Adjusting clocks, domain 0, de-ffwd 0
 [H] Attached to global heap
 [S 0] Thread 0 starting
-[S 0] Started scheduler watchdog thread
 [S 0] Started contention simulation thread 0
-[S 0] FF control Thread TID 12210
+[S 0] Started scheduler watchdog thread
+[S 0] FF control Thread TID 19599
 Model: CIFAR10 
 Pass: ForwardProp 
 WorkerCount: 1 
@@ -53,19 +53,18 @@ DeltaCacheLineSparsity: 67
 [S 0] Thread 4 starting
 [S 0] Thread 5 starting
 [S 0] Thread 6 starting
+[S 0] [0] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7fffffffd950
 [S 0] Thread 7 starting
 [S 0] Thread 8 starting
-[S 0] [4] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7fffcfd43be0
-[S 0] [5] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7fffcdb2fbe0
 [S 0] Thread 9 starting
 [S 0] Thread 10 starting
+[S 0] Thread 9 finished
+[S 0] Thread 10 finished
+[S 0] Thread 4 finished
+[S 0] Thread 8 finished
+[S 0] Thread 5 finished
 [S 0] Thread 6 finished
 [S 0] Thread 7 finished
-[S 0] Thread 8 finished
-[S 0] Thread 10 finished
-[S 0] Thread 5 finished
-[S 0] Thread 4 finished
-[S 0] Thread 9 finished
 Layers     Threads    GFLOP/s    MSec       FLOPs     
 SparseStatistics: InputActivations Word: 0.24 $Line: 0.08
 SparseStatistics: InputErrors Word: 0.84 $Line: 0.83
@@ -92,15 +91,15 @@ SparseStatistics: InputActivations Word: 0.24 $Line: 0.08
 SparseStatistics: InputErrors Word: 0.84 $Line: 0.83
 SparseStatistics: WeightDeltas Word: 0.89 $Line: 0.67
 ForwardProp:  1.55 msecs
-         0          8      32.48   0.302703 9830400
-         1          8      40.90   0.720984 29491200
-         2          8      32.44   0.256828 8331264
-         3          8      32.09   0.261422 8388608
-         4          8      11.30   0.003625 40960
-Pass_run_time: 0.01238secs
-Total_run_time: 0.01238secs
+         0          8      32.60   0.301563 9830400
+         1          8      40.91   0.720812 29491200
+         2          8      31.99   0.260437 8331264
+         3          8      32.46   0.258437 8388608
+         4          8      10.57   0.003875 40960
+Pass_run_time: 0.012375secs
+Total_run_time: 0.012375secs
 [S 0] Thread 0 finished
 [S 0] Finished, code 0
 [S 0] Dumping termination stats
-[H] Child 12206 done
+[H] Child 19595 done
 [H] All children done, exiting

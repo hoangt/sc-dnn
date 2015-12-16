@@ -1,12 +1,12 @@
 [H] Starting zsim, built Tue Dec  8 23:38:49 PST 2015 (rev no git repo)
 [H] Creating global segment, 1024 MBs
-[H] Global segment shmid = 5210124
+[H] Global segment shmid = 7766026
 [H] Deadlock detection ON
 [S 0] Started instance
 [S 0] Zero-HW-Opts[CPU,Cache,L1D,L2,L3] False False 1 1 8
 [S 0] Started RR scheduler, quantum=10000 phases
 [S 0] Cache/Scale sim.l3CacheScale 8
-[S 0] Cache/Size/Banks l3 16777216 8
+[S 0] Cache/Size/Banks l3 8388608 8
 [S 0] Cache/Scale sim.l2CacheScale 1
 [S 0] Cache/Size/Banks l2 65536 1
 [S 0] Cache/Scale sim.l1iCacheScale 1
@@ -27,14 +27,14 @@
 [S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_CIFAR10_FP/L1Cache_8/T8_CacheScale_1_1_8/zsim-cmp.h5
 [S 0] HDF5 backend: Created table, 3408 bytes/record, 1 records/write
 [S 0] Initialization complete
-[S 0] Started process, PID 12197
+[S 0] Started process, PID 19611
 [S 0] procMask: 0x0
 [S 0] [0] Adjusting clocks, domain 0, de-ffwd 0
 [H] Attached to global heap
-[S 0] Thread 0 starting
-[S 0] FF control Thread TID 12200
-[S 0] Started scheduler watchdog thread
 [S 0] Started contention simulation thread 0
+[S 0] Started scheduler watchdog thread
+[S 0] Thread 0 starting
+[S 0] FF control Thread TID 19618
 Model: CIFAR10 
 Pass: ForwardProp 
 WorkerCount: 1 
@@ -58,13 +58,13 @@ DeltaCacheLineSparsity: 67
 [S 0] Thread 8 starting
 [S 0] Thread 9 starting
 [S 0] Thread 10 starting
-[S 0] Thread 8 finished
 [S 0] Thread 7 finished
 [S 0] Thread 4 finished
-[S 0] Thread 10 finished
-[S 0] Thread 9 finished
 [S 0] Thread 5 finished
 [S 0] Thread 6 finished
+[S 0] Thread 10 finished
+[S 0] Thread 8 finished
+[S 0] Thread 9 finished
 Layers     Threads    GFLOP/s    MSec       FLOPs     
 SparseStatistics: InputActivations Word: 0.24 $Line: 0.08
 SparseStatistics: InputErrors Word: 0.84 $Line: 0.83
@@ -90,17 +90,16 @@ SparseStatistics: WeightDeltas Word: 0.89 $Line: 0.67
 SparseStatistics: InputActivations Word: 0.24 $Line: 0.08
 SparseStatistics: InputErrors Word: 0.84 $Line: 0.83
 SparseStatistics: WeightDeltas Word: 0.89 $Line: 0.67
-ForwardProp:  1.55 msecs
-         0          8      32.57   0.301781 9830400
-         1          8      40.90   0.721063 29491200
-         2          8      32.00   0.260375 8331264
-         3          8      32.46   0.258437 8388608
-         4          8      11.11   0.003687 40960
-Pass_run_time: 0.012375secs
-Total_run_time: 0.012375secs
+ForwardProp:  1.57 msecs
+         0          8      32.57   0.301812 9830400
+         1          8      39.54   0.745875 29491200
+         2          8      32.37   0.257375 8331264
+         3          8      32.40   0.258937 8388608
+         4          8      10.57   0.003875 40960
+Pass_run_time: 0.012554secs
+Total_run_time: 0.012554secs
 [S 0] Thread 0 finished
 [S 0] Finished, code 0
 [S 0] Dumping termination stats
-[S 0] Finished scheduler watchdog thread
-[H] Child 12196 done
+[H] Child 19607 done
 [H] All children done, exiting
