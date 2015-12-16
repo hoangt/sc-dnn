@@ -1,12 +1,12 @@
 [H] Starting zsim, built Tue Dec  8 23:30:09 PST 2015 (rev no git repo)
 [H] Creating global segment, 1024 MBs
-[H] Global segment shmid = 2588686
+[H] Global segment shmid = 5046287
 [H] Deadlock detection ON
 [S 0] Started instance
 [S 0] Zero-HW-Opts[CPU,Cache,L1D,L2,L3] False False 1 1 64
 [S 0] Started RR scheduler, quantum=10000 phases
 [S 0] Cache/Scale sim.l3CacheScale 64
-[S 0] Cache/Size/Banks l3 134217728 8
+[S 0] Cache/Size/Banks l3 67108864 8
 [S 0] Cache/Scale sim.l2CacheScale 1
 [S 0] Cache/Size/Banks l2 65536 1
 [S 0] Cache/Scale sim.l1iCacheScale 1
@@ -27,14 +27,14 @@
 [S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_CIFAR10_WU/L1Cache_64/T2_CacheScale_1_1_64/zsim-cmp.h5
 [S 0] HDF5 backend: Created table, 3408 bytes/record, 1 records/write
 [S 0] Initialization complete
-[S 0] Started process, PID 10727
+[S 0] Started process, PID 18269
 [S 0] procMask: 0x0
 [S 0] [0] Adjusting clocks, domain 0, de-ffwd 0
 [H] Attached to global heap
+[S 0] Started contention simulation thread 0
+[S 0] FF control Thread TID 18272
 [S 0] Started scheduler watchdog thread
 [S 0] Thread 0 starting
-[S 0] Started contention simulation thread 0
-[S 0] FF control Thread TID 10730
 Model: CIFAR10 
 Pass: WeightUpdate 
 WorkerCount: 1 
@@ -50,9 +50,8 @@ BackPropSparsity: 84
 SignalCacheLineSparsity: 83
 WeightUpdateSparsity: 89
 DeltaCacheLineSparsity: 67
-[S 0] Thread 4 starting
-[S 0] [4] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7fffdd03bbb0
 [S 0] [0] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7fffffffd910
+[S 0] Thread 4 starting
 [S 0] Thread 4 finished
 Layers     Threads    GFLOP/s    MSec       FLOPs     
 SparseStatistics: InputActivations Word: 0.24 $Line: 0.08
@@ -61,17 +60,17 @@ SparseStatistics: WeightDeltas Word: 0.89 $Line: 0.67
 SparseStatistics: InputActivations Word: 0.23 $Line: 0.08
 SparseStatistics: InputErrors Word: 0.84 $Line: 0.83
 SparseStatistics: WeightDeltas Word: 0.89 $Line: 0.67
-WeightUpdate:  8.42 msecs
-         0          2       7.53   1.305250 9830400
-         1          2       8.08   3.651000 29491200
-         2          2       4.84   1.719750 8331264
-         3          2       4.84   1.731500 8388608
-         4          2       3.03   0.013500 40960
-Pass_run_time: 0.01685secs
-Total_run_time: 0.01685secs
+WeightUpdate: 13.49 msecs
+         0          2       7.14   1.376000 9830400
+         1          2       7.83   3.766750 29491200
+         2          2       2.25   3.704250 8331264
+         3          2       1.82   4.607000 8388608
+         4          2       1.09   0.037500 40960
+Pass_run_time: 0.026987secs
+Total_run_time: 0.026987secs
 [S 0] Thread 0 finished
 [S 0] Finished, code 0
 [S 0] Dumping termination stats
 [S 0] Finished scheduler watchdog thread
-[H] Child 10726 done
+[H] Child 18268 done
 [H] All children done, exiting

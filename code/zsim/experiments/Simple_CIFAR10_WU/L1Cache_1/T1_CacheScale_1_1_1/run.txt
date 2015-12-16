@@ -1,12 +1,12 @@
 [H] Starting zsim, built Tue Dec  8 23:30:09 PST 2015 (rev no git repo)
 [H] Creating global segment, 1024 MBs
-[H] Global segment shmid = 2555920
+[H] Global segment shmid = 4816908
 [H] Deadlock detection ON
 [S 0] Started instance
 [S 0] Zero-HW-Opts[CPU,Cache,L1D,L2,L3] False False 1 1 1
 [S 0] Started RR scheduler, quantum=10000 phases
 [S 0] Cache/Scale sim.l3CacheScale 1
-[S 0] Cache/Size/Banks l3 2097152 8
+[S 0] Cache/Size/Banks l3 1048576 8
 [S 0] Cache/Scale sim.l2CacheScale 1
 [S 0] Cache/Size/Banks l2 65536 1
 [S 0] Cache/Scale sim.l1iCacheScale 1
@@ -27,14 +27,14 @@
 [S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_CIFAR10_WU/L1Cache_1/T1_CacheScale_1_1_1/zsim-cmp.h5
 [S 0] HDF5 backend: Created table, 3408 bytes/record, 1 records/write
 [S 0] Initialization complete
-[S 0] Started process, PID 10680
+[S 0] Started process, PID 18207
 [S 0] procMask: 0x0
 [S 0] [0] Adjusting clocks, domain 0, de-ffwd 0
 [H] Attached to global heap
-[S 0] Thread 0 starting
-[S 0] FF control Thread TID 10697
 [S 0] Started scheduler watchdog thread
 [S 0] Started contention simulation thread 0
+[S 0] Thread 0 starting
+[S 0] FF control Thread TID 18228
 Model: CIFAR10 
 Pass: WeightUpdate 
 WorkerCount: 1 
@@ -55,16 +55,16 @@ Layers     Threads    GFLOP/s    MSec       FLOPs
 SparseStatistics: InputActivations Word: 0.24 $Line: 0.08
 SparseStatistics: InputErrors Word: 0.84 $Line: 0.83
 SparseStatistics: WeightDeltas Word: 0.89 $Line: 0.67
-WeightUpdate: 33.13 msecs
+WeightUpdate: 33.24 msecs
          0          1       3.40   2.892000 9830400
-         1          1       3.65   8.083000 29491200
-         2          1       0.76  10.979000 8331264
-         3          1       0.76  11.092000 8388608
+         1          1       3.65   8.079000 29491200
+         2          1       0.76  11.029000 8331264
+         3          1       0.75  11.159000 8388608
          4          1       0.49   0.083000 40960
-Pass_run_time: 0.033129secs
-Total_run_time: 0.033129secs
+Pass_run_time: 0.033246secs
+Total_run_time: 0.033246secs
 [S 0] Thread 0 finished
 [S 0] Finished, code 0
 [S 0] Dumping termination stats
-[H] Child 10673 done
+[H] Child 18196 done
 [H] All children done, exiting
