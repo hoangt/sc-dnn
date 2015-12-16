@@ -1,12 +1,12 @@
 [H] Starting zsim, built Tue Dec  8 23:33:27 PST 2015 (rev no git repo)
 [H] Creating global segment, 1024 MBs
-[H] Global segment shmid = 3866638
+[H] Global segment shmid = 6389775
 [H] Deadlock detection ON
 [S 0] Started instance
 [S 0] Zero-HW-Opts[CPU,Cache,L1D,L2,L3] False False 1 1 1
 [S 0] Started RR scheduler, quantum=10000 phases
 [S 0] Cache/Scale sim.l3CacheScale 1
-[S 0] Cache/Size/Banks l3 2097152 8
+[S 0] Cache/Size/Banks l3 1048576 8
 [S 0] Cache/Scale sim.l2CacheScale 1
 [S 0] Cache/Size/Banks l2 65536 1
 [S 0] Cache/Scale sim.l1iCacheScale 1
@@ -27,14 +27,14 @@
 [S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_IMG22K_WU/L1Cache_1/T2_CacheScale_1_1_1/zsim-cmp.h5
 [S 0] HDF5 backend: Created table, 3408 bytes/record, 1 records/write
 [S 0] Initialization complete
-[S 0] Started process, PID 10247
+[S 0] Started process, PID 26126
 [S 0] procMask: 0x0
 [S 0] [0] Adjusting clocks, domain 0, de-ffwd 0
 [H] Attached to global heap
-[S 0] Thread 0 starting
 [S 0] Started contention simulation thread 0
 [S 0] Started scheduler watchdog thread
-[S 0] FF control Thread TID 10250
+[S 0] Thread 0 starting
+[S 0] FF control Thread TID 26129
 Model: IMG22K 
 Pass: WeightUpdate 
 WorkerCount: 1 
@@ -60,19 +60,19 @@ SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
 SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
 SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
 SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
-WeightUpdate: 1326.77 msecs
-         0          2       2.49 232.098000 578027520
-         1          2       2.53 533.005250 1350000000
-         2          2       2.52 120.705250 304200000
-         3          2       2.51 138.769750 348480000
-         4          2       2.50 139.783500 349920000
-         5          2       1.47  61.194750 90000000
-         6          2       1.48  12.202250 18000000
-         7          2       1.48  89.006250 132000000
-Pass_run_time: 2.65356secs
-Total_run_time: 2.65356secs
+WeightUpdate: 1332.23 msecs
+         0          2       2.49 232.096000 578027520
+         1          2       2.53 533.017750 1350000000
+         2          2       2.52 120.663500 304200000
+         3          2       2.51 138.800000 348480000
+         4          2       2.50 139.749000 349920000
+         5          2       1.46  61.733250 90000000
+         6          2       1.47  12.283500 18000000
+         7          2       1.41  93.890500 132000000
+Pass_run_time: 2.6662secs
+Total_run_time: 2.6662secs
 [S 0] Thread 0 finished
 [S 0] Finished, code 0
 [S 0] Dumping termination stats
-[H] Child 10246 done
+[H] Child 26125 done
 [H] All children done, exiting

@@ -1,12 +1,12 @@
 [H] Starting zsim, built Tue Dec  8 23:33:27 PST 2015 (rev no git repo)
 [H] Creating global segment, 1024 MBs
-[H] Global segment shmid = 4521996
+[H] Global segment shmid = 7208972
 [H] Deadlock detection ON
 [S 0] Started instance
 [S 0] Zero-HW-Opts[CPU,Cache,L1D,L2,L3] False False 1 1 16
 [S 0] Started RR scheduler, quantum=10000 phases
 [S 0] Cache/Scale sim.l3CacheScale 16
-[S 0] Cache/Size/Banks l3 33554432 8
+[S 0] Cache/Size/Banks l3 16777216 8
 [S 0] Cache/Scale sim.l2CacheScale 1
 [S 0] Cache/Size/Banks l2 65536 1
 [S 0] Cache/Scale sim.l1iCacheScale 1
@@ -27,14 +27,14 @@
 [S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_IMG22K_WU/L1Cache_16/T8_CacheScale_1_1_16/zsim-cmp.h5
 [S 0] HDF5 backend: Created table, 3408 bytes/record, 1 records/write
 [S 0] Initialization complete
-[S 0] Started process, PID 16226
+[S 0] Started process, PID 32761
 [S 0] procMask: 0x0
 [S 0] [0] Adjusting clocks, domain 0, de-ffwd 0
 [H] Attached to global heap
+[S 0] Thread 0 starting
 [S 0] Started scheduler watchdog thread
 [S 0] Started contention simulation thread 0
-[S 0] Thread 0 starting
-[S 0] FF control Thread TID 16229
+[S 0] FF control Thread TID 32764
 Model: IMG22K 
 Pass: WeightUpdate 
 WorkerCount: 1 
@@ -50,60 +50,9 @@ BackPropSparsity: 92
 SignalCacheLineSparsity: 63
 WeightUpdateSparsity: 7
 DeltaCacheLineSparsity: 0
-[S 0] Thread 4 starting
-[S 0] [4] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7ffeb5f43bb0
-[S 0] Thread 5 starting
-[S 0] Thread 6 starting
-[S 0] Thread 7 starting
-[S 0] Thread 8 starting
-[S 0] Thread 9 starting
-[S 0] Thread 10 starting
-[S 0] Thread 10 finished
-[S 0] Thread 6 finished
-[S 0] Thread 5 finished
-[S 0] Thread 9 finished
-[S 0] Thread 8 finished
-[S 0] Thread 7 finished
-[S 0] Thread 4 finished
-Layers     Threads    GFLOP/s    MSec       FLOPs     
-SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
-SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
-SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
-SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
-SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
-SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
-SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
-SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
-SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
-SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
-SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
-SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
-SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
-SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
-SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
-SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
-SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
-SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
-SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
-SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
-SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
-SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
-SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
-SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
-WeightUpdate: 297.95 msecs
-         0          8       9.63  60.030250 578027520
-         1          8       9.76 138.376094 1350000000
-         2          8      31.14   9.769000 304200000
-         3          8      30.79  11.319656 348480000
-         4          8      30.20  11.588516 349920000
-         5          8       3.63  24.797828 90000000
-         6          8       3.59   5.010531 18000000
-         7          8       3.56  37.060734 132000000
-Pass_run_time: 2.38417secs
-Total_run_time: 2.38417secs
-[S 0] Thread 0 finished
-[S 0] Finished, code 0
-[S 0] Dumping termination stats
-[S 0] Finished scheduler watchdog thread
-[H] Child 16225 done
-[H] All children done, exiting
+[H] Received interrupt
+[H] Attempting graceful termination
+[H] Killing process 32760
+[H] Done sending kill signals
+[H] Done sending kill signals
+[H] Child 32760 done
