@@ -1,12 +1,12 @@
 [H] Starting zsim, built Tue Dec  8 23:45:02 PST 2015 (rev no git repo)
 [H] Creating global segment, 1024 MBs
-[H] Global segment shmid = 5275661
+[H] Global segment shmid = 4030479
 [H] Deadlock detection ON
 [S 0] Started instance
 [S 0] Zero-HW-Opts[CPU,Cache,L1D,L2,L3] False False 1 1 4
 [S 0] Started RR scheduler, quantum=10000 phases
 [S 0] Cache/Scale sim.l3CacheScale 4
-[S 0] Cache/Size/Banks l3 8388608 8
+[S 0] Cache/Size/Banks l3 4194304 8
 [S 0] Cache/Scale sim.l2CacheScale 1
 [S 0] Cache/Size/Banks l2 65536 1
 [S 0] Cache/Scale sim.l1iCacheScale 1
@@ -27,14 +27,14 @@
 [S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_IMG22K_BP/L1Cache_4/T8_CacheScale_1_1_4/zsim-cmp.h5
 [S 0] HDF5 backend: Created table, 3408 bytes/record, 1 records/write
 [S 0] Initialization complete
-[H] Attached to global heap
-[S 0] Started process, PID 20420
+[S 0] Started process, PID 10666
 [S 0] procMask: 0x0
 [S 0] [0] Adjusting clocks, domain 0, de-ffwd 0
-[S 0] Thread 0 starting
-[S 0] Started scheduler watchdog thread
+[H] Attached to global heap
 [S 0] Started contention simulation thread 0
-[S 0] FF control Thread TID 20423
+[S 0] Started scheduler watchdog thread
+[S 0] Thread 0 starting
+[S 0] FF control Thread TID 10669
 Model: IMG22K 
 Pass: BackwardProp 
 WorkerCount: 1 
@@ -50,22 +50,29 @@ BackPropSparsity: 92
 SignalCacheLineSparsity: 63
 WeightUpdateSparsity: 7
 DeltaCacheLineSparsity: 0
+[S 0] Detected possible stall due to fake leaves (1 current)
+[S 0]  [0/0] lgetxattr (9) @ 0x4b83a8
+[S 0] Blacklisting from future fake leaves: [0] lgetxattr @ 0x4b83a8 | arg0 0x0 arg1 0x2256000
 [S 0] Thread 4 starting
 [S 0] Thread 5 starting
-[S 0] [4] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7ffeb5f43bf0
-[S 0] [5] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7ffeb4e39bf0
 [S 0] Thread 6 starting
+[S 0] [4] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7ffeb5f13bf0
+[S 0] [5] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7ffeb4e09bf0
+[S 0] [6] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7ffeb3cffbf0
 [S 0] Thread 7 starting
 [S 0] Thread 8 starting
 [S 0] Thread 9 starting
 [S 0] Thread 10 starting
-[S 0] Thread 8 finished
 [S 0] Thread 5 finished
-[S 0] Thread 10 finished
+[S 0] Thread 8 finished
+[S 0] Detected possible stall due to fake leaves (1 current)
+[S 0]  [0/0] accept (202) @ 0x45dbf2
+[S 0] Blacklisting from future fake leaves: [0] accept @ 0x45dbf2 | arg0 0x7ffeb5f149d0 arg1 0x0
 [S 0] Thread 4 finished
 [S 0] Thread 9 finished
-[S 0] Thread 6 finished
 [S 0] Thread 7 finished
+[S 0] Thread 6 finished
+[S 0] Thread 10 finished
 Layers     Threads    GFLOP/s    MSec       FLOPs     
 SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
 SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
@@ -91,20 +98,20 @@ SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
 SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
 SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
 SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
-BackwardProp: 448.47 msecs
-         0          8       6.07  95.277156 578027520
-         1          8       6.15 219.521344 1350000000
-         2          8       6.09  49.990719 304200000
-         3          8       6.12  56.916891 348480000
-         4          8      27.95  12.518453 349920000
-         5          8      14.74   6.106875 90000000
-         6          8      14.74   1.220906 18000000
-         7          8      19.07   6.920063 132000000
-Pass_run_time: 3.60379secs
-Total_run_time: 3.60379secs
+BackwardProp: 492.02 msecs
+         0          8       6.06  95.441625 578027520
+         1          8       6.14 219.830500 1350000000
+         2          8       6.11  49.822500 304200000
+         3          8       6.13  56.887234 348480000
+         4          8       6.09  57.449219 349920000
+         5          8      17.81   5.054016 90000000
+         6          8      19.93   0.902937 18000000
+         7          8      19.90   6.634563 132000000
+Pass_run_time: 3.97226secs
+Total_run_time: 3.97226secs
 [S 0] Thread 0 finished
 [S 0] Finished, code 0
 [S 0] Dumping termination stats
 [S 0] Finished scheduler watchdog thread
-[H] Child 20419 done
+[H] Child 10665 done
 [H] All children done, exiting

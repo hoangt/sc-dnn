@@ -1,12 +1,12 @@
 [H] Starting zsim, built Tue Dec  8 23:45:02 PST 2015 (rev no git repo)
 [H] Creating global segment, 1024 MBs
-[H] Global segment shmid = 3506192
+[H] Global segment shmid = 1802251
 [H] Deadlock detection ON
 [S 0] Started instance
 [S 0] Zero-HW-Opts[CPU,Cache,L1D,L2,L3] False False 1 1 32
 [S 0] Started RR scheduler, quantum=10000 phases
 [S 0] Cache/Scale sim.l3CacheScale 32
-[S 0] Cache/Size/Banks l3 67108864 8
+[S 0] Cache/Size/Banks l3 33554432 8
 [S 0] Cache/Scale sim.l2CacheScale 1
 [S 0] Cache/Size/Banks l2 65536 1
 [S 0] Cache/Scale sim.l1iCacheScale 1
@@ -27,14 +27,14 @@
 [S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_MNIST_BP/L1Cache_32/T2_CacheScale_1_1_32/zsim-cmp.h5
 [S 0] HDF5 backend: Created table, 3408 bytes/record, 1 records/write
 [S 0] Initialization complete
-[S 0] Started process, PID 13631
+[S 0] Started process, PID 3046
 [S 0] procMask: 0x0
 [S 0] [0] Adjusting clocks, domain 0, de-ffwd 0
 [H] Attached to global heap
 [S 0] Thread 0 starting
-[S 0] Started scheduler watchdog thread
 [S 0] Started contention simulation thread 0
-[S 0] FF control Thread TID 13635
+[S 0] Started scheduler watchdog thread
+[S 0] FF control Thread TID 3068
 Model: MNIST 
 Pass: BackwardProp 
 WorkerCount: 1 
@@ -51,8 +51,8 @@ SignalCacheLineSparsity: 81
 WeightUpdateSparsity: 5
 DeltaCacheLineSparsity: 0
 [S 0] Thread 4 starting
-[S 0] [0] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7fffffffd960
-[S 0] [4] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7fffe31eabf0
+[S 0] [0] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7fffffffd9a0
+[S 0] [4] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7fffe3205bf0
 [S 0] Thread 4 finished
 Layers     Threads    GFLOP/s    MSec       FLOPs     
 SparseStatistics: InputActivations Word: 0.33 $Line: 0.14
@@ -64,13 +64,13 @@ SparseStatistics: WeightDeltas Word: 0.05 $Line: 0.00
 BackwardProp:  0.34 msecs
          0          2       5.61   0.075000 420500
          1          2       8.18   0.148000 1210000
-         2          2       7.68   0.075000 576000
-         3          2       7.90   0.040500 320000
+         2          2       7.71   0.074750 576000
+         3          2       7.85   0.040750 320000
          4          2       4.00   0.002000 8000
 Pass_run_time: 0.000691secs
 Total_run_time: 0.000691secs
 [S 0] Thread 0 finished
 [S 0] Finished, code 0
 [S 0] Dumping termination stats
-[H] Child 13629 done
+[H] Child 3041 done
 [H] All children done, exiting
