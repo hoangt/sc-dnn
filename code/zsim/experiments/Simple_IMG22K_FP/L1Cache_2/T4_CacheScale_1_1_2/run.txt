@@ -1,12 +1,12 @@
 [H] Starting zsim, built Tue Dec  8 23:18:48 PST 2015 (rev no git repo)
 [H] Creating global segment, 1024 MBs
-[H] Global segment shmid = 4784141
+[H] Global segment shmid = 7438354
 [H] Deadlock detection ON
 [S 0] Started instance
 [S 0] Zero-HW-Opts[CPU,Cache,L1D,L2,L3] False False 1 1 2
 [S 0] Started RR scheduler, quantum=10000 phases
 [S 0] Cache/Scale sim.l3CacheScale 2
-[S 0] Cache/Size/Banks l3 4194304 8
+[S 0] Cache/Size/Banks l3 2097152 8
 [S 0] Cache/Scale sim.l2CacheScale 1
 [S 0] Cache/Size/Banks l2 65536 1
 [S 0] Cache/Scale sim.l1iCacheScale 1
@@ -27,14 +27,14 @@
 [S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_IMG22K_FP/L1Cache_2/T4_CacheScale_1_1_2/zsim-cmp.h5
 [S 0] HDF5 backend: Created table, 3408 bytes/record, 1 records/write
 [S 0] Initialization complete
-[H] Attached to global heap
-[S 0] Started process, PID 14313
+[S 0] Started process, PID 40657
 [S 0] procMask: 0x0
 [S 0] [0] Adjusting clocks, domain 0, de-ffwd 0
-[S 0] Thread 0 starting
+[H] Attached to global heap
 [S 0] Started contention simulation thread 0
 [S 0] Started scheduler watchdog thread
-[S 0] FF control Thread TID 14316
+[S 0] Thread 0 starting
+[S 0] FF control Thread TID 40660
 Model: IMG22K 
 Pass: ForwardProp 
 WorkerCount: 1 
@@ -51,13 +51,12 @@ SignalCacheLineSparsity: 63
 WeightUpdateSparsity: 7
 DeltaCacheLineSparsity: 0
 [S 0] Thread 4 starting
+[S 0] [4] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7fff3cb0dbe0
 [S 0] Thread 5 starting
-[S 0] [5] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7fff3cb0dbe0
-[S 0] [4] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7fff3dc17be0
 [S 0] Thread 6 starting
+[S 0] Thread 5 finished
 [S 0] Thread 4 finished
 [S 0] Thread 6 finished
-[S 0] Thread 5 finished
 Layers     Threads    GFLOP/s    MSec       FLOPs     
 SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
 SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
@@ -71,19 +70,20 @@ SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
 SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
 SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
 SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
-ForwardProp: 446.46 msecs
-         0          4       6.33  91.266688 578027520
-         1          4       6.80 198.428313 1350000000
-         2          4       6.79  44.772438 304200000
-         3          4       6.80  51.222062 348480000
-         4          4      13.66  25.608187 349920000
-         5          4       6.82  13.192937 90000000
-         6          4       6.77   2.657313 18000000
-         7          4       6.84  19.307500 132000000
-Pass_run_time: 1.83053secs
-Total_run_time: 1.83053secs
+ForwardProp: 461.07 msecs
+         0          4       6.33  91.299125 578027520
+         1          4       6.80 198.410000 1350000000
+         2          4       6.80  44.762125 304200000
+         3          4       6.80  51.211250 348480000
+         4          4       6.80  51.427625 349920000
+         5          4      10.00   8.999250 90000000
+         6          4       9.97   1.806188 18000000
+         7          4      10.04  13.153125 132000000
+Pass_run_time: 1.88942secs
+Total_run_time: 1.88942secs
 [S 0] Thread 0 finished
 [S 0] Finished, code 0
 [S 0] Dumping termination stats
-[H] Child 14312 done
+[S 0] Finished scheduler watchdog thread
+[H] Child 40656 done
 [H] All children done, exiting

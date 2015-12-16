@@ -1,12 +1,12 @@
 [H] Starting zsim, built Tue Dec  8 23:18:48 PST 2015 (rev no git repo)
 [H] Creating global segment, 1024 MBs
-[H] Global segment shmid = 5242892
+[H] Global segment shmid = 7995407
 [H] Deadlock detection ON
 [S 0] Started instance
 [S 0] Zero-HW-Opts[CPU,Cache,L1D,L2,L3] False False 1 1 8
 [S 0] Started RR scheduler, quantum=10000 phases
 [S 0] Cache/Scale sim.l3CacheScale 8
-[S 0] Cache/Size/Banks l3 16777216 8
+[S 0] Cache/Size/Banks l3 8388608 8
 [S 0] Cache/Scale sim.l2CacheScale 1
 [S 0] Cache/Size/Banks l2 65536 1
 [S 0] Cache/Scale sim.l1iCacheScale 1
@@ -27,14 +27,14 @@
 [S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_IMG22K_FP/L1Cache_8/T8_CacheScale_1_1_8/zsim-cmp.h5
 [S 0] HDF5 backend: Created table, 3408 bytes/record, 1 records/write
 [S 0] Initialization complete
-[S 0] Started process, PID 24141
+[S 0] Started process, PID 46262
 [S 0] procMask: 0x0
 [S 0] [0] Adjusting clocks, domain 0, de-ffwd 0
 [H] Attached to global heap
 [S 0] Started contention simulation thread 0
+[S 0] FF control Thread TID 46265
 [S 0] Started scheduler watchdog thread
 [S 0] Thread 0 starting
-[S 0] FF control Thread TID 24144
 Model: IMG22K 
 Pass: ForwardProp 
 WorkerCount: 1 
@@ -51,20 +51,23 @@ SignalCacheLineSparsity: 63
 WeightUpdateSparsity: 7
 DeltaCacheLineSparsity: 0
 [S 0] Thread 4 starting
-[S 0] [4] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7ffeb5f13be0
 [S 0] Thread 5 starting
 [S 0] Thread 6 starting
 [S 0] Thread 7 starting
 [S 0] Thread 8 starting
 [S 0] Thread 9 starting
+[S 0] [8] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7ffeb1aebbe0
 [S 0] Thread 10 starting
-[S 0] Thread 10 finished
 [S 0] Thread 7 finished
 [S 0] Thread 4 finished
-[S 0] Thread 8 finished
-[S 0] Thread 9 finished
-[S 0] Thread 6 finished
 [S 0] Thread 5 finished
+[S 0] Detected possible stall due to fake leaves (1 current)
+[S 0]  [0/0] accept (202) @ 0x45dbf2
+[S 0] Blacklisting from future fake leaves: [0] accept @ 0x45dbf2 | arg0 0x7ffeb3d009d0 arg1 0x0
+[S 0] Thread 8 finished
+[S 0] Thread 10 finished
+[S 0] Thread 6 finished
+[S 0] Thread 9 finished
 Layers     Threads    GFLOP/s    MSec       FLOPs     
 SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
 SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
@@ -90,20 +93,20 @@ SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
 SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
 SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
 SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
-ForwardProp: 184.67 msecs
-         0          8      11.97  48.295938 578027520
-         1          8      12.85 105.019250 1350000000
-         2          8      42.09   7.227203 304200000
-         3          8      41.40   8.418031 348480000
-         4          8      42.27   8.278141 349920000
-         5          8      32.35   2.782375 90000000
-         6          8      32.35   0.556438 18000000
-         7          8      32.27   4.090125 132000000
-Pass_run_time: 1.47735secs
-Total_run_time: 1.47735secs
+ForwardProp: 232.66 msecs
+         0          8      11.96  48.320359 578027520
+         1          8      12.91 104.530516 1350000000
+         2          8      13.05  23.310828 304200000
+         3          8      13.05  26.697000 348480000
+         4          8      30.13  11.613844 349920000
+         5          8      13.27   6.781016 90000000
+         6          8      12.83   1.403437 18000000
+         7          8      13.20  10.003391 132000000
+Pass_run_time: 1.88929secs
+Total_run_time: 1.88929secs
 [S 0] Thread 0 finished
 [S 0] Finished, code 0
 [S 0] Dumping termination stats
 [S 0] Finished scheduler watchdog thread
-[H] Child 24140 done
+[H] Child 46261 done
 [H] All children done, exiting
