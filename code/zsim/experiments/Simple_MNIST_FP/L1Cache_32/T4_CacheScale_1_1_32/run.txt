@@ -1,12 +1,12 @@
 [H] Starting zsim, built Tue Dec  8 23:18:48 PST 2015 (rev no git repo)
 [H] Creating global segment, 1024 MBs
-[H] Global segment shmid = 3571723
+[H] Global segment shmid = 6127631
 [H] Deadlock detection ON
 [S 0] Started instance
 [S 0] Zero-HW-Opts[CPU,Cache,L1D,L2,L3] False False 1 1 32
 [S 0] Started RR scheduler, quantum=10000 phases
 [S 0] Cache/Scale sim.l3CacheScale 32
-[S 0] Cache/Size/Banks l3 67108864 8
+[S 0] Cache/Size/Banks l3 33554432 8
 [S 0] Cache/Scale sim.l2CacheScale 1
 [S 0] Cache/Size/Banks l2 65536 1
 [S 0] Cache/Scale sim.l1iCacheScale 1
@@ -27,14 +27,14 @@
 [S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_MNIST_FP/L1Cache_32/T4_CacheScale_1_1_32/zsim-cmp.h5
 [S 0] HDF5 backend: Created table, 3408 bytes/record, 1 records/write
 [S 0] Initialization complete
-[S 0] Started process, PID 11097
-[S 0] procMask: 0x0
 [H] Attached to global heap
+[S 0] Started process, PID 38168
+[S 0] procMask: 0x0
 [S 0] [0] Adjusting clocks, domain 0, de-ffwd 0
-[S 0] Thread 0 starting
 [S 0] Started contention simulation thread 0
 [S 0] Started scheduler watchdog thread
-[S 0] FF control Thread TID 11100
+[S 0] FF control Thread TID 38171
+[S 0] Thread 0 starting
 Model: MNIST 
 Pass: ForwardProp 
 WorkerCount: 1 
@@ -72,15 +72,15 @@ SparseStatistics: InputErrors Word: 0.83 $Line: 0.81
 SparseStatistics: WeightDeltas Word: 0.05 $Line: 0.00
 ForwardProp:  0.15 msecs
          0          4      11.21   0.037500 420500
-         1          4      19.28   0.062750 1210000
-         2          4      18.89   0.030500 576000
+         1          4      19.21   0.063000 1210000
+         2          4      19.04   0.030250 576000
          3          4      19.47   0.016438 320000
-         4          4       3.88   0.002063 8000
+         4          4       8.00   0.001000 8000
 Pass_run_time: 0.0006secs
 Total_run_time: 0.0006secs
 [S 0] Thread 0 finished
 [S 0] Finished, code 0
 [S 0] Dumping termination stats
 [S 0] Finished scheduler watchdog thread
-[H] Child 11096 done
+[H] Child 38167 done
 [H] All children done, exiting
