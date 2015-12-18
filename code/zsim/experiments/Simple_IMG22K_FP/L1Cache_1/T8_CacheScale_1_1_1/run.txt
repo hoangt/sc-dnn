@@ -1,6 +1,6 @@
 [H] Starting zsim, built Tue Dec  8 23:18:48 PST 2015 (rev no git repo)
 [H] Creating global segment, 1024 MBs
-[H] Global segment shmid = 7864334
+[H] Global segment shmid = 8355853
 [H] Deadlock detection ON
 [S 0] Started instance
 [S 0] Zero-HW-Opts[CPU,Cache,L1D,L2,L3] False False 1 1 1
@@ -27,14 +27,14 @@
 [S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_IMG22K_FP/L1Cache_1/T8_CacheScale_1_1_1/zsim-cmp.h5
 [S 0] HDF5 backend: Created table, 3408 bytes/record, 1 records/write
 [S 0] Initialization complete
-[S 0] Started process, PID 46105
+[S 0] Started process, PID 5972
 [S 0] procMask: 0x0
 [S 0] [0] Adjusting clocks, domain 0, de-ffwd 0
 [H] Attached to global heap
-[S 0] Thread 0 starting
-[S 0] Started scheduler watchdog thread
 [S 0] Started contention simulation thread 0
-[S 0] FF control Thread TID 46108
+[S 0] FF control Thread TID 6067
+[S 0] Started scheduler watchdog thread
+[S 0] Thread 0 starting
 Model: IMG22K 
 Pass: ForwardProp 
 WorkerCount: 1 
@@ -50,14 +50,63 @@ BackPropSparsity: 92
 SignalCacheLineSparsity: 63
 WeightUpdateSparsity: 7
 DeltaCacheLineSparsity: 0
+[S 0] Thread 4 starting
+[S 0] [4] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7ffeb5f13be0
+[S 0] Thread 5 starting
+[S 0] Thread 6 starting
+[S 0] Thread 7 starting
+[S 0] Thread 8 starting
+[S 0] Thread 9 starting
+[S 0] Thread 10 starting
+[S 0] Thread 10 finished
+[S 0] Thread 5 finished
+[S 0] Thread 9 finished
+[S 0] Thread 6 finished
+[S 0] Thread 4 finished
+[S 0] Thread 7 finished
 [S 0] Detected possible stall due to fake leaves (1 current)
-[S 0]  [0/0] lgetxattr (9) @ 0x4b83a8
-[S 0] Blacklisting from future fake leaves: [0] lgetxattr @ 0x4b83a8 | arg0 0x0 arg1 0x174000
-[S 0] Detected possible stall due to fake leaves (1 current)
-[S 0]  [0/0] llistxattr (12) @ 0x4e5eba
-[S 0] Blacklisting from future fake leaves: [0] llistxattr @ 0x4e5eba | arg0 0xb6a4000 arg1 0xb6a4000
-C: Tool (or Pin) caused signal 11 at PC 0x7ffff65be998
-[H] Received interrupt
-[H] Attempting graceful termination
-[H] Killing process 46104
-[H] Child 46104 done
+[S 0]  [0/0] accept (202) @ 0x45dbf2
+[S 0] Blacklisting from future fake leaves: [0] accept @ 0x45dbf2 | arg0 0x7ffeb1aec9d0 arg1 0x0
+[S 0] Thread 8 finished
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
+SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
+SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
+SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
+SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
+SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
+SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
+SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
+SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
+SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
+SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
+SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
+SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
+SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
+SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
+SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
+SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
+SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
+SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
+SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
+SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
+SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
+SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
+SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
+ForwardProp: 248.53 msecs
+         0          8      11.89  48.611266 578027520
+         1          8      13.02 103.674031 1350000000
+         2          8      13.04  23.332141 304200000
+         3          8      13.05  26.699516 348480000
+         4          8      13.03  26.845813 349920000
+         5          8      12.49   7.208406 90000000
+         6          8      13.70   1.313766 18000000
+         7          8      12.18  10.840438 132000000
+Pass_run_time: 2.00713secs
+Total_run_time: 2.00713secs
+[S 0] Thread 0 finished
+[S 0] Finished, code 0
+[S 0] Dumping termination stats
+[S 0] Finished scheduler watchdog thread
+[H] Child 5928 done
+[H] All children done, exiting
