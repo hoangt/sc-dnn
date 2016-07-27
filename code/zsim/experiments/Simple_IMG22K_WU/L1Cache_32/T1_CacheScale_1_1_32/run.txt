@@ -1,0 +1,74 @@
+[H] Starting zsim, built Tue Dec  8 23:33:27 PST 2015 (rev no git repo)
+[H] Creating global segment, 1024 MBs
+[H] Global segment shmid = 6127630
+[H] Deadlock detection ON
+[S 0] Started instance
+[S 0] Zero-HW-Opts[CPU,Cache,L1D,L2,L3] False False 1 1 32
+[S 0] Started RR scheduler, quantum=10000 phases
+[S 0] Cache/Scale sim.l3CacheScale 32
+[S 0] Cache/Size/Banks l3 33554432 8
+[S 0] Cache/Scale sim.l2CacheScale 1
+[S 0] Cache/Size/Banks l2 65536 1
+[S 0] Cache/Scale sim.l1iCacheScale 1
+[S 0] Cache/Size/Banks l1i 32768 1
+[S 0] Cache/Scale sim.l1dCacheScale 1
+[S 0] Cache/Size/Banks l1d 32768 1
+[S 0] mem-0: domain 0, 4 ranks/ch 8 banks/rank, tech DDR3-1333-CL10, boundLat 90 rd / 40 wr
+[S 0] mem-0: Address mapping rank:col:bank row 63:15 col 12:3 rank 14:13 bank 2:0
+[S 0] mem-1: domain 0, 4 ranks/ch 8 banks/rank, tech DDR3-1333-CL10, boundLat 90 rd / 40 wr
+[S 0] mem-1: Address mapping rank:col:bank row 63:15 col 12:3 rank 14:13 bank 2:0
+[S 0] mem-2: domain 0, 4 ranks/ch 8 banks/rank, tech DDR3-1333-CL10, boundLat 90 rd / 40 wr
+[S 0] mem-2: Address mapping rank:col:bank row 63:15 col 12:3 rank 14:13 bank 2:0
+[S 0] Initialized system
+[S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_IMG22K_WU/L1Cache_32/T1_CacheScale_1_1_32/zsim.h5
+[S 0] HDF5 backend: Created table, 22520 bytes/record, 47 records/write
+[S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_IMG22K_WU/L1Cache_32/T1_CacheScale_1_1_32/zsim-ev.h5
+[S 0] HDF5 backend: Created table, 22520 bytes/record, 6 records/write
+[S 0] HDF5 backend: Opening /home/tunji/sc-dnn/code/zsim/experiments/Simple_IMG22K_WU/L1Cache_32/T1_CacheScale_1_1_32/zsim-cmp.h5
+[S 0] HDF5 backend: Created table, 3408 bytes/record, 1 records/write
+[S 0] Initialization complete
+[S 0] Started process, PID 25600
+[S 0] procMask: 0x0
+[S 0] [0] Adjusting clocks, domain 0, de-ffwd 0
+[H] Attached to global heap
+[S 0] Thread 0 starting
+[S 0] Started contention simulation thread 0
+[S 0] FF control Thread TID 25627
+[S 0] Started scheduler watchdog thread
+Model: IMG22K 
+Pass: WeightUpdate 
+WorkerCount: 1 
+ThreadCount: 1 
+SampleCount: 1 
+ThreadModel: 1 
+OutputScale: 1
+UseMainThread: Yes
+KernelVersion: UNROLL
+FeedForwardSparsity: 20
+ActivationCacheLineSparsity: 15
+BackPropSparsity: 92
+SignalCacheLineSparsity: 63
+WeightUpdateSparsity: 7
+DeltaCacheLineSparsity: 0
+[S 0] [0] Post-patching SYS_sched_getaffinity size 128 cpuset 0x7fffffffd910
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+SparseStatistics: InputActivations Word: 0.19 $Line: 0.15
+SparseStatistics: InputErrors Word: 0.92 $Line: 0.64
+SparseStatistics: WeightDeltas Word: 0.07 $Line: 0.00
+WeightUpdate: 1068.92 msecs
+         0          1       3.71 155.987000 578027520
+         1          1       3.98 339.138000 1350000000
+         2          1       3.91  77.754000 304200000
+         3          1       3.88  89.808000 348480000
+         4          1       3.82  91.567000 349920000
+         5          1       0.76 118.196000 90000000
+         6          1       0.76  23.700000 18000000
+         7          1       0.76 172.775000 132000000
+Pass_run_time: 1.06892secs
+Total_run_time: 1.06892secs
+[S 0] Thread 0 finished
+[S 0] Finished, code 0
+[S 0] Dumping termination stats
+[S 0] Finished scheduler watchdog thread
+[H] Child 25592 done
+[H] All children done, exiting
