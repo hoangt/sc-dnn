@@ -1577,6 +1577,7 @@ int main(int argc, char *argv[]) {
         SimEnd();
     } else {
         // Never returns
+        info("Running exec-driven simulation");
         PIN_StartProgram();
     }
     return 0;

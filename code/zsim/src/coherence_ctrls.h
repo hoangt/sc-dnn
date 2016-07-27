@@ -93,6 +93,8 @@ class MESIBottomCC : public GlobAlloc {
         //Counter profWBIncl, profWBCoh /* writebacks due to inclusion or coherence, received from downstream, does not include PUTS */;
         // TODO: Measuring writebacks is messy, do if needed
         Counter profGETNextLevelLat, profGETNetLat;
+	Counter profZeroGETSHit, profZeroGETSMiss, profZeroGETXHit, profZeroGETXMissIM, profZeroGETXMissSM;
+	Counter profZeroPUTS, profZeroPUTX;
 
         bool nonInclusiveHack;
 
@@ -130,6 +132,14 @@ class MESIBottomCC : public GlobAlloc {
             profGETNextLevelLat.init("latGETnl", "GET request latency on next level");
             profGETNetLat.init("latGETnet", "GET request latency on network to next level");
 
+	    profZeroGETSHit.init("hZeroGETS", "ZeroGETS hits");
+	    profZeroGETXHit.init("hZeroGETX", "ZeroGETX hits");
+	    profZeroGETSMiss.init("mZeroGETS", "ZeroGETS misses");
+	    profZeroGETXMissIM.init("mZeroGETXIM", "ZeroGETX I->M misses");
+	    profZeroGETXMissSM.init("mZeroGETXSM", "ZeroGETX S->M misses (upgrade misses)");
+	    profZeroPUTS.init("ZeroPUTS", "Zero Clean evictions (from lower level)");
+	    profZeroPUTX.init("ZeroPUTX", "Zero Dirty evictions (from lower level)");
+
             parentStat->append(&profGETSHit);
             parentStat->append(&profGETXHit);
             parentStat->append(&profGETSMiss);
@@ -142,6 +152,14 @@ class MESIBottomCC : public GlobAlloc {
             parentStat->append(&profFWD);
             parentStat->append(&profGETNextLevelLat);
             parentStat->append(&profGETNetLat);
+
+	    parentStat->append(&profZeroGETSHit);
+	    parentStat->append(&profZeroGETXHit);
+	    parentStat->append(&profZeroGETSMiss);
+	    parentStat->append(&profZeroGETXMissIM);
+	    parentStat->append(&profZeroGETXMissSM);
+	    parentStat->append(&profZeroPUTS);
+	    parentStat->append(&profZeroPUTX);
         }
 
         uint64_t processEviction(Address wbLineAddr, uint32_t lineId, bool lowerLevelWriteback, uint64_t cycle, uint32_t srcId);

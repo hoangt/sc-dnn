@@ -82,69 +82,13 @@ extern void EndOfPhaseActions(); //in zsim.cpp
  * follow the layout of zinfo, top-down.
  */
 
-BaseCache* BuildCacheBank(Config& config, const string& prefix, g_string& name, uint32_t bankSize, bool isTerminal, uint32_t domain) {
-    string type = config.get<const char*>(prefix + "type", "Simple");
-    // Shortcut for TraceDriven type
-    if (type == "TraceDriven") {
-        assert(zinfo->traceDriven);
-        assert(isTerminal);
-        return new TraceDriverProxyCache(name);
-    }
+ReplPolicy* BuildReplPolicy(Config& config, const string& prefix, g_string& name, const bool isTerminal, const uint32_t numLines, const uint32_t ways) {
+    const string arrayType = config.get<const char*>(prefix + "array.type", "SetAssoc");
+    const string replType = config.get<const char*>(prefix + "repl.type", (arrayType == "IdealLRUPart")? "IdealLRUPart" : "LRU");
+    const uint32_t candidates = (arrayType == "Z")? config.get<uint32_t>(prefix + "array.candidates", 16) : ways;
 
-    uint32_t lineSize = zinfo->lineSize;
-    assert(lineSize > 0); //avoid config deps
-    if (bankSize % lineSize != 0) panic("%s: Bank size must be a multiple of line size", name.c_str());
-
-    uint32_t numLines = bankSize/lineSize;
-
-    //Array
-    uint32_t numHashes = 1;
-    uint32_t ways = config.get<uint32_t>(prefix + "array.ways", 4);
-    string arrayType = config.get<const char*>(prefix + "array.type", "SetAssoc");
-    uint32_t candidates = (arrayType == "Z")? config.get<uint32_t>(prefix + "array.candidates", 16) : ways;
-
-    //Need to know number of hash functions before instantiating array
-    if (arrayType == "SetAssoc") {
-        numHashes = 1;
-    } else if (arrayType == "Z") {
-        numHashes = ways;
-        assert(ways > 1);
-    } else if (arrayType == "IdealLRU" || arrayType == "IdealLRUPart") {
-        ways = numLines;
-        numHashes = 0;
-    } else {
-        panic("%s: Invalid array type %s", name.c_str(), arrayType.c_str());
-    }
-
-    // Power of two sets check; also compute setBits, will be useful later
-    uint32_t numSets = numLines/ways;
-    uint32_t setBits = 31 - __builtin_clz(numSets);
-    if ((1u << setBits) != numSets) panic("%s: Number of sets must be a power of two (you specified %d sets)", name.c_str(), numSets);
-
-    //Hash function
-    HashFamily* hf = nullptr;
-    string hashType = config.get<const char*>(prefix + "array.hash", (arrayType == "Z")? "H3" : "None"); //zcaches must be hashed by default
-    if (numHashes) {
-        if (hashType == "None") {
-            if (arrayType == "Z") panic("ZCaches must be hashed!"); //double check for stupid user
-            assert(numHashes == 1);
-            hf = new IdHashFamily;
-        } else if (hashType == "H3") {
-            //STL hash function
-            size_t seed = _Fnv_hash_bytes(prefix.c_str(), prefix.size()+1, 0xB4AC5B);
-            //info("%s -> %lx", prefix.c_str(), seed);
-            hf = new H3HashFamily(numHashes, setBits, 0xCAC7EAFFA1 + seed /*make randSeed depend on prefix*/);
-        } else if (hashType == "SHA1") {
-            hf = new SHA1HashFamily(numHashes);
-        } else {
-            panic("%s: Invalid value %s on array.hash", name.c_str(), hashType.c_str());
-        }
-    }
-
-    //Replacement policy
-    string replType = config.get<const char*>(prefix + "repl.type", (arrayType == "IdealLRUPart")? "IdealLRUPart" : "LRU");
     ReplPolicy* rp = nullptr;
-
+  
     if (replType == "LRU" || replType == "LRUNoSh") {
         bool sharersAware = (replType == "LRU") && !isTerminal;
         if (sharersAware) {
@@ -226,11 +170,20 @@ BaseCache* BuildCacheBank(Config& config, const string& prefix, g_string& name, 
     } else {
         panic("%s: Invalid replacement type %s", name.c_str(), replType.c_str());
     }
+
+  return rp;
+}
+
+CacheArray* BuildCacheArray(Config& config, const string& prefix, g_string& name, const bool isTerminal, HashFamily* hf, const uint32_t numLines, const uint32_t ways) {
+
+    ReplPolicy* rp = BuildReplPolicy(config, prefix, name, isTerminal, numLines, ways);
     assert(rp);
 
-
-    //Alright, build the array
     CacheArray* array = nullptr;
+    const string arrayType = config.get<const char*>(prefix + "array.type", "SetAssoc");
+    string replType = config.get<const char*>(prefix + "repl.type", (arrayType == "IdealLRUPart")? "IdealLRUPart" : "LRU");
+    const uint32_t candidates = (arrayType == "Z")? config.get<uint32_t>(prefix + "array.candidates", 16) : ways;
+
     if (arrayType == "SetAssoc") {
         array = new SetAssocArray(numLines, ways, rp, hf);
     } else if (arrayType == "Z") {
@@ -250,24 +203,37 @@ BaseCache* BuildCacheBank(Config& config, const string& prefix, g_string& name, 
         panic("This should not happen, we already checked for it!"); //unless someone changed arrayStr...
     }
 
-    //Latency
-    uint32_t latency = config.get<uint32_t>(prefix + "latency", 10);
-    uint32_t accLat = (isTerminal)? 0 : latency; //terminal caches has no access latency b/c it is assumed accLat is hidden by the pipeline
-    uint32_t invLat = latency;
+    return array;
+}
+
+Cache* BuildCache(Config& config, const string& prefix, g_string& name, HashFamily* hf, const bool isTerminal, const uint32_t numLines, const uint32_t numSets, const uint32_t ways, uint32_t domain) {
+    const string arrayType = config.get<const char*>(prefix + "array.type", "SetAssoc");
+    const uint32_t candidates = (arrayType == "Z")? config.get<uint32_t>(prefix + "array.candidates", 16) : ways;
+    string type = config.get<const char*>(prefix + "type", "Simple");
+    string hashType = config.get<const char*>(prefix + "array.hash", (arrayType == "Z")? "H3" : "None"); //zcaches must be hashed by default
+    string replType = config.get<const char*>(prefix + "repl.type", (arrayType == "IdealLRUPart")? "IdealLRUPart" : "LRU");
+    
+    CacheArray* array = BuildCacheArray(config, prefix, name, isTerminal, hf, numLines, ways);
 
     // Inclusion?
     bool nonInclusiveHack = config.get<bool>(prefix + "nonInclusiveHack", false);
     if (nonInclusiveHack) assert(type == "Simple" && !isTerminal);
 
-    // Finally, build the cache
-    Cache* cache;
-    CC* cc;
+    CC* cc = nullptr;
     if (isTerminal) {
         cc = new MESITerminalCC(numLines, name);
     } else {
         cc = new MESICC(numLines, nonInclusiveHack, name);
     }
+
+    ReplPolicy* rp = array->getRP();
     rp->setCC(cc);
+
+    Cache* cache = nullptr;
+    //Latency
+    uint32_t latency = config.get<uint32_t>(prefix + "latency", 10);
+    uint32_t accLat = (isTerminal)? 0 : latency; //terminal caches has no access latency b/c it is assumed accLat is hidden by the pipeline
+    uint32_t invLat = latency;
     if (!isTerminal) {
         if (type == "Simple") {
             cache = new Cache(numLines, cc, array, rp, accLat, invLat, name);
@@ -289,6 +255,74 @@ BaseCache* BuildCacheBank(Config& config, const string& prefix, g_string& name, 
         if (arrayType != "SetAssoc" || hashType != "None" || replType != "LRU") panic("Invalid FilterCache config %s", name.c_str());
         cache = new FilterCache(numSets, numLines, cc, array, rp, accLat, invLat, name);
     }
+   
+    return cache;
+}
+
+BaseCache* BuildCacheBank(Config& config, const string& prefix, g_string& name, uint32_t bankSize, bool isTerminal, uint32_t domain) {
+    string type = config.get<const char*>(prefix + "type", "Simple");
+    // Shortcut for TraceDriven type
+    if (type == "TraceDriven") {
+        assert(zinfo->traceDriven);
+        assert(isTerminal);
+        return new TraceDriverProxyCache(name);
+    }
+
+    uint32_t lineSize = zinfo->lineSize;
+    assert(lineSize > 0); //avoid config deps
+    if (bankSize % lineSize != 0) panic("%s: Bank size must be a multiple of line size", name.c_str());
+
+    uint32_t numLines = bankSize/lineSize;
+
+    //Array
+    uint32_t numHashes = 1;
+    uint32_t ways = config.get<uint32_t>(prefix + "array.ways", 4);
+    string arrayType = config.get<const char*>(prefix + "array.type", "SetAssoc");
+    //    uint32_t candidates = (arrayType == "Z")? config.get<uint32_t>(prefix + "array.candidates", 16) : ways;
+
+    //Need to know number of hash functions before instantiating array
+    if (arrayType == "SetAssoc") {
+        numHashes = 1;
+    } else if (arrayType == "Z") {
+        numHashes = ways;
+        assert(ways > 1);
+    } else if (arrayType == "IdealLRU" || arrayType == "IdealLRUPart") {
+        ways = numLines;
+        numHashes = 0;
+    } else {
+        panic("%s: Invalid array type %s", name.c_str(), arrayType.c_str());
+    }
+
+    // Power of two sets check; also compute setBits, will be useful later
+    uint32_t numSets = numLines/ways;
+    uint32_t setBits = 31 - __builtin_clz(numSets);
+    if ((1u << setBits) != numSets) panic("%s: Number of sets must be a power of two (you specified %d sets)", name.c_str(), numSets);
+
+    //Hash function
+    HashFamily* hf = nullptr;
+    string hashType = config.get<const char*>(prefix + "array.hash", (arrayType == "Z")? "H3" : "None"); //zcaches must be hashed by default
+    if (numHashes) {
+        if (hashType == "None") {
+            if (arrayType == "Z") panic("ZCaches must be hashed!"); //double check for stupid user
+            assert(numHashes == 1);
+            hf = new IdHashFamily;
+        } else if (hashType == "H3") {
+            //STL hash function
+            size_t seed = _Fnv_hash_bytes(prefix.c_str(), prefix.size()+1, 0xB4AC5B);
+            //info("%s -> %lx", prefix.c_str(), seed);
+            hf = new H3HashFamily(numHashes, setBits, 0xCAC7EAFFA1 + seed /*make randSeed depend on prefix*/);
+        } else if (hashType == "SHA1") {
+            hf = new SHA1HashFamily(numHashes);
+        } else {
+            panic("%s: Invalid value %s on array.hash", name.c_str(), hashType.c_str());
+        }
+    }
+
+    //Replacement policy
+    string replType = config.get<const char*>(prefix + "repl.type", (arrayType == "IdealLRUPart")? "IdealLRUPart" : "LRU");
+
+    //Alright, build the cache
+    Cache* cache = BuildCache(config, prefix, name, hf, isTerminal, numLines, numSets, ways, domain);
 
 #if 0
     info("Built L%d bank, %d bytes, %d lines, %d ways (%d candidates if array is Z), %s array, %s hash, %s replacement, accLat %d, invLat %d name %s",

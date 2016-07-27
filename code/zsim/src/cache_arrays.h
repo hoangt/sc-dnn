@@ -33,6 +33,7 @@
  * translates addresses to line IDs. A line ID represents the position of the tag. The other
  * cache components store tag data in non-associative arrays indexed by line ID.
  */
+class ReplPolicy;
 class CacheArray : public GlobAlloc {
     public:
         /* Returns tag's ID if present, -1 otherwise. If updateReplacement is set, call the replacement policy's update() on the line accessed*/
@@ -49,9 +50,10 @@ class CacheArray : public GlobAlloc {
         virtual void postinsert(const Address lineAddr, const MemReq* req, uint32_t lineId) = 0;
 
         virtual void initStats(AggregateStat* parent) {}
+
+	virtual ReplPolicy* getRP() const = 0;
 };
 
-class ReplPolicy;
 class HashFamily;
 
 /* Set-associative cache array */
@@ -71,6 +73,7 @@ class SetAssocArray : public CacheArray {
         int32_t lookup(const Address lineAddr, const MemReq* req, bool updateReplacement);
         uint32_t preinsert(const Address lineAddr, const MemReq* req, Address* wbLineAddr);
         void postinsert(const Address lineAddr, const MemReq* req, uint32_t candidate);
+	ReplPolicy* getRP() const { return rp; };
 };
 
 /* The cache array that started this simulator :) */
@@ -100,6 +103,7 @@ class ZArray : public CacheArray {
         int32_t lookup(const Address lineAddr, const MemReq* req, bool updateReplacement);
         uint32_t preinsert(const Address lineAddr, const MemReq* req, Address* wbLineAddr);
         void postinsert(const Address lineAddr, const MemReq* req, uint32_t candidate);
+	ReplPolicy* getRP() const { return rp; };
 
         //zcache-specific, since timing code needs to know the number of swaps, and these depend on idx
         //Should be called after preinsert(). Allows intervening lookups

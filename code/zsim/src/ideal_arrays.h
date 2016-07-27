@@ -279,6 +279,8 @@ class IdealLRUPartArray : public CacheArray {
             rp->replaced(lineId);
             rp->update(lineId, req);
         }
+
+	ReplPolicy* getRP() const { return rp; }
 };
 
 #endif  // IDEAL_ARRAYS_H_

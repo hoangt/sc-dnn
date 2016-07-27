@@ -26,6 +26,7 @@
 #include "coherence_ctrls.h"
 #include "cache.h"
 #include "network.h"
+#include "pin.H"
 
 /* Do a simple XOR block hash on address to determine its bank. Hacky for now,
  * should probably have a class that deals with this with a real hash function
@@ -84,9 +85,24 @@ uint64_t MESIBottomCC::processEviction(Address wbLineAddr, uint32_t lineId, bool
     return respCycle;
 }
 
-uint64_t MESIBottomCC::processAccess(Address lineAddr, uint32_t lineId, AccessType type, uint64_t cycle, uint32_t srcId, uint32_t flags) {
+#define CACHE_LINE_SHIFT 6
+bool isZeroCacheLine(Address lineAddr)
+{
+  uint8_t buffer[CACHE_LINE_BYTES];
+  Address appAddr = (lineAddr << CACHE_LINE_SHIFT);
+  memset (buffer, 0, sizeof(buffer));
+  const size_t len = PIN_SafeCopy(buffer, (const VOID*)appAddr, CACHE_LINE_BYTES);
+  if (len == 0) return false;
+  for (size_t i = 0; i < len; i++) {
+   	 if (0 != buffer[i]) return false;
+  }
+  return true;
+}
+
+uint64_t MESIBottomCC::processAccess(Address lineAddr, uint32_t lineId, AccessType type, uint64_t cycle, uint32_t srcId, uint32_t flags) {  
     uint64_t respCycle = cycle;
     MESIState* state = &array[lineId];
+    const bool isZeroLine = isZeroCacheLine(lineAddr);
     switch (type) {
         // A PUTS/PUTX does nothing w.r.t. higher coherence levels --- it dies here
         case PUTS: //Clean writeback, nothing to do (except profiling)
@@ -100,6 +116,7 @@ uint64_t MESIBottomCC::processAccess(Address lineAddr, uint32_t lineId, AccessTy
                 *state = M;
             }
             profPUTX.inc();
+	    if (isZeroLine) profZeroPUTX.inc();
             break;
         case GETS:
             if (*state == I) {
@@ -111,9 +128,11 @@ uint64_t MESIBottomCC::processAccess(Address lineAddr, uint32_t lineId, AccessTy
                 profGETNetLat.inc(netLat);
                 respCycle += nextLevelLat + netLat;
                 profGETSMiss.inc();
+		if (isZeroLine) profZeroGETSMiss.inc();
                 assert(*state == S || *state == E);
             } else {
                 profGETSHit.inc();
+		if (isZeroLine) profZeroGETSHit.inc();
             }
             break;
         case GETX:
@@ -140,6 +159,7 @@ uint64_t MESIBottomCC::processAccess(Address lineAddr, uint32_t lineId, AccessTy
                     *state = M;
                 }
                 profGETXHit.inc();
+		if (isZeroLine) profZeroGETXHit.inc();
             }
             assert_msg(*state == M, "Wrong final state on GETX, lineId %d numLines %d, finalState %s", lineId, numLines, MESIStateName(*state));
             break;
