@@ -10,7 +10,7 @@ void InitDataProvider();
 
 void Sparsify(std::vector<float>& data, const int sparsePercent);
 
-void Sparsify(float* data, const int size, const int sparsePercent, const int sparseCacheLinePercent);
+void Sparsify(float* data, const int size, const int wordSparsity, const int cacheLineSparsity);
 
 void GetSparseData(std::vector<std::vector<float>>& sparseData, size_t unitCount, const size_t numElems, const int sparsePercent);
 

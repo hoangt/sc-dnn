@@ -8,6 +8,10 @@
 #include "string.h"
 #include "DataProvider.h"
 
+#ifdef ZSIM_BUILD
+#include "zsim_hooks.h"
+#endif 
+
 using namespace std;
 
 
@@ -16,17 +20,16 @@ void InitDataProvider()
     srand(static_cast<unsigned> (time(0)));
 }
 
-void Sparsify(float* data, const int size, const int sparsePercent, const int sparsecacheLinePercent)
+static void CPU_Sparsify(float* data, const int size, const int wordSparsity, const int cacheLineSparsity)
 {
-    assert(sparsePercent >= sparsecacheLinePercent);
     int numCacheLines = size / DATA_PER_CACHELINE;
-    int remainderSparsePercent = 100 * (sparsePercent - sparsecacheLinePercent)/(100 - sparsecacheLinePercent);
+    int remainderSparsePercent = (100 == cacheLineSparsity) ? 0 : 100 * (wordSparsity - cacheLineSparsity)/(100 - cacheLineSparsity);
 
     for (size_t i = 0; i < numCacheLines; i++)
     {
         float* cacheLine = data + (i * DATA_PER_CACHELINE);
         int lineProbability = rand() % 100;
-        if (lineProbability < sparsecacheLinePercent)
+        if (lineProbability < cacheLineSparsity)
         {
             memset(cacheLine, 0, sizeof(float)* DATA_PER_CACHELINE);
         }
@@ -38,24 +41,57 @@ void Sparsify(float* data, const int size, const int sparsePercent, const int sp
                 cacheLine[j] = (wordProbability < remainderSparsePercent) ? 0.0f : static_cast<float>(wordProbability);
             }
         }
-    }
+    }  
 }
 
-void Sparsify(std::vector<float>& data, const int sparsePercent)
+#ifdef ZSIM_BUILD 
+struct SparsifyOp {
+  float* _buffer;
+  int _count;
+  int _wordSparsity;
+  int _cacheLineSparsity;
+  
+  SparsifyOp(float* buffer, const int count, const int wordSparse, const int lineSparse):
+    _buffer(buffer),
+    _count(count),
+    _wordSparsity(wordSparse),
+    _cacheLineSparsity(lineSparse)
+  {}  
+  };
+
+static void ZSIM_Sparsify(float* data, const int count, const int wordSparsity, const int cacheLineSparsity)
+{
+  SparsifyOp* op = new SparsifyOp(data, count, wordSparsity, cacheLineSparsity);
+  zsim_sparsify((uint64_t)op);
+  delete op;
+}
+#endif // ZSIM_BUILD 
+
+void Sparsify(float* data, const int size, const int wordSparsity, const int cacheLineSparsity)
+{
+    assert(wordSparsity >= cacheLineSparsity);
+#ifdef ZSIM_BUILD
+    ZSIM_Sparsify(data, size, wordSparsity, cacheLineSparsity);
+#else
+    CPU_Sparsify(data, size, wordSparsity, cacheLineSparsity);
+#endif
+}
+
+void Sparsify(std::vector<float>& data, const int wordSparsity)
 {
     for (size_t j = 0; j < data.size(); j++)
     {
         int value = rand() % 100;
-        data[j] = (value < sparsePercent) ? 0.0f : static_cast<float>(value);
+        data[j] = (value < wordSparsity) ? 0.0f : static_cast<float>(value);
     }
 }
-void GetSparseData(std::vector<std::vector<float>>& sparseData,  size_t unitCount, const size_t numElems, const int sparsePercent)
+void GetSparseData(std::vector<std::vector<float>>& sparseData,  size_t unitCount, const size_t numElems, const int wordSparsity)
 {
     sparseData.resize(numElems);
     for (size_t i = 0; i < numElems; i++)
     {
         sparseData[i].resize(unitCount);
-        Sparsify(sparseData[i], sparsePercent);
+        Sparsify(sparseData[i], wordSparsity);
     }
 }
 

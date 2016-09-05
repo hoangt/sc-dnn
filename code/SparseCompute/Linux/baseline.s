@@ -55,7 +55,7 @@ mulsum3_baseline:
     mov   %rdx, %r8
     shr   $0x2, %rdx
     test  %rdx,	%rdx
-    jz    loop_1_end
+    jz    loop_3_end
 loop_3:
 	movups	(%rsi),	%xmm1
 	movups	(%rdi), %xmm3

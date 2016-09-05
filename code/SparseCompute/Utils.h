@@ -233,4 +233,3 @@ struct CanonicalConfig {
     void EnableAllPasses();
     void EnablePass(DNNPass, const char* name);
 };
-
