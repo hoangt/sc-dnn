@@ -59,6 +59,7 @@
 #include "stats.h"
 #include "trace_driver.h"
 #include "virt/virt.h"
+#include "zero_opt_utils.h"
 
 //#include <signal.h> //can't include this, conflicts with PIN's
 
@@ -142,7 +143,7 @@ VOID SimThreadStart(THREADID tid);
 VOID SimThreadFini(THREADID tid);
 VOID SimEnd();
 
-VOID HandleMagicOp(THREADID tid, ADDRINT op);
+VOID HandleMagicOp(THREADID tid, ADDRINT op, ADDRINT argAddr);
 
 VOID FakeCPUIDPre(THREADID tid, REG eax, REG ecx);
 VOID FakeCPUIDPost(THREADID tid, ADDRINT* eax, ADDRINT* ebx, ADDRINT* ecx, ADDRINT* edx); //REG* eax, REG* ebx, REG* ecx, REG* edx);
@@ -528,9 +529,9 @@ static void PrintIp(THREADID tid, ADDRINT ip) {
 }
 #endif
 
-VOID Instruction(INS ins) {
+VOID Instruction(INS ins) { 
     //Uncomment to print an instruction trace
-    //INS_InsertCall(ins, IPOINT_BEFORE, (AFUNPTR)PrintIp, IARG_THREAD_ID, IARG_REG_VALUE, REG_INST_PTR, IARG_END);
+    // INS_InsertCall(ins, IPOINT_BEFORE, (AFUNPTR)PrintIp, IARG_THREAD_ID, IARG_REG_VALUE, REG_INST_PTR, IARG_END);
 
     if (!procTreeNode->isInFastForward() || !zinfo->ffReinstrument) {
         AFUNPTR LoadFuncPtr = (AFUNPTR) IndirectLoadSingle;
@@ -577,7 +578,7 @@ VOID Instruction(INS ins) {
      */
     if (INS_IsXchg(ins) && INS_OperandReg(ins, 0) == REG_RCX && INS_OperandReg(ins, 1) == REG_RCX) {
         //info("Instrumenting magic op");
-        INS_InsertCall(ins, IPOINT_BEFORE, (AFUNPTR) HandleMagicOp, IARG_THREAD_ID, IARG_REG_VALUE, REG_ECX, IARG_END);
+      INS_InsertCall(ins, IPOINT_BEFORE, (AFUNPTR) HandleMagicOp, IARG_THREAD_ID, IARG_REG_VALUE, REG_ECX, IARG_REG_VALUE, REG_EDX, IARG_END);
     }
 
     if (INS_Opcode(ins) == XED_ICLASS_CPUID) {
@@ -595,14 +596,21 @@ VOID Instruction(INS ins) {
     VdsoInstrument(ins);
 }
 
-
 VOID Trace(TRACE trace, VOID *v) {
     if (!procTreeNode->isInFastForward() || !zinfo->ffReinstrument) {
+
+      {
+	INS ins = BBL_InsHead(TRACE_BblHead(trace));
+	const ADDRINT lastInstAddr = INS_Address(BBL_InsTail(TRACE_BblTail(trace)));
+	ZeroOptUtils::AddTraceInfo(TraceInfo(TRACE_Address(trace), lastInstAddr, TRACE_NumBbl(trace), TRACE_NumIns(trace)));
+	INS_InsertCall(ins, IPOINT_BEFORE, (AFUNPTR)ZeroOptUtils::CountTraces, IARG_THREAD_ID, IARG_REG_VALUE, REG_INST_PTR, IARG_END);
+      }
+
         // Visit every basic block in the trace
         for (BBL bbl = TRACE_BblHead(trace); BBL_Valid(bbl); bbl = BBL_Next(bbl)) {
             BblInfo* bblInfo = Decoder::decodeBbl(bbl, zinfo->oooDecode);
             BBL_InsertCall(bbl, IPOINT_BEFORE /*could do IPOINT_ANYWHERE if we redid load and store simulation in OOO*/, (AFUNPTR)IndirectBasicBlock, IARG_FAST_ANALYSIS_CALL,
-                 IARG_THREAD_ID, IARG_ADDRINT, BBL_Address(bbl), IARG_PTR, bblInfo, IARG_END);
+                 IARG_THREAD_ID, IARG_ADDRINT, BBL_Address(bbl), IARG_PTR, bblInfo, IARG_END);	    
         }
     }
 
@@ -1089,6 +1097,7 @@ VOID AfterForkInChild(THREADID tid, const CONTEXT* ctxt, VOID * arg) {
 /** Finalization **/
 
 VOID Fini(int code, VOID * v) {
+  ZeroOptUtils::FiniTraceCount();
     info("Finished, code %d", code);
     //NOTE: In fini, it appears that info() and writes to stdout in general won't work; warn() and stderr still work fine.
     SimEnd();
@@ -1146,8 +1155,9 @@ VOID SimEnd() {
 #define ZSIM_MAGIC_OP_ROI_END           (1026)
 #define ZSIM_MAGIC_OP_REGISTER_THREAD   (1027)
 #define ZSIM_MAGIC_OP_HEARTBEAT         (1028)
+#define ZSIM_MAGIC_OP_SPARSIFY          (1031)
 
-VOID HandleMagicOp(THREADID tid, ADDRINT op) {
+VOID HandleMagicOp(THREADID tid, ADDRINT op, ADDRINT argAddr) {
     switch (op) {
         case ZSIM_MAGIC_OP_ROI_BEGIN:
             if (!zinfo->ignoreHooks) {
@@ -1204,10 +1214,24 @@ VOID HandleMagicOp(THREADID tid, ADDRINT op) {
             procTreeNode->heartbeat(); //heartbeats are per process for now
             return;
 
+    case ZSIM_MAGIC_OP_SPARSIFY:
+      if (!zinfo->ignoreHooks) {
+	futex_lock(&zinfo->ffLock);
+#ifdef DEBUG_SPARSIFY_OP
+	info("start - SPARSIFY: %lx", argAddr);
+	ZeroOptUtils::SparsifyAppMem(argAddr);
+	info("stop  - SPARSIFY: 0x%lx", argAddr);
+#else
+	ZeroOptUtils::SparsifyAppMem(argAddr);
+#endif
+	futex_unlock(&zinfo->ffLock);
+      }
+      return;
+
         // HACK: Ubik magic ops
         case 1029:
         case 1030:
-        case 1031:
+	  //	case 1031:
         case 1032:
         case 1033:
             return;
@@ -1443,8 +1467,8 @@ static EXCEPT_HANDLING_RESULT InternalExceptionHandler(THREADID tid, EXCEPTION_I
 int main(int argc, char *argv[]) {
     PIN_InitSymbols();
     if (PIN_Init(argc, argv)) return Usage();
-
-    //Register an internal exception handler (ASAP, to catch segfaults in init)
+    
+   //Register an internal exception handler (ASAP, to catch segfaults in init)
     PIN_AddInternalExceptionHandler(InternalExceptionHandler, nullptr);
 
     procIdx = KnobProcIdx.Value();
@@ -1540,6 +1564,9 @@ int main(int argc, char *argv[]) {
     FFIInit();
 
     VirtInit();
+
+    // Initialize ZeroOPT 
+    ZeroOptUtils::Init();
 
     //Register instrumentation
     TRACE_AddInstrumentFunction(Trace, 0);

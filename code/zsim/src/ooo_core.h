@@ -34,9 +34,11 @@
 #include "memory_hierarchy.h"
 #include "ooo_core_recorder.h"
 #include "pad.h"
+#include <vector>
+#include <unordered_map>
 
 // Uncomment to enable stall stats
-// #define OOO_STALL_STATS
+#define OOO_STALL_STATS
 
 class FilterCache;
 
@@ -360,6 +362,17 @@ struct BblInfo;
 
 class OOOCore : public Core {
     private:
+  
+  // Zero-opt structures
+  typedef std::unordered_map<Address, uint32_t> kernelBblMap;  
+  kernelBblMap kernelBBL;
+
+  void traceKernelBBL(DynBbl* dynBbl, uint64_t instrs, uint64_t cycles);
+  uint64_t kernelBlocks;
+  uint64_t kernelInstrs;
+  uint64_t kernelCycles;
+  uint64_t kernelUops;
+
         FilterCache* l1i;
         FilterCache* l1d;
 

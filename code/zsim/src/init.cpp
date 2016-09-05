@@ -736,7 +736,7 @@ static void InitSystem(Config& config) {
                         core = ocore;
                     }
                     coreMap[group].push_back(core);
-                    coreIdx++;
+                    coreIdx++;		    
                 }
             } else {
                 assert(type == "Null");

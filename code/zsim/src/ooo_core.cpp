@@ -74,6 +74,10 @@ OOOCore::OOOCore(FilterCache* _l1i, FilterCache* _l1d, g_string& _name) : Core(_
     instrs = uops = bbls = approxInstrs = mispredBranches = 0;
 
     for (uint32_t i = 0; i < FWD_ENTRIES; i++) fwdArray[i].set((Address)(-1L), 0);
+
+    // zero-opt
+    kernelBBL.insert(std::make_pair(0x404f19, 0));
+    kernelBBL.insert(std::make_pair(0x404f64, 0));
 }
 
 void OOOCore::initStats(AggregateStat* parentStat) {
@@ -98,7 +102,7 @@ void OOOCore::initStats(AggregateStat* parentStat) {
     approxInstrsStat->init("approxInstrs", "Instrs with approx uop decoding", &approxInstrs);
     ProxyStat* mispredBranchesStat = new ProxyStat();
     mispredBranchesStat->init("mispredBranches", "Mispredicted branches", &mispredBranches);
-
+    
     coreStat->append(cyclesStat);
     coreStat->append(cCyclesStat);
     coreStat->append(instrsStat);
@@ -112,6 +116,23 @@ void OOOCore::initStats(AggregateStat* parentStat) {
     profDecodeStalls.init("decodeStalls", "Decode stalls"); coreStat->append(&profDecodeStalls);
     profIssueStalls.init("issueStalls",  "Issue stalls");  coreStat->append(&profIssueStalls);
 #endif
+
+    // zero-opt
+    ProxyStat* kernelBblStat = new ProxyStat();
+    kernelBblStat->init("kernelBbls", "Kernel Basic blocks", &kernelBlocks);
+    coreStat->append(kernelBblStat);
+
+    ProxyStat* kernelInstrStat = new ProxyStat();
+    kernelInstrStat->init("kernelInstrs", "Kernel instructions", &kernelInstrs);
+    coreStat->append(kernelInstrStat);
+
+    ProxyStat* kernelCycleStat = new ProxyStat();
+    kernelCycleStat->init("kernelCycles", "Kernel Cycles", &kernelCycles);
+    coreStat->append(kernelCycleStat);
+
+    ProxyStat* kernelUopStat = new ProxyStat();
+    kernelUopStat->init("kernelUops", "Kernel Uops", &kernelUops);
+    coreStat->append(kernelUopStat);
 
     parentStat->append(coreStat);
 }
@@ -155,7 +176,20 @@ void OOOCore::branch(Address pc, bool taken, Address takenNpc, Address notTakenN
     branchNotTakenNpc = notTakenNpc;
 }
 
+inline void OOOCore::traceKernelBBL(DynBbl* dynBbl, uint64_t instrs, uint64_t cycles)
+{
+  Address bblAddr = (Address)dynBbl->addr;
+  if (kernelBBL.count(bblAddr) > 0) {
+    kernelBBL[bblAddr]++;
+    ++kernelBlocks;
+    kernelInstrs += instrs;
+    kernelCycles += cycles;
+    kernelUops += dynBbl->uops;
+  }
+}
+
 inline void OOOCore::bbl(Address bblAddr, BblInfo* bblInfo) {
+
     if (!prevBbl) {
         // This is the 1st BBL since scheduled, nothing to simulate
         prevBbl = bblInfo;
@@ -164,8 +198,10 @@ inline void OOOCore::bbl(Address bblAddr, BblInfo* bblInfo) {
         return;
     }
 
-    /* Simulate execution of previous BBL */
+    /* Record current cycle */
+    uint64_t startCycle = curCycle;
 
+    /* Simulate execution of previous BBL */
     uint32_t bblInstrs = prevBbl->instrs;
     DynBbl* bbl = &(prevBbl->oooBbl[0]);
     prevBbl = bblInfo;
@@ -348,6 +384,9 @@ inline void OOOCore::bbl(Address bblAddr, BblInfo* bblInfo) {
     uops += bbl->uops;
     bbls++;
     approxInstrs += bbl->approxInstrs;
+
+    // Trace bbl 
+    traceKernelBBL(bbl, bblInstrs, (curCycle - startCycle));
 
 #ifdef BBL_PROFILING
     if (approxInstrs) Decoder::profileBbl(bbl->bblIdx);

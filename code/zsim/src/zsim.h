@@ -83,7 +83,7 @@ struct GlobSimInfo {
     uint32_t l1dCacheScale;
     uint32_t l2CacheScale;
     uint32_t l3CacheScale;
-
+ 
     //Cores
     Core** cores;
 
