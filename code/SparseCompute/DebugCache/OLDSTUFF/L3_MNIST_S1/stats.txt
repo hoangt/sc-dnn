@@ -1,0 +1,931 @@
+
+---------- Begin Simulation Statistics ----------
+sim_seconds                                  0.117161                       # Number of seconds simulated
+sim_ticks                                117161224500                       # Number of ticks simulated
+final_tick                               117161224500                       # Number of ticks from beginning of simulation (restored from checkpoints and never reset)
+sim_freq                                 1000000000000                       # Frequency of simulated ticks
+host_inst_rate                                  83054                       # Simulator instruction rate (inst/s)
+host_op_rate                                   229362                       # Simulator op (including micro ops) rate (op/s)
+host_tick_rate                              142230514                       # Simulator tick rate (ticks/s)
+host_mem_usage                                 781700                       # Number of bytes of host memory used
+host_seconds                                   823.74                       # Real time elapsed on the host
+sim_insts                                    68414964                       # Number of instructions simulated
+sim_ops                                     188935260                       # Number of ops (including micro ops) simulated
+system.voltage_domain.voltage                       1                       # Voltage in Volts
+system.clk_domain.clock                          1000                       # Clock period in ticks
+system.mem_ctrls.bytes_read::ruby.dir_cntrl0      4076352                       # Number of bytes read from this memory
+system.mem_ctrls.bytes_read::total            4076352                       # Number of bytes read from this memory
+system.mem_ctrls.num_reads::ruby.dir_cntrl0        63693                       # Number of read requests responded to by this memory
+system.mem_ctrls.num_reads::total               63693                       # Number of read requests responded to by this memory
+system.mem_ctrls.bw_read::ruby.dir_cntrl0     34792672                       # Total read bandwidth from this memory (bytes/s)
+system.mem_ctrls.bw_read::total              34792672                       # Total read bandwidth from this memory (bytes/s)
+system.mem_ctrls.bw_total::ruby.dir_cntrl0     34792672                       # Total bandwidth to/from this memory (bytes/s)
+system.mem_ctrls.bw_total::total             34792672                       # Total bandwidth to/from this memory (bytes/s)
+system.mem_ctrls.readReqs                       63693                       # Number of read requests accepted
+system.mem_ctrls.writeReqs                          0                       # Number of write requests accepted
+system.mem_ctrls.readBursts                     63693                       # Number of DRAM read bursts, including those serviced by the write queue
+system.mem_ctrls.writeBursts                        0                       # Number of DRAM write bursts, including those merged in the write queue
+system.mem_ctrls.bytesReadDRAM                4076352                       # Total number of bytes read from DRAM
+system.mem_ctrls.bytesReadWrQ                       0                       # Total number of bytes read from write queue
+system.mem_ctrls.bytesWritten                       0                       # Total number of bytes written to DRAM
+system.mem_ctrls.bytesReadSys                 4076352                       # Total read bytes from the system interface side
+system.mem_ctrls.bytesWrittenSys                    0                       # Total written bytes from the system interface side
+system.mem_ctrls.servicedByWrQ                      0                       # Number of DRAM read bursts serviced by the write queue
+system.mem_ctrls.mergedWrBursts                     0                       # Number of DRAM write bursts merged with an existing one
+system.mem_ctrls.neitherReadNorWriteReqs            0                       # Number of requests that are neither read nor write
+system.mem_ctrls.perBankRdBursts::0              3937                       # Per bank write bursts
+system.mem_ctrls.perBankRdBursts::1              3940                       # Per bank write bursts
+system.mem_ctrls.perBankRdBursts::2              3866                       # Per bank write bursts
+system.mem_ctrls.perBankRdBursts::3              3712                       # Per bank write bursts
+system.mem_ctrls.perBankRdBursts::4              3836                       # Per bank write bursts
+system.mem_ctrls.perBankRdBursts::5              3832                       # Per bank write bursts
+system.mem_ctrls.perBankRdBursts::6              4125                       # Per bank write bursts
+system.mem_ctrls.perBankRdBursts::7              4183                       # Per bank write bursts
+system.mem_ctrls.perBankRdBursts::8              4010                       # Per bank write bursts
+system.mem_ctrls.perBankRdBursts::9              4108                       # Per bank write bursts
+system.mem_ctrls.perBankRdBursts::10             4175                       # Per bank write bursts
+system.mem_ctrls.perBankRdBursts::11             4225                       # Per bank write bursts
+system.mem_ctrls.perBankRdBursts::12             4053                       # Per bank write bursts
+system.mem_ctrls.perBankRdBursts::13             3929                       # Per bank write bursts
+system.mem_ctrls.perBankRdBursts::14             3871                       # Per bank write bursts
+system.mem_ctrls.perBankRdBursts::15             3891                       # Per bank write bursts
+system.mem_ctrls.perBankWrBursts::0                 0                       # Per bank write bursts
+system.mem_ctrls.perBankWrBursts::1                 0                       # Per bank write bursts
+system.mem_ctrls.perBankWrBursts::2                 0                       # Per bank write bursts
+system.mem_ctrls.perBankWrBursts::3                 0                       # Per bank write bursts
+system.mem_ctrls.perBankWrBursts::4                 0                       # Per bank write bursts
+system.mem_ctrls.perBankWrBursts::5                 0                       # Per bank write bursts
+system.mem_ctrls.perBankWrBursts::6                 0                       # Per bank write bursts
+system.mem_ctrls.perBankWrBursts::7                 0                       # Per bank write bursts
+system.mem_ctrls.perBankWrBursts::8                 0                       # Per bank write bursts
+system.mem_ctrls.perBankWrBursts::9                 0                       # Per bank write bursts
+system.mem_ctrls.perBankWrBursts::10                0                       # Per bank write bursts
+system.mem_ctrls.perBankWrBursts::11                0                       # Per bank write bursts
+system.mem_ctrls.perBankWrBursts::12                0                       # Per bank write bursts
+system.mem_ctrls.perBankWrBursts::13                0                       # Per bank write bursts
+system.mem_ctrls.perBankWrBursts::14                0                       # Per bank write bursts
+system.mem_ctrls.perBankWrBursts::15                0                       # Per bank write bursts
+system.mem_ctrls.numRdRetry                         0                       # Number of times read queue was full causing retry
+system.mem_ctrls.numWrRetry                         0                       # Number of times write queue was full causing retry
+system.mem_ctrls.totGap                  117161161500                       # Total gap between requests
+system.mem_ctrls.readPktSize::0                     0                       # Read request sizes (log2)
+system.mem_ctrls.readPktSize::1                     0                       # Read request sizes (log2)
+system.mem_ctrls.readPktSize::2                     0                       # Read request sizes (log2)
+system.mem_ctrls.readPktSize::3                     0                       # Read request sizes (log2)
+system.mem_ctrls.readPktSize::4                     0                       # Read request sizes (log2)
+system.mem_ctrls.readPktSize::5                     0                       # Read request sizes (log2)
+system.mem_ctrls.readPktSize::6                 63693                       # Read request sizes (log2)
+system.mem_ctrls.writePktSize::0                    0                       # Write request sizes (log2)
+system.mem_ctrls.writePktSize::1                    0                       # Write request sizes (log2)
+system.mem_ctrls.writePktSize::2                    0                       # Write request sizes (log2)
+system.mem_ctrls.writePktSize::3                    0                       # Write request sizes (log2)
+system.mem_ctrls.writePktSize::4                    0                       # Write request sizes (log2)
+system.mem_ctrls.writePktSize::5                    0                       # Write request sizes (log2)
+system.mem_ctrls.writePktSize::6                    0                       # Write request sizes (log2)
+system.mem_ctrls.rdQLenPdf::0                   63691                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::1                       2                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::2                       0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::3                       0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::4                       0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::5                       0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::6                       0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::7                       0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::8                       0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::9                       0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::10                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::11                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::12                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::13                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::14                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::15                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::16                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::17                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::18                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::19                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::20                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::21                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::22                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::23                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::24                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::25                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::26                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::27                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::28                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::29                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::30                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.rdQLenPdf::31                      0                       # What read queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::0                       0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::1                       0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::2                       0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::3                       0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::4                       0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::5                       0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::6                       0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::7                       0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::8                       0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::9                       0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::10                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::11                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::12                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::13                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::14                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::15                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::16                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::17                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::18                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::19                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::20                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::21                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::22                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::23                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::24                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::25                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::26                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::27                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::28                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::29                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::30                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::31                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::32                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::33                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::34                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::35                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::36                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::37                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::38                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::39                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::40                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::41                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::42                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::43                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::44                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::45                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::46                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::47                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::48                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::49                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::50                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::51                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::52                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::53                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::54                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::55                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::56                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::57                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::58                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::59                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::60                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::61                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::62                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.wrQLenPdf::63                      0                       # What write queue length does an incoming req see
+system.mem_ctrls.bytesPerActivate::samples        15520                       # Bytes accessed per row activation
+system.mem_ctrls.bytesPerActivate::mean    262.589691                       # Bytes accessed per row activation
+system.mem_ctrls.bytesPerActivate::gmean   251.603088                       # Bytes accessed per row activation
+system.mem_ctrls.bytesPerActivate::stdev    72.307686                       # Bytes accessed per row activation
+system.mem_ctrls.bytesPerActivate::0-127          592      3.81%      3.81% # Bytes accessed per row activation
+system.mem_ctrls.bytesPerActivate::128-255          685      4.41%      8.23% # Bytes accessed per row activation
+system.mem_ctrls.bytesPerActivate::256-383        13969     90.01%     98.23% # Bytes accessed per row activation
+system.mem_ctrls.bytesPerActivate::384-511          161      1.04%     99.27% # Bytes accessed per row activation
+system.mem_ctrls.bytesPerActivate::512-639           31      0.20%     99.47% # Bytes accessed per row activation
+system.mem_ctrls.bytesPerActivate::640-767           17      0.11%     99.58% # Bytes accessed per row activation
+system.mem_ctrls.bytesPerActivate::768-895           16      0.10%     99.68% # Bytes accessed per row activation
+system.mem_ctrls.bytesPerActivate::896-1023           15      0.10%     99.78% # Bytes accessed per row activation
+system.mem_ctrls.bytesPerActivate::1024-1151           34      0.22%    100.00% # Bytes accessed per row activation
+system.mem_ctrls.bytesPerActivate::total        15520                       # Bytes accessed per row activation
+system.mem_ctrls.totQLat                    722468499                       # Total ticks spent queuing
+system.mem_ctrls.totMemAccLat              1916712249                       # Total ticks spent from burst creation until serviced by the DRAM
+system.mem_ctrls.totBusLat                  318465000                       # Total ticks spent in databus transfers
+system.mem_ctrls.avgQLat                     11342.98                       # Average queueing delay per DRAM burst
+system.mem_ctrls.avgBusLat                    5000.00                       # Average bus latency per DRAM burst
+system.mem_ctrls.avgMemAccLat                30092.98                       # Average memory access latency per DRAM burst
+system.mem_ctrls.avgRdBW                        34.79                       # Average DRAM read bandwidth in MiByte/s
+system.mem_ctrls.avgWrBW                         0.00                       # Average achieved write bandwidth in MiByte/s
+system.mem_ctrls.avgRdBWSys                     34.79                       # Average system read bandwidth in MiByte/s
+system.mem_ctrls.avgWrBWSys                      0.00                       # Average system write bandwidth in MiByte/s
+system.mem_ctrls.peakBW                      12800.00                       # Theoretical peak bandwidth in MiByte/s
+system.mem_ctrls.busUtil                         0.27                       # Data bus utilization in percentage
+system.mem_ctrls.busUtilRead                     0.27                       # Data bus utilization in percentage for reads
+system.mem_ctrls.busUtilWrite                    0.00                       # Data bus utilization in percentage for writes
+system.mem_ctrls.avgRdQLen                       1.00                       # Average read queue length when enqueuing
+system.mem_ctrls.avgWrQLen                       0.00                       # Average write queue length when enqueuing
+system.mem_ctrls.readRowHits                    48169                       # Number of row buffer hits during reads
+system.mem_ctrls.writeRowHits                       0                       # Number of row buffer hits during writes
+system.mem_ctrls.readRowHitRate                 75.63                       # Row buffer hit rate for reads
+system.mem_ctrls.writeRowHitRate                  nan                       # Row buffer hit rate for writes
+system.mem_ctrls.avgGap                    1839466.84                       # Average gap between requests
+system.mem_ctrls.pageHitRate                    75.63                       # Row buffer hit rate, read and write combined
+system.mem_ctrls_0.actEnergy                 58552200                       # Energy for activate commands per rank (pJ)
+system.mem_ctrls_0.preEnergy                 31948125                       # Energy for precharge commands per rank (pJ)
+system.mem_ctrls_0.readEnergy               245138400                       # Energy for read commands per rank (pJ)
+system.mem_ctrls_0.writeEnergy                      0                       # Energy for write commands per rank (pJ)
+system.mem_ctrls_0.refreshEnergy           7652302320                       # Energy for refresh commands per rank (pJ)
+system.mem_ctrls_0.actBackEnergy          36654965775                       # Energy for active background per rank (pJ)
+system.mem_ctrls_0.preBackEnergy          38142499500                       # Energy for precharge background per rank (pJ)
+system.mem_ctrls_0.totalEnergy            82785406320                       # Total energy per rank (pJ)
+system.mem_ctrls_0.averagePower            706.601502                       # Core power per rank (mW)
+system.mem_ctrls_0.memoryStateTime::IDLE  63260319500                       # Time in different power states
+system.mem_ctrls_0.memoryStateTime::REF    3912220000                       # Time in different power states
+system.mem_ctrls_0.memoryStateTime::PRE_PDN            0                       # Time in different power states
+system.mem_ctrls_0.memoryStateTime::ACT   49987438000                       # Time in different power states
+system.mem_ctrls_0.memoryStateTime::ACT_PDN            0                       # Time in different power states
+system.mem_ctrls_1.actEnergy                 58779000                       # Energy for activate commands per rank (pJ)
+system.mem_ctrls_1.preEnergy                 32071875                       # Energy for precharge commands per rank (pJ)
+system.mem_ctrls_1.readEnergy               251550000                       # Energy for read commands per rank (pJ)
+system.mem_ctrls_1.writeEnergy                      0                       # Energy for write commands per rank (pJ)
+system.mem_ctrls_1.refreshEnergy           7652302320                       # Energy for refresh commands per rank (pJ)
+system.mem_ctrls_1.actBackEnergy          37203361065                       # Energy for active background per rank (pJ)
+system.mem_ctrls_1.preBackEnergy          37661451000                       # Energy for precharge background per rank (pJ)
+system.mem_ctrls_1.totalEnergy            82859515260                       # Total energy per rank (pJ)
+system.mem_ctrls_1.averagePower            707.234047                       # Core power per rank (mW)
+system.mem_ctrls_1.memoryStateTime::IDLE  62456292000                       # Time in different power states
+system.mem_ctrls_1.memoryStateTime::REF    3912220000                       # Time in different power states
+system.mem_ctrls_1.memoryStateTime::PRE_PDN            0                       # Time in different power states
+system.mem_ctrls_1.memoryStateTime::ACT   50791620000                       # Time in different power states
+system.mem_ctrls_1.memoryStateTime::ACT_PDN            0                       # Time in different power states
+system.cpu_voltage_domain.voltage                   1                       # Voltage in Volts
+system.cpu_clk_domain.clock                       500                       # Clock period in ticks
+system.cpu0.apic_clk_domain.clock                8000                       # Clock period in ticks
+system.cpu0.workload.num_syscalls                  61                       # Number of system calls
+system.cpu0.numCycles                       234322449                       # number of cpu cycles simulated
+system.cpu0.numWorkItemsStarted                     0                       # number of work items this cpu started
+system.cpu0.numWorkItemsCompleted                   0                       # number of work items this cpu completed
+system.cpu0.committedInsts                   65537448                       # Number of instructions committed
+system.cpu0.committedOps                    183181789                       # Number of ops (including micro ops) committed
+system.cpu0.num_int_alu_accesses            173151019                       # Number of integer alu accesses
+system.cpu0.num_fp_alu_accesses               4747498                       # Number of float alu accesses
+system.cpu0.num_func_calls                    6140940                       # number of times a function call or return occured
+system.cpu0.num_conditional_control_insts     13943641                       # number of instructions that are conditional controls
+system.cpu0.num_int_insts                   173151019                       # number of integer instructions
+system.cpu0.num_fp_insts                      4747498                       # number of float instructions
+system.cpu0.num_int_register_reads          364705540                       # number of times the integer registers were read
+system.cpu0.num_int_register_writes         172012069                       # number of times the integer registers were written
+system.cpu0.num_fp_register_reads             7602990                       # number of times the floating registers were read
+system.cpu0.num_fp_register_writes            3784978                       # number of times the floating registers were written
+system.cpu0.num_cc_register_reads           144768232                       # number of times the CC registers were read
+system.cpu0.num_cc_register_writes           54609841                       # number of times the CC registers were written
+system.cpu0.num_mem_refs                     28369159                       # number of memory refs
+system.cpu0.num_load_insts                   17555142                       # Number of load instructions
+system.cpu0.num_store_insts                  10814017                       # Number of store instructions
+system.cpu0.num_idle_cycles                  0.002000                       # Number of idle cycles
+system.cpu0.num_busy_cycles              234322448.998000                       # Number of busy cycles
+system.cpu0.not_idle_fraction                1.000000                       # Percentage of non-idle cycles
+system.cpu0.idle_fraction                    0.000000                       # Percentage of idle cycles
+system.cpu0.Branches                         23122684                       # Number of branches fetched
+system.cpu0.op_class::No_OpClass              3084847      1.68%      1.68% # Class of executed instruction
+system.cpu0.op_class::IntAlu                132621135     72.40%     74.08% # Class of executed instruction
+system.cpu0.op_class::IntMult                     320      0.00%     74.08% # Class of executed instruction
+system.cpu0.op_class::IntDiv                 15322044      8.36%     82.45% # Class of executed instruction
+system.cpu0.op_class::FloatAdd                3784284      2.07%     84.51% # Class of executed instruction
+system.cpu0.op_class::FloatCmp                      0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::FloatCvt                      0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::FloatMult                     0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::FloatDiv                      0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::FloatSqrt                     0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdAdd                       0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdAddAcc                    0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdAlu                       0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdCmp                       0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdCvt                       0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdMisc                      0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdMult                      0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdMultAcc                   0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdShift                     0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdShiftAcc                  0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdSqrt                      0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdFloatAdd                  0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdFloatAlu                  0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdFloatCmp                  0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdFloatCvt                  0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdFloatDiv                  0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdFloatMisc                 0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdFloatMult                 0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdFloatMultAcc              0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::SimdFloatSqrt                 0      0.00%     84.51% # Class of executed instruction
+system.cpu0.op_class::MemRead                17555142      9.58%     94.10% # Class of executed instruction
+system.cpu0.op_class::MemWrite               10814017      5.90%    100.00% # Class of executed instruction
+system.cpu0.op_class::IprAccess                     0      0.00%    100.00% # Class of executed instruction
+system.cpu0.op_class::InstPrefetch                  0      0.00%    100.00% # Class of executed instruction
+system.cpu0.op_class::total                 183181789                       # Class of executed instruction
+system.cpu1.apic_clk_domain.clock                8000                       # Clock period in ticks
+system.cpu1.numCycles                       234111790                       # number of cpu cycles simulated
+system.cpu1.numWorkItemsStarted                     0                       # number of work items this cpu started
+system.cpu1.numWorkItemsCompleted                   0                       # number of work items this cpu completed
+system.cpu1.committedInsts                    2877516                       # Number of instructions committed
+system.cpu1.committedOps                      5753471                       # Number of ops (including micro ops) committed
+system.cpu1.num_int_alu_accesses              4327355                       # Number of integer alu accesses
+system.cpu1.num_fp_alu_accesses               2691675                       # Number of float alu accesses
+system.cpu1.num_func_calls                      24751                       # number of times a function call or return occured
+system.cpu1.num_conditional_control_insts       341144                       # number of instructions that are conditional controls
+system.cpu1.num_int_insts                     4327355                       # number of integer instructions
+system.cpu1.num_fp_insts                      2691675                       # number of float instructions
+system.cpu1.num_int_register_reads            7670140                       # number of times the integer registers were read
+system.cpu1.num_int_register_writes           2706596                       # number of times the integer registers were written
+system.cpu1.num_fp_register_reads             4167185                       # number of times the floating registers were read
+system.cpu1.num_fp_register_writes            2679320                       # number of times the floating registers were written
+system.cpu1.num_cc_register_reads             2059260                       # number of times the CC registers were read
+system.cpu1.num_cc_register_writes            2052982                       # number of times the CC registers were written
+system.cpu1.num_mem_refs                      1330703                       # number of memory refs
+system.cpu1.num_load_insts                    1305886                       # Number of load instructions
+system.cpu1.num_store_insts                     24817                       # Number of store instructions
+system.cpu1.num_idle_cycles              223102393.500135                       # Number of idle cycles
+system.cpu1.num_busy_cycles              11009396.499865                       # Number of busy cycles
+system.cpu1.not_idle_fraction                0.047026                       # Percentage of non-idle cycles
+system.cpu1.idle_fraction                    0.952974                       # Percentage of idle cycles
+system.cpu1.Branches                           379810                       # Number of branches fetched
+system.cpu1.op_class::No_OpClass                    2      0.00%      0.00% # Class of executed instruction
+system.cpu1.op_class::IntAlu                  2959576     51.44%     51.44% # Class of executed instruction
+system.cpu1.op_class::IntMult                   37061      0.64%     52.08% # Class of executed instruction
+system.cpu1.op_class::IntDiv                       14      0.00%     52.08% # Class of executed instruction
+system.cpu1.op_class::FloatAdd                1426115     24.79%     76.87% # Class of executed instruction
+system.cpu1.op_class::FloatCmp                      0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::FloatCvt                      0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::FloatMult                     0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::FloatDiv                      0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::FloatSqrt                     0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdAdd                       0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdAddAcc                    0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdAlu                       0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdCmp                       0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdCvt                       0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdMisc                      0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdMult                      0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdMultAcc                   0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdShift                     0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdShiftAcc                  0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdSqrt                      0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdFloatAdd                  0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdFloatAlu                  0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdFloatCmp                  0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdFloatCvt                  0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdFloatDiv                  0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdFloatMisc                 0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdFloatMult                 0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdFloatMultAcc              0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::SimdFloatSqrt                 0      0.00%     76.87% # Class of executed instruction
+system.cpu1.op_class::MemRead                 1305886     22.70%     99.57% # Class of executed instruction
+system.cpu1.op_class::MemWrite                  24817      0.43%    100.00% # Class of executed instruction
+system.cpu1.op_class::IprAccess                     0      0.00%    100.00% # Class of executed instruction
+system.cpu1.op_class::InstPrefetch                  0      0.00%    100.00% # Class of executed instruction
+system.cpu1.op_class::total                   5753471                       # Class of executed instruction
+system.ruby.clk_domain.clock                      500                       # Clock period in ticks
+system.ruby.delayHist::bucket_size                  2                       # delay histogram for all message
+system.ruby.delayHist::max_bucket                  19                       # delay histogram for all message
+system.ruby.delayHist::samples                 687073                       # delay histogram for all message
+system.ruby.delayHist::mean                  0.736337                       # delay histogram for all message
+system.ruby.delayHist::stdev                 2.311321                       # delay histogram for all message
+system.ruby.delayHist                    |      623710     90.78%     90.78% |          26      0.00%     90.78% |         280      0.04%     90.82% |           0      0.00%     90.82% |       63056      9.18%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           1      0.00%    100.00% # delay histogram for all message
+system.ruby.delayHist::total                   687073                       # delay histogram for all message
+system.ruby.outstanding_req_hist::bucket_size            1                      
+system.ruby.outstanding_req_hist::max_bucket            9                      
+system.ruby.outstanding_req_hist::samples    117761610                      
+system.ruby.outstanding_req_hist::mean       1.000118                      
+system.ruby.outstanding_req_hist::gmean      1.000082                      
+system.ruby.outstanding_req_hist::stdev      0.010877                      
+system.ruby.outstanding_req_hist         |           0      0.00%      0.00% |   117747677     99.99%     99.99% |       13933      0.01%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00%
+system.ruby.outstanding_req_hist::total     117761610                      
+system.ruby.latency_hist::bucket_size             128                      
+system.ruby.latency_hist::max_bucket             1279                      
+system.ruby.latency_hist::samples           117761610                      
+system.ruby.latency_hist::mean               1.083550                      
+system.ruby.latency_hist::gmean              1.004233                      
+system.ruby.latency_hist::stdev              3.841846                      
+system.ruby.latency_hist                 |   117746084     99.99%     99.99% |       13055      0.01%    100.00% |         100      0.00%    100.00% |         647      0.00%    100.00% |        1517      0.00%    100.00% |         207      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00%
+system.ruby.latency_hist::total             117761610                      
+system.ruby.hit_latency_hist::bucket_size          128                      
+system.ruby.hit_latency_hist::max_bucket         1279                      
+system.ruby.hit_latency_hist::samples       117761610                      
+system.ruby.hit_latency_hist::mean           1.083550                      
+system.ruby.hit_latency_hist::gmean          1.004233                      
+system.ruby.hit_latency_hist::stdev          3.841846                      
+system.ruby.hit_latency_hist             |   117746084     99.99%     99.99% |       13055      0.01%    100.00% |         100      0.00%    100.00% |         647      0.00%    100.00% |        1517      0.00%    100.00% |         207      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00%
+system.ruby.hit_latency_hist::total         117761610                      
+system.ruby.l0_cntrl0.Dcache.demand_hits     28302471                       # Number of cache demand hits
+system.ruby.l0_cntrl0.Dcache.demand_misses        66752                       # Number of cache demand misses
+system.ruby.l0_cntrl0.Dcache.demand_accesses     28369223                       # Number of cache demand accesses
+system.ruby.l0_cntrl0.Icache.demand_hits     84379368                       # Number of cache demand hits
+system.ruby.l0_cntrl0.Icache.demand_misses         1899                       # Number of cache demand misses
+system.ruby.l0_cntrl0.Icache.demand_accesses     84381267                       # Number of cache demand accesses
+system.ruby.l0_cntrl0.Zcache.demand_hits            0                       # Number of cache demand hits
+system.ruby.l0_cntrl0.Zcache.demand_misses            0                       # Number of cache demand misses
+system.ruby.l0_cntrl0.Zcache.demand_accesses            0                       # Number of cache demand accesses
+system.ruby.l0_cntrl1.Dcache.demand_hits      1263814                       # Number of cache demand hits
+system.ruby.l0_cntrl1.Dcache.demand_misses        80758                       # Number of cache demand misses
+system.ruby.l0_cntrl1.Dcache.demand_accesses      1344572                       # Number of cache demand accesses
+system.ruby.l0_cntrl1.Icache.demand_hits      3666448                       # Number of cache demand hits
+system.ruby.l0_cntrl1.Icache.demand_misses          100                       # Number of cache demand misses
+system.ruby.l0_cntrl1.Icache.demand_accesses      3666548                       # Number of cache demand accesses
+system.ruby.l0_cntrl1.Zcache.demand_hits            0                       # Number of cache demand hits
+system.ruby.l0_cntrl1.Zcache.demand_misses            0                       # Number of cache demand misses
+system.ruby.l0_cntrl1.Zcache.demand_accesses            0                       # Number of cache demand accesses
+system.ruby.l1_cntrl0.cache.demand_hits          5006                       # Number of cache demand hits
+system.ruby.l1_cntrl0.cache.demand_misses        63645                       # Number of cache demand misses
+system.ruby.l1_cntrl0.cache.demand_accesses        68651                       # Number of cache demand accesses
+system.ruby.l1_cntrl1.cache.demand_hits         47914                       # Number of cache demand hits
+system.ruby.l1_cntrl1.cache.demand_misses        32944                       # Number of cache demand misses
+system.ruby.l1_cntrl1.cache.demand_accesses        80858                       # Number of cache demand accesses
+system.ruby.l2_cntrl0.L2cache.demand_hits        29179                       # Number of cache demand hits
+system.ruby.l2_cntrl0.L2cache.demand_misses        67410                       # Number of cache demand misses
+system.ruby.l2_cntrl0.L2cache.demand_accesses        96589                       # Number of cache demand accesses
+system.ruby.memctrl_clk_domain.clock             1500                       # Clock period in ticks
+system.ruby.network.routers0.percent_links_utilized            0                      
+system.ruby.network.routers1.percent_links_utilized            0                      
+system.ruby.network.routers2.percent_links_utilized     0.144565                      
+system.ruby.network.routers2.msg_count.Control::0        63645                      
+system.ruby.network.routers2.msg_count.Request_Control::2         3711                      
+system.ruby.network.routers2.msg_count.Response_Data::1        71045                      
+system.ruby.network.routers2.msg_count.Response_Control::1        58925                      
+system.ruby.network.routers2.msg_count.Response_Control::2        63645                      
+system.ruby.network.routers2.msg_count.Writeback_Data::0        58346                      
+system.ruby.network.routers2.msg_count.Writeback_Control::0          544                      
+system.ruby.network.routers2.msg_bytes.Control::0       509160                      
+system.ruby.network.routers2.msg_bytes.Request_Control::2        29688                      
+system.ruby.network.routers2.msg_bytes.Response_Data::1      5115240                      
+system.ruby.network.routers2.msg_bytes.Response_Control::1       471400                      
+system.ruby.network.routers2.msg_bytes.Response_Control::2       509160                      
+system.ruby.network.routers2.msg_bytes.Writeback_Data::0      4200912                      
+system.ruby.network.routers2.msg_bytes.Writeback_Control::0         4352                      
+system.ruby.network.routers3.percent_links_utilized     0.045663                      
+system.ruby.network.routers3.msg_count.Control::0        32944                      
+system.ruby.network.routers3.msg_count.Request_Control::2           25                      
+system.ruby.network.routers3.msg_count.Response_Data::1        32959                      
+system.ruby.network.routers3.msg_count.Response_Control::1        28771                      
+system.ruby.network.routers3.msg_count.Response_Control::2        32917                      
+system.ruby.network.routers3.msg_count.Writeback_Data::0          994                      
+system.ruby.network.routers3.msg_count.Writeback_Control::0        27756                      
+system.ruby.network.routers3.msg_bytes.Control::0       263552                      
+system.ruby.network.routers3.msg_bytes.Request_Control::2          200                      
+system.ruby.network.routers3.msg_bytes.Response_Data::1      2373048                      
+system.ruby.network.routers3.msg_bytes.Response_Control::1       230168                      
+system.ruby.network.routers3.msg_bytes.Response_Control::2       263336                      
+system.ruby.network.routers3.msg_bytes.Writeback_Data::0        71568                      
+system.ruby.network.routers3.msg_bytes.Writeback_Control::0       222048                      
+system.ruby.network.routers4.percent_links_utilized     0.251039                      
+system.ruby.network.routers4.msg_count.Control::0       160282                      
+system.ruby.network.routers4.msg_count.Request_Control::2         3736                      
+system.ruby.network.routers4.msg_count.Response_Data::1       160263                      
+system.ruby.network.routers4.msg_count.Response_Control::1        87658                      
+system.ruby.network.routers4.msg_count.Response_Control::2        96562                      
+system.ruby.network.routers4.msg_count.Writeback_Data::0        59340                      
+system.ruby.network.routers4.msg_count.Writeback_Control::0        28300                      
+system.ruby.network.routers4.msg_bytes.Control::0      1282256                      
+system.ruby.network.routers4.msg_bytes.Request_Control::2        29888                      
+system.ruby.network.routers4.msg_bytes.Response_Data::1     11538936                      
+system.ruby.network.routers4.msg_bytes.Response_Control::1       701264                      
+system.ruby.network.routers4.msg_bytes.Response_Control::2       772496                      
+system.ruby.network.routers4.msg_bytes.Writeback_Data::0      4272480                      
+system.ruby.network.routers4.msg_bytes.Writeback_Control::0       226400                      
+system.ruby.network.routers5.percent_links_utilized     0.067954                      
+system.ruby.network.routers5.msg_count.Control::0        63693                      
+system.ruby.network.routers5.msg_count.Response_Data::1        63693                      
+system.ruby.network.routers5.msg_bytes.Control::0       509544                      
+system.ruby.network.routers5.msg_bytes.Response_Data::1      4585896                      
+system.ruby.network.routers6.percent_links_utilized     0.084870                      
+system.ruby.network.routers6.msg_count.Control::0       160282                      
+system.ruby.network.routers6.msg_count.Request_Control::2         3736                      
+system.ruby.network.routers6.msg_count.Response_Data::1       163980                      
+system.ruby.network.routers6.msg_count.Response_Control::1        87677                      
+system.ruby.network.routers6.msg_count.Response_Control::2        96562                      
+system.ruby.network.routers6.msg_count.Writeback_Data::0        59340                      
+system.ruby.network.routers6.msg_count.Writeback_Control::0        28300                      
+system.ruby.network.routers6.msg_bytes.Control::0      1282256                      
+system.ruby.network.routers6.msg_bytes.Request_Control::2        29888                      
+system.ruby.network.routers6.msg_bytes.Response_Data::1     11806560                      
+system.ruby.network.routers6.msg_bytes.Response_Control::1       701416                      
+system.ruby.network.routers6.msg_bytes.Response_Control::2       772496                      
+system.ruby.network.routers6.msg_bytes.Writeback_Data::0      4272480                      
+system.ruby.network.routers6.msg_bytes.Writeback_Control::0       226400                      
+system.ruby.network.msg_count.Control          480846                      
+system.ruby.network.msg_count.Request_Control        11208                      
+system.ruby.network.msg_count.Response_Data       491940                      
+system.ruby.network.msg_count.Response_Control       552717                      
+system.ruby.network.msg_count.Writeback_Data       178020                      
+system.ruby.network.msg_count.Writeback_Control        84900                      
+system.ruby.network.msg_byte.Control          3846768                      
+system.ruby.network.msg_byte.Request_Control        89664                      
+system.ruby.network.msg_byte.Response_Data     35419680                      
+system.ruby.network.msg_byte.Response_Control      4421736                      
+system.ruby.network.msg_byte.Writeback_Data     12817440                      
+system.ruby.network.msg_byte.Writeback_Control       679200                      
+system.ruby.network.routers0.throttle0.link_utilization            0                      
+system.ruby.network.routers0.throttle1.link_utilization            0                      
+system.ruby.network.routers1.throttle0.link_utilization            0                      
+system.ruby.network.routers1.throttle1.link_utilization            0                      
+system.ruby.network.routers2.throttle0.link_utilization     0.135560                      
+system.ruby.network.routers2.throttle0.msg_count.Request_Control::2         3711                      
+system.ruby.network.routers2.throttle0.msg_count.Response_Data::1        63629                      
+system.ruby.network.routers2.throttle0.msg_count.Response_Control::1        58922                      
+system.ruby.network.routers2.throttle0.msg_bytes.Request_Control::2        29688                      
+system.ruby.network.routers2.throttle0.msg_bytes.Response_Data::1      4581288                      
+system.ruby.network.routers2.throttle0.msg_bytes.Response_Control::1       471376                      
+system.ruby.network.routers2.throttle1.link_utilization     0.153569                      
+system.ruby.network.routers2.throttle1.msg_count.Control::0        63645                      
+system.ruby.network.routers2.throttle1.msg_count.Response_Data::1         7416                      
+system.ruby.network.routers2.throttle1.msg_count.Response_Control::1            3                      
+system.ruby.network.routers2.throttle1.msg_count.Response_Control::2        63645                      
+system.ruby.network.routers2.throttle1.msg_count.Writeback_Data::0        58346                      
+system.ruby.network.routers2.throttle1.msg_count.Writeback_Control::0          544                      
+system.ruby.network.routers2.throttle1.msg_bytes.Control::0       509160                      
+system.ruby.network.routers2.throttle1.msg_bytes.Response_Data::1       533952                      
+system.ruby.network.routers2.throttle1.msg_bytes.Response_Control::1           24                      
+system.ruby.network.routers2.throttle1.msg_bytes.Response_Control::2       509160                      
+system.ruby.network.routers2.throttle1.msg_bytes.Writeback_Data::0      4200912                      
+system.ruby.network.routers2.throttle1.msg_bytes.Writeback_Control::0         4352                      
+system.ruby.network.routers3.throttle0.link_utilization     0.069404                      
+system.ruby.network.routers3.throttle0.msg_count.Request_Control::2           25                      
+system.ruby.network.routers3.throttle0.msg_count.Response_Data::1        32942                      
+system.ruby.network.routers3.throttle0.msg_count.Response_Control::1        28755                      
+system.ruby.network.routers3.throttle0.msg_bytes.Request_Control::2          200                      
+system.ruby.network.routers3.throttle0.msg_bytes.Response_Data::1      2371824                      
+system.ruby.network.routers3.throttle0.msg_bytes.Response_Control::1       230040                      
+system.ruby.network.routers3.throttle1.link_utilization     0.021921                      
+system.ruby.network.routers3.throttle1.msg_count.Control::0        32944                      
+system.ruby.network.routers3.throttle1.msg_count.Response_Data::1           17                      
+system.ruby.network.routers3.throttle1.msg_count.Response_Control::1           16                      
+system.ruby.network.routers3.throttle1.msg_count.Response_Control::2        32917                      
+system.ruby.network.routers3.throttle1.msg_count.Writeback_Data::0          994                      
+system.ruby.network.routers3.throttle1.msg_count.Writeback_Control::0        27756                      
+system.ruby.network.routers3.throttle1.msg_bytes.Control::0       263552                      
+system.ruby.network.routers3.throttle1.msg_bytes.Response_Data::1         1224                      
+system.ruby.network.routers3.throttle1.msg_bytes.Response_Control::1          128                      
+system.ruby.network.routers3.throttle1.msg_bytes.Response_Control::2       263336                      
+system.ruby.network.routers3.throttle1.msg_bytes.Writeback_Data::0        71568                      
+system.ruby.network.routers3.throttle1.msg_bytes.Writeback_Control::0       222048                      
+system.ruby.network.routers4.throttle0.link_utilization     0.290666                      
+system.ruby.network.routers4.throttle0.msg_count.Control::0        96589                      
+system.ruby.network.routers4.throttle0.msg_count.Response_Data::1        67409                      
+system.ruby.network.routers4.throttle0.msg_count.Response_Control::2        96562                      
+system.ruby.network.routers4.throttle0.msg_count.Writeback_Data::0        59340                      
+system.ruby.network.routers4.throttle0.msg_count.Writeback_Control::0        28300                      
+system.ruby.network.routers4.throttle0.msg_bytes.Control::0       772712                      
+system.ruby.network.routers4.throttle0.msg_bytes.Response_Data::1      4853448                      
+system.ruby.network.routers4.throttle0.msg_bytes.Response_Control::2       772496                      
+system.ruby.network.routers4.throttle0.msg_bytes.Writeback_Data::0      4272480                      
+system.ruby.network.routers4.throttle0.msg_bytes.Writeback_Control::0       226400                      
+system.ruby.network.routers4.throttle1.link_utilization     0.211412                      
+system.ruby.network.routers4.throttle1.msg_count.Control::0        63693                      
+system.ruby.network.routers4.throttle1.msg_count.Request_Control::2         3736                      
+system.ruby.network.routers4.throttle1.msg_count.Response_Data::1        92854                      
+system.ruby.network.routers4.throttle1.msg_count.Response_Control::1        87658                      
+system.ruby.network.routers4.throttle1.msg_bytes.Control::0       509544                      
+system.ruby.network.routers4.throttle1.msg_bytes.Request_Control::2        29888                      
+system.ruby.network.routers4.throttle1.msg_bytes.Response_Data::1      6685488                      
+system.ruby.network.routers4.throttle1.msg_bytes.Response_Control::1       701264                      
+system.ruby.network.routers5.throttle0.link_utilization     0.013591                      
+system.ruby.network.routers5.throttle0.msg_count.Control::0        63693                      
+system.ruby.network.routers5.throttle0.msg_bytes.Control::0       509544                      
+system.ruby.network.routers5.throttle1.link_utilization     0.122318                      
+system.ruby.network.routers5.throttle1.msg_count.Response_Data::1        63693                      
+system.ruby.network.routers5.throttle1.msg_bytes.Response_Data::1      4585896                      
+system.ruby.network.routers6.throttle0.link_utilization            0                      
+system.ruby.network.routers6.throttle1.link_utilization            0                      
+system.ruby.network.routers6.throttle2.link_utilization     0.135560                      
+system.ruby.network.routers6.throttle2.msg_count.Request_Control::2         3711                      
+system.ruby.network.routers6.throttle2.msg_count.Response_Data::1        63629                      
+system.ruby.network.routers6.throttle2.msg_count.Response_Control::1        58922                      
+system.ruby.network.routers6.throttle2.msg_bytes.Request_Control::2        29688                      
+system.ruby.network.routers6.throttle2.msg_bytes.Response_Data::1      4581288                      
+system.ruby.network.routers6.throttle2.msg_bytes.Response_Control::1       471376                      
+system.ruby.network.routers6.throttle3.link_utilization     0.069404                      
+system.ruby.network.routers6.throttle3.msg_count.Request_Control::2           25                      
+system.ruby.network.routers6.throttle3.msg_count.Response_Data::1        32942                      
+system.ruby.network.routers6.throttle3.msg_count.Response_Control::1        28755                      
+system.ruby.network.routers6.throttle3.msg_bytes.Request_Control::2          200                      
+system.ruby.network.routers6.throttle3.msg_bytes.Response_Data::1      2371824                      
+system.ruby.network.routers6.throttle3.msg_bytes.Response_Control::1       230040                      
+system.ruby.network.routers6.throttle4.link_utilization     0.290666                      
+system.ruby.network.routers6.throttle4.msg_count.Control::0        96589                      
+system.ruby.network.routers6.throttle4.msg_count.Response_Data::1        67409                      
+system.ruby.network.routers6.throttle4.msg_count.Response_Control::2        96562                      
+system.ruby.network.routers6.throttle4.msg_count.Writeback_Data::0        59340                      
+system.ruby.network.routers6.throttle4.msg_count.Writeback_Control::0        28300                      
+system.ruby.network.routers6.throttle4.msg_bytes.Control::0       772712                      
+system.ruby.network.routers6.throttle4.msg_bytes.Response_Data::1      4853448                      
+system.ruby.network.routers6.throttle4.msg_bytes.Response_Control::2       772496                      
+system.ruby.network.routers6.throttle4.msg_bytes.Writeback_Data::0      4272480                      
+system.ruby.network.routers6.throttle4.msg_bytes.Writeback_Control::0       226400                      
+system.ruby.network.routers6.throttle5.link_utilization     0.013591                      
+system.ruby.network.routers6.throttle5.msg_count.Control::0        63693                      
+system.ruby.network.routers6.throttle5.msg_bytes.Control::0       509544                      
+system.ruby.delayVCHist.vnet_0::bucket_size            2                       # delay histogram for vnet_0
+system.ruby.delayVCHist.vnet_0::max_bucket           19                       # delay histogram for vnet_0
+system.ruby.delayVCHist.vnet_0::samples        280791                       # delay histogram for vnet_0
+system.ruby.delayVCHist.vnet_0::mean         1.690916                       # delay histogram for vnet_0
+system.ruby.delayVCHist.vnet_0::stdev        3.266136                       # delay histogram for vnet_0
+system.ruby.delayVCHist.vnet_0           |      221423     78.86%     78.86% |          26      0.01%     78.87% |           1      0.00%     78.87% |           0      0.00%     78.87% |       59340     21.13%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           1      0.00%    100.00% # delay histogram for vnet_0
+system.ruby.delayVCHist.vnet_0::total          280791                       # delay histogram for vnet_0
+system.ruby.delayVCHist.vnet_1::bucket_size            1                       # delay histogram for vnet_1
+system.ruby.delayVCHist.vnet_1::max_bucket            9                       # delay histogram for vnet_1
+system.ruby.delayVCHist.vnet_1::samples        401166                       # delay histogram for vnet_1
+system.ruby.delayVCHist.vnet_1::mean         0.074104                       # delay histogram for vnet_1
+system.ruby.delayVCHist.vnet_1::stdev        0.766382                       # delay histogram for vnet_1
+system.ruby.delayVCHist.vnet_1           |      397450     99.07%     99.07% |           0      0.00%     99.07% |           0      0.00%     99.07% |           0      0.00%     99.07% |           0      0.00%     99.07% |           0      0.00%     99.07% |           0      0.00%     99.07% |           0      0.00%     99.07% |        3716      0.93%    100.00% |           0      0.00%    100.00% # delay histogram for vnet_1
+system.ruby.delayVCHist.vnet_1::total          401166                       # delay histogram for vnet_1
+system.ruby.delayVCHist.vnet_2::bucket_size            1                       # delay histogram for vnet_2
+system.ruby.delayVCHist.vnet_2::max_bucket            9                       # delay histogram for vnet_2
+system.ruby.delayVCHist.vnet_2::samples          5116                       # delay histogram for vnet_2
+system.ruby.delayVCHist.vnet_2::mean         0.272674                       # delay histogram for vnet_2
+system.ruby.delayVCHist.vnet_2::stdev        1.135461                       # delay histogram for vnet_2
+system.ruby.delayVCHist.vnet_2           |        4837     94.55%     94.55% |           0      0.00%     94.55% |           0      0.00%     94.55% |           0      0.00%     94.55% |           0      0.00%     94.55% |         279      5.45%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% # delay histogram for vnet_2
+system.ruby.delayVCHist.vnet_2::total            5116                       # delay histogram for vnet_2
+system.ruby.LD.latency_hist::bucket_size          128                      
+system.ruby.LD.latency_hist::max_bucket          1279                      
+system.ruby.LD.latency_hist::samples         16829252                      
+system.ruby.LD.latency_hist::mean            1.054139                      
+system.ruby.LD.latency_hist::gmean           1.010866                      
+system.ruby.LD.latency_hist::stdev           1.084088                      
+system.ruby.LD.latency_hist              |    16829143    100.00%    100.00% |         108      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           1      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00%
+system.ruby.LD.latency_hist::total           16829252                      
+system.ruby.LD.hit_latency_hist::bucket_size          128                      
+system.ruby.LD.hit_latency_hist::max_bucket         1279                      
+system.ruby.LD.hit_latency_hist::samples     16829252                      
+system.ruby.LD.hit_latency_hist::mean        1.054139                      
+system.ruby.LD.hit_latency_hist::gmean       1.010866                      
+system.ruby.LD.hit_latency_hist::stdev       1.084088                      
+system.ruby.LD.hit_latency_hist          |    16829143    100.00%    100.00% |         108      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           1      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00%
+system.ruby.LD.hit_latency_hist::total       16829252                      
+system.ruby.ST.latency_hist::bucket_size          128                      
+system.ruby.ST.latency_hist::max_bucket          1279                      
+system.ruby.ST.latency_hist::samples          8793530                      
+system.ruby.ST.latency_hist::mean            1.996472                      
+system.ruby.ST.latency_hist::gmean           1.035611                      
+system.ruby.ST.latency_hist::stdev          13.850375                      
+system.ruby.ST.latency_hist              |     8778381     99.83%     99.83% |       12696      0.14%     99.97% |          98      0.00%     99.97% |         645      0.01%     99.98% |        1508      0.02%    100.00% |         202      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00%
+system.ruby.ST.latency_hist::total            8793530                      
+system.ruby.ST.hit_latency_hist::bucket_size          128                      
+system.ruby.ST.hit_latency_hist::max_bucket         1279                      
+system.ruby.ST.hit_latency_hist::samples      8793530                      
+system.ruby.ST.hit_latency_hist::mean        1.996472                      
+system.ruby.ST.hit_latency_hist::gmean       1.035611                      
+system.ruby.ST.hit_latency_hist::stdev      13.850375                      
+system.ruby.ST.hit_latency_hist          |     8778381     99.83%     99.83% |       12696      0.14%     99.97% |          98      0.00%     99.97% |         645      0.01%     99.98% |        1508      0.02%    100.00% |         202      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00%
+system.ruby.ST.hit_latency_hist::total        8793530                      
+system.ruby.IFETCH.latency_hist::bucket_size          128                      
+system.ruby.IFETCH.latency_hist::max_bucket         1279                      
+system.ruby.IFETCH.latency_hist::samples     88047815                      
+system.ruby.IFETCH.latency_hist::mean        1.001866                      
+system.ruby.IFETCH.latency_hist::gmean       1.000088                      
+system.ruby.IFETCH.latency_hist::stdev       0.516009                      
+system.ruby.IFETCH.latency_hist          |    88047549    100.00%    100.00% |         249      0.00%    100.00% |           2      0.00%    100.00% |           2      0.00%    100.00% |           9      0.00%    100.00% |           4      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00%
+system.ruby.IFETCH.latency_hist::total       88047815                      
+system.ruby.IFETCH.hit_latency_hist::bucket_size          128                      
+system.ruby.IFETCH.hit_latency_hist::max_bucket         1279                      
+system.ruby.IFETCH.hit_latency_hist::samples     88047815                      
+system.ruby.IFETCH.hit_latency_hist::mean     1.001866                      
+system.ruby.IFETCH.hit_latency_hist::gmean     1.000088                      
+system.ruby.IFETCH.hit_latency_hist::stdev     0.516009                      
+system.ruby.IFETCH.hit_latency_hist      |    88047549    100.00%    100.00% |         249      0.00%    100.00% |           2      0.00%    100.00% |           2      0.00%    100.00% |           9      0.00%    100.00% |           4      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00%
+system.ruby.IFETCH.hit_latency_hist::total     88047815                      
+system.ruby.RMW_Read.latency_hist::bucket_size            4                      
+system.ruby.RMW_Read.latency_hist::max_bucket           39                      
+system.ruby.RMW_Read.latency_hist::samples          395                      
+system.ruby.RMW_Read.latency_hist::mean      1.529114                      
+system.ruby.RMW_Read.latency_hist::gmean     1.072733                      
+system.ruby.RMW_Read.latency_hist::stdev     3.681624                      
+system.ruby.RMW_Read.latency_hist        |         386     97.72%     97.72% |           1      0.25%     97.97% |           0      0.00%     97.97% |           0      0.00%     97.97% |           0      0.00%     97.97% |           3      0.76%     98.73% |           0      0.00%     98.73% |           3      0.76%     99.49% |           2      0.51%    100.00% |           0      0.00%    100.00%
+system.ruby.RMW_Read.latency_hist::total          395                      
+system.ruby.RMW_Read.hit_latency_hist::bucket_size            4                      
+system.ruby.RMW_Read.hit_latency_hist::max_bucket           39                      
+system.ruby.RMW_Read.hit_latency_hist::samples          395                      
+system.ruby.RMW_Read.hit_latency_hist::mean     1.529114                      
+system.ruby.RMW_Read.hit_latency_hist::gmean     1.072733                      
+system.ruby.RMW_Read.hit_latency_hist::stdev     3.681624                      
+system.ruby.RMW_Read.hit_latency_hist    |         386     97.72%     97.72% |           1      0.25%     97.97% |           0      0.00%     97.97% |           0      0.00%     97.97% |           0      0.00%     97.97% |           3      0.76%     98.73% |           0      0.00%     98.73% |           3      0.76%     99.49% |           2      0.51%    100.00% |           0      0.00%    100.00%
+system.ruby.RMW_Read.hit_latency_hist::total          395                      
+system.ruby.Locked_RMW_Read.latency_hist::bucket_size           32                      
+system.ruby.Locked_RMW_Read.latency_hist::max_bucket          319                      
+system.ruby.Locked_RMW_Read.latency_hist::samples      2045309                      
+system.ruby.Locked_RMW_Read.latency_hist::mean     1.000391                      
+system.ruby.Locked_RMW_Read.latency_hist::gmean     1.000039                      
+system.ruby.Locked_RMW_Read.latency_hist::stdev     0.171108                      
+system.ruby.Locked_RMW_Read.latency_hist |     2045307    100.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           1      0.00%    100.00% |           1      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00%
+system.ruby.Locked_RMW_Read.latency_hist::total      2045309                      
+system.ruby.Locked_RMW_Read.hit_latency_hist::bucket_size           32                      
+system.ruby.Locked_RMW_Read.hit_latency_hist::max_bucket          319                      
+system.ruby.Locked_RMW_Read.hit_latency_hist::samples      2045309                      
+system.ruby.Locked_RMW_Read.hit_latency_hist::mean     1.000391                      
+system.ruby.Locked_RMW_Read.hit_latency_hist::gmean     1.000039                      
+system.ruby.Locked_RMW_Read.hit_latency_hist::stdev     0.171108                      
+system.ruby.Locked_RMW_Read.hit_latency_hist |     2045307    100.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           1      0.00%    100.00% |           1      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00%
+system.ruby.Locked_RMW_Read.hit_latency_hist::total      2045309                      
+system.ruby.Locked_RMW_Write.latency_hist::bucket_size            1                      
+system.ruby.Locked_RMW_Write.latency_hist::max_bucket            9                      
+system.ruby.Locked_RMW_Write.latency_hist::samples      2045309                      
+system.ruby.Locked_RMW_Write.latency_hist::mean            1                      
+system.ruby.Locked_RMW_Write.latency_hist::gmean            1                      
+system.ruby.Locked_RMW_Write.latency_hist |           0      0.00%      0.00% |     2045309    100.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00%
+system.ruby.Locked_RMW_Write.latency_hist::total      2045309                      
+system.ruby.Locked_RMW_Write.hit_latency_hist::bucket_size            1                      
+system.ruby.Locked_RMW_Write.hit_latency_hist::max_bucket            9                      
+system.ruby.Locked_RMW_Write.hit_latency_hist::samples      2045309                      
+system.ruby.Locked_RMW_Write.hit_latency_hist::mean            1                      
+system.ruby.Locked_RMW_Write.hit_latency_hist::gmean            1                      
+system.ruby.Locked_RMW_Write.hit_latency_hist |           0      0.00%      0.00% |     2045309    100.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00% |           0      0.00%    100.00%
+system.ruby.Locked_RMW_Write.hit_latency_hist::total      2045309                      
+system.ruby.Directory_Controller.Fetch          63693      0.00%      0.00%
+system.ruby.Directory_Controller.Memory_Data        63693      0.00%      0.00%
+system.ruby.Directory_Controller.I.Fetch        63693      0.00%      0.00%
+system.ruby.Directory_Controller.IM.Memory_Data        63693      0.00%      0.00%
+system.ruby.L0Cache_Controller.Load      |    15509504     92.16%     92.16% |     1319748      7.84%    100.00%
+system.ruby.L0Cache_Controller.Load::total     16829252                      
+system.ruby.L0Cache_Controller.Ifetch    |    84381267     95.84%     95.84% |     3666548      4.16%    100.00%
+system.ruby.L0Cache_Controller.Ifetch::total     88047815                      
+system.ruby.L0Cache_Controller.Store     |    12859719     99.81%     99.81% |       24824      0.19%    100.00%
+system.ruby.L0Cache_Controller.Store::total     12884543                      
+system.ruby.L0Cache_Controller.Inv       |        1031     74.71%     74.71% |         349     25.29%    100.00%
+system.ruby.L0Cache_Controller.Inv::total         1380                      
+system.ruby.L0Cache_Controller.L0_Replacement |       66810     45.49%     45.49% |       80072     54.51%    100.00%
+system.ruby.L0Cache_Controller.L0_Replacement::total       146882                      
+system.ruby.L0Cache_Controller.Data      |          25      0.66%      0.66% |        3755     99.34%    100.00%
+system.ruby.L0Cache_Controller.Data::total         3780                      
+system.ruby.L0Cache_Controller.Data_Exclusive |       68626     47.09%     47.09% |       77103     52.91%    100.00%
+system.ruby.L0Cache_Controller.Data_Exclusive::total       145729                      
+system.ruby.L0Cache_Controller.NP.Load   |        2975      3.59%      3.59% |       79936     96.41%    100.00%
+system.ruby.L0Cache_Controller.NP.Load::total        82911                      
+system.ruby.L0Cache_Controller.NP.Ifetch |        1899     95.00%     95.00% |         100      5.00%    100.00%
+system.ruby.L0Cache_Controller.NP.Ifetch::total         1999                      
+system.ruby.L0Cache_Controller.NP.Store  |       63761     98.73%     98.73% |         821      1.27%    100.00%
+system.ruby.L0Cache_Controller.NP.Store::total        64582                      
+system.ruby.L0Cache_Controller.NP.Inv    |           0      0.00%      0.00% |          80    100.00%    100.00%
+system.ruby.L0Cache_Controller.NP.Inv::total           80                      
+system.ruby.L0Cache_Controller.S.Load    |      612287     90.49%     90.49% |       64336      9.51%    100.00%
+system.ruby.L0Cache_Controller.S.Load::total       676623                      
+system.ruby.L0Cache_Controller.S.Ifetch  |          22     13.33%     13.33% |         143     86.67%    100.00%
+system.ruby.L0Cache_Controller.S.Ifetch::total          165                      
+system.ruby.L0Cache_Controller.S.Store   |          16     94.12%     94.12% |           1      5.88%    100.00%
+system.ruby.L0Cache_Controller.S.Store::total           17                      
+system.ruby.L0Cache_Controller.S.Inv     |           1      4.17%      4.17% |          23     95.83%    100.00%
+system.ruby.L0Cache_Controller.S.Inv::total           24                      
+system.ruby.L0Cache_Controller.S.L0_Replacement |           6      0.18%      0.18% |        3280     99.82%    100.00%
+system.ruby.L0Cache_Controller.S.L0_Replacement::total         3286                      
+system.ruby.L0Cache_Controller.E.Load    |     1968115     62.86%     62.86% |     1163062     37.14%    100.00%
+system.ruby.L0Cache_Controller.E.Load::total      3131177                      
+system.ruby.L0Cache_Controller.E.Ifetch  |    84379346     95.84%     95.84% |     3666305      4.16%    100.00%
+system.ruby.L0Cache_Controller.E.Ifetch::total     88045651                      
+system.ruby.L0Cache_Controller.E.Store   |        2206     98.66%     98.66% |          30      1.34%    100.00%
+system.ruby.L0Cache_Controller.E.Store::total         2236                      
+system.ruby.L0Cache_Controller.E.Inv     |         705     75.08%     75.08% |         234     24.92%    100.00%
+system.ruby.L0Cache_Controller.E.Inv::total          939                      
+system.ruby.L0Cache_Controller.E.L0_Replacement |        1446      1.87%      1.87% |       75980     98.13%    100.00%
+system.ruby.L0Cache_Controller.E.L0_Replacement::total        77426                      
+system.ruby.L0Cache_Controller.M.Load    |    12926127     99.90%     99.90% |       12414      0.10%    100.00%
+system.ruby.L0Cache_Controller.M.Load::total     12938541                      
+system.ruby.L0Cache_Controller.M.Store   |    12793736     99.81%     99.81% |       23972      0.19%    100.00%
+system.ruby.L0Cache_Controller.M.Store::total     12817708                      
+system.ruby.L0Cache_Controller.M.Inv     |         325     96.44%     96.44% |          12      3.56%    100.00%
+system.ruby.L0Cache_Controller.M.Inv::total          337                      
+system.ruby.L0Cache_Controller.M.L0_Replacement |       65358     98.77%     98.77% |         812      1.23%    100.00%
+system.ruby.L0Cache_Controller.M.L0_Replacement::total        66170                      
+system.ruby.L0Cache_Controller.IS.Data   |          25      0.66%      0.66% |        3755     99.34%    100.00%
+system.ruby.L0Cache_Controller.IS.Data::total         3780                      
+system.ruby.L0Cache_Controller.IS.Data_Exclusive |        4849      5.98%      5.98% |       76281     94.02%    100.00%
+system.ruby.L0Cache_Controller.IS.Data_Exclusive::total        81130                      
+system.ruby.L0Cache_Controller.IM.Data_Exclusive |       63761     98.73%     98.73% |         821      1.27%    100.00%
+system.ruby.L0Cache_Controller.IM.Data_Exclusive::total        64582                      
+system.ruby.L0Cache_Controller.SM.Data_Exclusive |          16     94.12%     94.12% |           1      5.88%    100.00%
+system.ruby.L0Cache_Controller.SM.Data_Exclusive::total           17                      
+system.ruby.L1Cache_Controller.Load      |        4874      5.74%      5.74% |       80036     94.26%    100.00%
+system.ruby.L1Cache_Controller.Load::total        84910                      
+system.ruby.L1Cache_Controller.Store     |       63777     98.73%     98.73% |         822      1.27%    100.00%
+system.ruby.L1Cache_Controller.Store::total        64599                      
+system.ruby.L1Cache_Controller.WriteBack |       66804     46.52%     46.52% |       76792     53.48%    100.00%
+system.ruby.L1Cache_Controller.WriteBack::total       143596                      
+system.ruby.L1Cache_Controller.L0_DataAck |         325     96.44%     96.44% |          12      3.56%    100.00%
+system.ruby.L1Cache_Controller.L0_DataAck::total          337                      
+system.ruby.L1Cache_Controller.Inv       |           3     15.79%     15.79% |          16     84.21%    100.00%
+system.ruby.L1Cache_Controller.Inv::total           19                      
+system.ruby.L1Cache_Controller.L0_Invalidate_Own |        1536     69.75%     69.75% |         666     30.25%    100.00%
+system.ruby.L1Cache_Controller.L0_Invalidate_Own::total         2202                      
+system.ruby.L1Cache_Controller.L0_Invalidate_Else |         526     94.27%     94.27% |          32      5.73%    100.00%
+system.ruby.L1Cache_Controller.L0_Invalidate_Else::total          558                      
+system.ruby.L1Cache_Controller.L1_Replacement |       59530     67.36%     67.36% |       28846     32.64%    100.00%
+system.ruby.L1Cache_Controller.L1_Replacement::total        88376                      
+system.ruby.L1Cache_Controller.Fwd_GETX  |           0      0.00%      0.00% |           1    100.00%    100.00%
+system.ruby.L1Cache_Controller.Fwd_GETX::total            1                      
+system.ruby.L1Cache_Controller.Fwd_GETS  |        3708     99.78%     99.78% |           8      0.22%    100.00%
+system.ruby.L1Cache_Controller.Fwd_GETS::total         3716                      
+system.ruby.L1Cache_Controller.Data      |           0      0.00%      0.00% |           1    100.00%    100.00%
+system.ruby.L1Cache_Controller.Data::total            1                      
+system.ruby.L1Cache_Controller.Data_Exclusive |        2033      6.68%      6.68% |       28419     93.32%    100.00%
+system.ruby.L1Cache_Controller.Data_Exclusive::total        30452                      
+system.ruby.L1Cache_Controller.DataS_fromL1 |           8      0.22%      0.22% |        3708     99.78%    100.00%
+system.ruby.L1Cache_Controller.DataS_fromL1::total         3716                      
+system.ruby.L1Cache_Controller.Data_all_Acks |       61588     98.70%     98.70% |         814      1.30%    100.00%
+system.ruby.L1Cache_Controller.Data_all_Acks::total        62402                      
+system.ruby.L1Cache_Controller.L0_Ack    |         706     67.69%     67.69% |         337     32.31%    100.00%
+system.ruby.L1Cache_Controller.L0_Ack::total         1043                      
+system.ruby.L1Cache_Controller.Ack       |          16     88.89%     88.89% |           2     11.11%    100.00%
+system.ruby.L1Cache_Controller.Ack::total           18                      
+system.ruby.L1Cache_Controller.Ack_all   |          16     84.21%     84.21% |           3     15.79%    100.00%
+system.ruby.L1Cache_Controller.Ack_all::total           19                      
+system.ruby.L1Cache_Controller.WB_Ack    |       58890     67.20%     67.20% |       28750     32.80%    100.00%
+system.ruby.L1Cache_Controller.WB_Ack::total        87640                      
+system.ruby.L1Cache_Controller.NP.Load   |        2041      5.97%      5.97% |       32154     94.03%    100.00%
+system.ruby.L1Cache_Controller.NP.Load::total        34195                      
+system.ruby.L1Cache_Controller.NP.Store  |       61588     98.74%     98.74% |         788      1.26%    100.00%
+system.ruby.L1Cache_Controller.NP.Store::total        62376                      
+system.ruby.L1Cache_Controller.NP.Inv    |           0      0.00%      0.00% |           4    100.00%    100.00%
+system.ruby.L1Cache_Controller.NP.Inv::total            4                      
+system.ruby.L1Cache_Controller.S.Load    |           1      4.76%      4.76% |          20     95.24%    100.00%
+system.ruby.L1Cache_Controller.S.Load::total           21                      
+system.ruby.L1Cache_Controller.S.Store   |          16     88.89%     88.89% |           2     11.11%    100.00%
+system.ruby.L1Cache_Controller.S.Store::total           18                      
+system.ruby.L1Cache_Controller.S.L0_Invalidate_Own |           0      0.00%      0.00% |          96    100.00%    100.00%
+system.ruby.L1Cache_Controller.S.L0_Invalidate_Own::total           96                      
+system.ruby.L1Cache_Controller.S.L0_Invalidate_Else |           1     12.50%     12.50% |           7     87.50%    100.00%
+system.ruby.L1Cache_Controller.S.L0_Invalidate_Else::total            8                      
+system.ruby.L1Cache_Controller.SS.Load   |          16    100.00%    100.00% |           0      0.00%    100.00%
+system.ruby.L1Cache_Controller.SS.Load::total           16                      
+system.ruby.L1Cache_Controller.SS.Inv    |           3     20.00%     20.00% |          12     80.00%    100.00%
+system.ruby.L1Cache_Controller.SS.Inv::total           15                      
+system.ruby.L1Cache_Controller.SS.L1_Replacement |         640     86.96%     86.96% |          96     13.04%    100.00%
+system.ruby.L1Cache_Controller.SS.L1_Replacement::total          736                      
+system.ruby.L1Cache_Controller.E.WriteBack |         882      3.04%      3.04% |       28143     96.96%    100.00%
+system.ruby.L1Cache_Controller.E.WriteBack::total        29025                      
+system.ruby.L1Cache_Controller.E.L0_Invalidate_Own |         677     74.56%     74.56% |         231     25.44%    100.00%
+system.ruby.L1Cache_Controller.E.L0_Invalidate_Own::total          908                      
+system.ruby.L1Cache_Controller.E.L0_Invalidate_Else |          13     72.22%     72.22% |           5     27.78%    100.00%
+system.ruby.L1Cache_Controller.E.L0_Invalidate_Else::total           18                      
+system.ruby.L1Cache_Controller.EE.L1_Replacement |         647     74.11%     74.11% |         226     25.89%    100.00%
+system.ruby.L1Cache_Controller.EE.L1_Replacement::total          873                      
+system.ruby.L1Cache_Controller.EE.Fwd_GETS |          13     76.47%     76.47% |           4     23.53%    100.00%
+system.ruby.L1Cache_Controller.EE.Fwd_GETS::total           17                      
+system.ruby.L1Cache_Controller.M.WriteBack |       65922     57.54%     57.54% |       48649     42.46%    100.00%
+system.ruby.L1Cache_Controller.M.WriteBack::total       114571                      
+system.ruby.L1Cache_Controller.M.L0_Invalidate_Own |          91     93.81%     93.81% |           6      6.19%    100.00%
+system.ruby.L1Cache_Controller.M.L0_Invalidate_Own::total           97                      
+system.ruby.L1Cache_Controller.M.L0_Invalidate_Else |         249     98.42%     98.42% |           4      1.58%    100.00%
+system.ruby.L1Cache_Controller.M.L0_Invalidate_Else::total          253                      
+system.ruby.L1Cache_Controller.MM.Load   |        2816      5.56%      5.56% |       47862     94.44%    100.00%
+system.ruby.L1Cache_Controller.MM.Load::total        50678                      
+system.ruby.L1Cache_Controller.MM.Store  |        2173     98.55%     98.55% |          32      1.45%    100.00%
+system.ruby.L1Cache_Controller.MM.Store::total         2205                      
+system.ruby.L1Cache_Controller.MM.L1_Replacement |       58243     67.13%     67.13% |       28524     32.87%    100.00%
+system.ruby.L1Cache_Controller.MM.L1_Replacement::total        86767                      
+system.ruby.L1Cache_Controller.MM.Fwd_GETX |           0      0.00%      0.00% |           1    100.00%    100.00%
+system.ruby.L1Cache_Controller.MM.Fwd_GETX::total            1                      
+system.ruby.L1Cache_Controller.MM.Fwd_GETS |        3695     99.89%     99.89% |           4      0.11%    100.00%
+system.ruby.L1Cache_Controller.MM.Fwd_GETS::total         3699                      
+system.ruby.L1Cache_Controller.IS.Data_Exclusive |        2033      6.68%      6.68% |       28419     93.32%    100.00%
+system.ruby.L1Cache_Controller.IS.Data_Exclusive::total        30452                      
+system.ruby.L1Cache_Controller.IS.DataS_fromL1 |           8      0.22%      0.22% |        3708     99.78%    100.00%
+system.ruby.L1Cache_Controller.IS.DataS_fromL1::total         3716                      
+system.ruby.L1Cache_Controller.IS.Data_all_Acks |           0      0.00%      0.00% |          27    100.00%    100.00%
+system.ruby.L1Cache_Controller.IS.Data_all_Acks::total           27                      
+system.ruby.L1Cache_Controller.IM.Data   |           0      0.00%      0.00% |           1    100.00%    100.00%
+system.ruby.L1Cache_Controller.IM.Data::total            1                      
+system.ruby.L1Cache_Controller.IM.Data_all_Acks |       61588     98.74%     98.74% |         787      1.26%    100.00%
+system.ruby.L1Cache_Controller.IM.Data_all_Acks::total        62375                      
+system.ruby.L1Cache_Controller.SM.Ack    |          16     88.89%     88.89% |           2     11.11%    100.00%
+system.ruby.L1Cache_Controller.SM.Ack::total           18                      
+system.ruby.L1Cache_Controller.SM.Ack_all |          16     84.21%     84.21% |           3     15.79%    100.00%
+system.ruby.L1Cache_Controller.SM.Ack_all::total           19                      
+system.ruby.L1Cache_Controller.M_I.WB_Ack |       58890     67.20%     67.20% |       28750     32.80%    100.00%
+system.ruby.L1Cache_Controller.M_I.WB_Ack::total        87640                      
+system.ruby.L1Cache_Controller.S_IL0.L0_Invalidate_Own |           0      0.00%      0.00% |          96    100.00%    100.00%
+system.ruby.L1Cache_Controller.S_IL0.L0_Invalidate_Own::total           96                      
+system.ruby.L1Cache_Controller.S_IL0.L0_Invalidate_Else |           1     12.50%     12.50% |           7     87.50%    100.00%
+system.ruby.L1Cache_Controller.S_IL0.L0_Invalidate_Else::total            8                      
+system.ruby.L1Cache_Controller.S_IL0.L0_Ack |           1      0.96%      0.96% |         103     99.04%    100.00%
+system.ruby.L1Cache_Controller.S_IL0.L0_Ack::total          104                      
+system.ruby.L1Cache_Controller.E_IL0.L0_DataAck |          30     83.33%     83.33% |           6     16.67%    100.00%
+system.ruby.L1Cache_Controller.E_IL0.L0_DataAck::total           36                      
+system.ruby.L1Cache_Controller.E_IL0.L0_Invalidate_Own |         677     74.56%     74.56% |         231     25.44%    100.00%
+system.ruby.L1Cache_Controller.E_IL0.L0_Invalidate_Own::total          908                      
+system.ruby.L1Cache_Controller.E_IL0.L0_Invalidate_Else |          13     72.22%     72.22% |           5     27.78%    100.00%
+system.ruby.L1Cache_Controller.E_IL0.L0_Invalidate_Else::total           18                      
+system.ruby.L1Cache_Controller.E_IL0.L0_Ack |         660     74.16%     74.16% |         230     25.84%    100.00%
+system.ruby.L1Cache_Controller.E_IL0.L0_Ack::total          890                      
+system.ruby.L1Cache_Controller.M_IL0.L0_DataAck |         295     98.01%     98.01% |           6      1.99%    100.00%
+system.ruby.L1Cache_Controller.M_IL0.L0_DataAck::total          301                      
+system.ruby.L1Cache_Controller.M_IL0.L0_Invalidate_Own |          91     93.81%     93.81% |           6      6.19%    100.00%
+system.ruby.L1Cache_Controller.M_IL0.L0_Invalidate_Own::total           97                      
+system.ruby.L1Cache_Controller.M_IL0.L0_Invalidate_Else |         249     98.42%     98.42% |           4      1.58%    100.00%
+system.ruby.L1Cache_Controller.M_IL0.L0_Invalidate_Else::total          253                      
+system.ruby.L1Cache_Controller.M_IL0.L0_Ack |          45     91.84%     91.84% |           4      8.16%    100.00%
+system.ruby.L1Cache_Controller.M_IL0.L0_Ack::total           49                      
+system.ruby.L2Cache_Controller.L1_GETS          34195      0.00%      0.00%
+system.ruby.L2Cache_Controller.L1_GETX          62376      0.00%      0.00%
+system.ruby.L2Cache_Controller.L1_UPGRADE           18      0.00%      0.00%
+system.ruby.L2Cache_Controller.L1_PUTX          87640      0.00%      0.00%
+system.ruby.L2Cache_Controller.Mem_Data         63693      0.00%      0.00%
+system.ruby.L2Cache_Controller.WB_Data           3716      0.00%      0.00%
+system.ruby.L2Cache_Controller.Unblock           3716      0.00%      0.00%
+system.ruby.L2Cache_Controller.Exclusive_Unblock        92846      0.00%      0.00%
+system.ruby.L2Cache_Controller.NP.L1_GETS         1414      0.00%      0.00%
+system.ruby.L2Cache_Controller.NP.L1_GETX        62279      0.00%      0.00%
+system.ruby.L2Cache_Controller.SS.L1_GETS           27      0.00%      0.00%
+system.ruby.L2Cache_Controller.SS.L1_GETX            1      0.00%      0.00%
+system.ruby.L2Cache_Controller.SS.L1_UPGRADE           18      0.00%      0.00%
+system.ruby.L2Cache_Controller.M.L1_GETS        29038      0.00%      0.00%
+system.ruby.L2Cache_Controller.M.L1_GETX           95      0.00%      0.00%
+system.ruby.L2Cache_Controller.MT.L1_GETS         3716      0.00%      0.00%
+system.ruby.L2Cache_Controller.MT.L1_GETX            1      0.00%      0.00%
+system.ruby.L2Cache_Controller.MT.L1_PUTX        87640      0.00%      0.00%
+system.ruby.L2Cache_Controller.ISS.Mem_Data         1414      0.00%      0.00%
+system.ruby.L2Cache_Controller.IM.Mem_Data        62279      0.00%      0.00%
+system.ruby.L2Cache_Controller.SS_MB.Exclusive_Unblock           19      0.00%      0.00%
+system.ruby.L2Cache_Controller.MT_MB.Exclusive_Unblock        92827      0.00%      0.00%
+system.ruby.L2Cache_Controller.MT_IIB.WB_Data         3716      0.00%      0.00%
+system.ruby.L2Cache_Controller.MT_SB.Unblock         3716      0.00%      0.00%
+
+---------- End Simulation Statistics   ----------

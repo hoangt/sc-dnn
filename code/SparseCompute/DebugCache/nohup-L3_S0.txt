@@ -1,0 +1,35 @@
+gem5 Simulator System.  http://gem5.org
+gem5 is copyrighted software; use the --copyright option for details.
+
+gem5 compiled Nov 18 2015 23:15:21
+gem5 started Nov 22 2015 18:51:33
+gem5 executing on tunji-Virtual-Machine
+command line: /home/tunji/sc-dnn/code/gem5-stable/build/X86_MESI_Three_Level/gem5.opt -d L3_MNIST_S0/ /home/tunji/sc-dnn/code/gem5-stable/configs/example/se.py --ruby --cpu-type=timing --caches --l2cache --num-l3caches=1 --num-cpus=2 --l1d_size=32kB --l1i_size=32kB --l2_size=256kB --l3_size=20MB -c /home/tunji/sc-dnn/code/SparseCompute/M5SparseCompute -o  --kernel 1 --samples 0 --threads 1 --forwardsparsity 33 --activationcachelinesparsity 14 --backwardsparsity 83 --signalcachelinesparsity 81 --weightupdatesparsity 5 --deltacachelinesparsity 0 --model MNIST --workers 1 --pass ForwardProp
+Global frequency set at 1000000000000 ticks per second
+**** REAL SIMULATION ****
+info: Entering event queue @ 0.  Starting simulation...
+info: Increasing stack size by one page.
+Model: MNIST 
+Pass: ForwardProp 
+WorkerCount: 1 
+ThreadCount: 1 
+SampleCount: 0 
+ThreadModel: 1 
+OutputScale: 1
+KernelVersion: UNROLL
+FeedForwardSparsity: 33
+ActivationCacheLineSparsity: 14
+BackPropSparsity: 83
+SignalCacheLineSparsity: 81
+WeightUpdateSparsity: 5
+DeltaCacheLineSparsity: 0
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+ForwardProp:  0.00 msecs
+         0          1        inf   0.000000 420500
+         1          1        inf   0.000000 1210000
+         2          1        inf   0.000000 576000
+         3          1        inf   0.000000 320000
+         4          1        inf   0.000000 8000
+Pass_run_time: 3e-06secs
+Total_run_time: 3e-06secs
+Exiting @ tick 111655228500 because target called exit()

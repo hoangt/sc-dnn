@@ -1,0 +1,277 @@
+Run SparseCompute in GEM5-RUby
+GEM5=/home/tunji/sc-dnn/code/gem5-stable/build/X86_MESI_Three_Level/gem5.opt
+SCRIPT=/home/tunji/sc-dnn/code/gem5-stable/configs/example/se.py
+PROGDIR=/home/tunji/sc-dnn/code/SparseCompute
+InputCount= OutputCount= Sparsity= Iteration=
+PROGOPTS=--samples 1 --threads 1
+CPUOPTS=--ruby --cpu-type=timing --caches --l2cache --num-l3caches=1 --num-cpus=2
+gem5 Simulator System.  http://gem5.org
+gem5 is copyrighted software; use the --copyright option for details.
+
+gem5 compiled Nov  9 2015 15:47:54
+gem5 started Nov 10 2015 11:57:03
+gem5 executing on tunji-Virtual-Machine
+command line: /home/tunji/sc-dnn/code/gem5-stable/build/X86_MESI_Three_Level/gem5.opt -d l3-ruby-m5out-k1 /home/tunji/sc-dnn/code/gem5-stable/configs/example/se.py --ruby --cpu-type=timing --caches --l2cache --num-l3caches=1 --num-cpus=2 -c /home/tunji/sc-dnn/code/SparseCompute/M5SparseCompute -o --kernel 1 --samples 1 --threads 1
+Global frequency set at 1000000000000 ticks per second
+warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (512 Mbytes)
+0: system.remote_gdb.listener: listening for remote gdb #0 on port 7000
+0: system.remote_gdb.listener: listening for remote gdb #1 on port 7001
+**** REAL SIMULATION ****
+info: Entering event queue @ 0.  Starting simulation...
+info: Increasing stack size by one page.
+warn: ignoring syscall access(5371649, ...)
+Model: MNIST 
+Pass: ALL 
+WorkerCount: 1 
+ThreadCount: 1 
+SampleCount: 1 
+KernelVersion: UNROLL
+FeedForwardSparsity: 0
+BackPropSparsity: 0
+SignalCacheLineSparsity: 0
+WeightUpdateSparsity: 0
+DeltaCacheLineSparsity: 0
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+warn: ignoring syscall mprotect(46912518488064, ...)
+warn: ignoring syscall mprotect(46912518623232, ...)
+warn: ignoring syscall mprotect(46912518729728, ...)
+warn: ignoring syscall mprotect(46912518742016, ...)
+warn: ignoring syscall mprotect(46912518746112, ...)
+ForwardProp:  6.64 msecs
+         0          1       0.35   1.207000 420500
+         1          1       0.46   2.656000 1210000
+         2          1       0.33   1.745500 576000
+         3          1       0.33   0.980500 320000
+         4          1       0.16   0.051000 8000
+Pass_run_time: 0.024694secs
+warn: ignoring syscall mprotect(46912652705792, ...)
+warn: ignoring syscall mprotect(46912652840960, ...)
+warn: ignoring syscall mprotect(46912652947456, ...)
+warn: ignoring syscall mprotect(46912652959744, ...)
+warn: ignoring syscall mprotect(46912652963840, ...)
+BackwardProp:  7.24 msecs
+         0          1       0.29   1.464000 420500
+         1          1       0.38   3.197000 1210000
+         2          1       0.36   1.605500 576000
+         3          1       0.35   0.912500 320000
+         4          1       0.14   0.057500 8000
+Pass_run_time: 0.017207secs
+warn: ignoring syscall mprotect(46912786923520, ...)
+warn: ignoring syscall mprotect(46912787058688, ...)
+warn: ignoring syscall mprotect(46912787169280, ...)
+warn: ignoring syscall mprotect(46912787177472, ...)
+warn: ignoring syscall mprotect(46912787197952, ...)
+warn: ignoring syscall mprotect(46912787202048, ...)
+warn: ignoring syscall mprotect(46912787206144, ...)
+WeightUpdate: 13.09 msecs
+         0          1       0.30   1.381500 420500
+         1          1       0.39   3.089500 1210000
+         2          1       0.11   5.466000 576000
+         3          1       0.10   3.069500 320000
+         4          1       0.10   0.081000 8000
+Pass_run_time: 0.13896secs
+Total_run_time: 0.180861secs
+Exiting @ tick 181378383500 because target called exit()
+gem5 Simulator System.  http://gem5.org
+gem5 is copyrighted software; use the --copyright option for details.
+
+gem5 compiled Nov  9 2015 15:47:54
+gem5 started Nov 10 2015 12:27:38
+gem5 executing on tunji-Virtual-Machine
+command line: /home/tunji/sc-dnn/code/gem5-stable/build/X86_MESI_Three_Level/gem5.opt -d l3-ruby-m5out-k2 /home/tunji/sc-dnn/code/gem5-stable/configs/example/se.py --ruby --cpu-type=timing --caches --l2cache --num-l3caches=1 --num-cpus=2 -c /home/tunji/sc-dnn/code/SparseCompute/M5SparseCompute -o --kernel 2 --samples 1 --threads 1
+Global frequency set at 1000000000000 ticks per second
+warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (512 Mbytes)
+0: system.remote_gdb.listener: listening for remote gdb #0 on port 7000
+0: system.remote_gdb.listener: listening for remote gdb #1 on port 7001
+**** REAL SIMULATION ****
+info: Entering event queue @ 0.  Starting simulation...
+info: Increasing stack size by one page.
+warn: ignoring syscall access(5371649, ...)
+Model: MNIST 
+Pass: ALL 
+WorkerCount: 1 
+ThreadCount: 1 
+SampleCount: 1 
+KernelVersion: SW_SPARSE
+FeedForwardSparsity: 0
+BackPropSparsity: 0
+SignalCacheLineSparsity: 0
+WeightUpdateSparsity: 0
+DeltaCacheLineSparsity: 0
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+warn: ignoring syscall mprotect(46912518488064, ...)
+warn: ignoring syscall mprotect(46912518623232, ...)
+warn: ignoring syscall mprotect(46912518729728, ...)
+warn: ignoring syscall mprotect(46912518742016, ...)
+warn: ignoring syscall mprotect(46912518746112, ...)
+warn: instruction 'ptest_Vdq_Wdq' unimplemented
+ForwardProp:  4.54 msecs
+         0          1       0.40   1.053000 420500
+         1          1       0.56   2.153500 1210000
+         2          1       0.69   0.838000 576000
+         3          1       0.69   0.467000 320000
+         4          1       0.25   0.032000 8000
+Pass_run_time: 0.020489secs
+warn: ignoring syscall mprotect(46912652705792, ...)
+warn: ignoring syscall mprotect(46912652840960, ...)
+warn: ignoring syscall mprotect(46912652947456, ...)
+warn: ignoring syscall mprotect(46912652959744, ...)
+warn: ignoring syscall mprotect(46912652963840, ...)
+BackwardProp:  7.74 msecs
+         0          1       0.29   1.456000 420500
+         1          1       0.38   3.147500 1210000
+         2          1       0.29   1.992000 576000
+         3          1       0.29   1.096500 320000
+         4          1       0.16   0.050500 8000
+Pass_run_time: 0.018207secs
+warn: ignoring syscall mprotect(46912786923520, ...)
+warn: ignoring syscall mprotect(46912787058688, ...)
+warn: ignoring syscall mprotect(46912787169280, ...)
+warn: ignoring syscall mprotect(46912787177472, ...)
+warn: ignoring syscall mprotect(46912787197952, ...)
+warn: ignoring syscall mprotect(46912787202048, ...)
+warn: ignoring syscall mprotect(46912787206144, ...)
+WeightUpdate:  6.01 msecs
+         0          1       0.38   1.106500 420500
+         1          1       0.57   2.124000 1210000
+         2          1       0.33   1.765000 576000
+         3          1       0.33   0.980000 320000
+         4          1       0.20   0.039500 8000
+Pass_run_time: 0.126466secs
+Total_run_time: 0.165162secs
+Exiting @ tick 165656179500 because target called exit()
+gem5 Simulator System.  http://gem5.org
+gem5 is copyrighted software; use the --copyright option for details.
+
+gem5 compiled Nov  9 2015 15:47:54
+gem5 started Nov 10 2015 12:53:36
+gem5 executing on tunji-Virtual-Machine
+command line: /home/tunji/sc-dnn/code/gem5-stable/build/X86_MESI_Three_Level/gem5.opt -d l3-ruby-m5out-k3 /home/tunji/sc-dnn/code/gem5-stable/configs/example/se.py --ruby --cpu-type=timing --caches --l2cache --num-l3caches=1 --num-cpus=2 -c /home/tunji/sc-dnn/code/SparseCompute/M5SparseCompute -o --kernel 3 --samples 1 --threads 1
+Global frequency set at 1000000000000 ticks per second
+warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (512 Mbytes)
+0: system.remote_gdb.listener: listening for remote gdb #0 on port 7000
+0: system.remote_gdb.listener: listening for remote gdb #1 on port 7001
+**** REAL SIMULATION ****
+info: Entering event queue @ 0.  Starting simulation...
+info: Increasing stack size by one page.
+warn: ignoring syscall access(5371649, ...)
+Model: MNIST 
+Pass: ALL 
+WorkerCount: 1 
+ThreadCount: 1 
+SampleCount: 1 
+KernelVersion: OPT_SW
+FeedForwardSparsity: 0
+BackPropSparsity: 0
+SignalCacheLineSparsity: 0
+WeightUpdateSparsity: 0
+DeltaCacheLineSparsity: 0
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+warn: ignoring syscall mprotect(46912518488064, ...)
+warn: ignoring syscall mprotect(46912518623232, ...)
+warn: ignoring syscall mprotect(46912518729728, ...)
+warn: ignoring syscall mprotect(46912518742016, ...)
+warn: ignoring syscall mprotect(46912518746112, ...)
+ForwardProp:  6.64 msecs
+         0          1       0.35   1.207000 420500
+         1          1       0.46   2.656000 1210000
+         2          1       0.33   1.745500 576000
+         3          1       0.33   0.980500 320000
+         4          1       0.16   0.051000 8000
+Pass_run_time: 0.024694secs
+warn: ignoring syscall mprotect(46912652705792, ...)
+warn: ignoring syscall mprotect(46912652840960, ...)
+warn: ignoring syscall mprotect(46912652947456, ...)
+warn: ignoring syscall mprotect(46912652959744, ...)
+warn: ignoring syscall mprotect(46912652963840, ...)
+BackwardProp:  7.18 msecs
+         0          1       0.29   1.460500 420500
+         1          1       0.38   3.172000 1210000
+         2          1       0.36   1.589500 576000
+         3          1       0.36   0.900000 320000
+         4          1       0.14   0.056000 8000
+Pass_run_time: 0.01709secs
+warn: ignoring syscall mprotect(46912786923520, ...)
+warn: ignoring syscall mprotect(46912787058688, ...)
+warn: ignoring syscall mprotect(46912787169280, ...)
+warn: ignoring syscall mprotect(46912787177472, ...)
+warn: ignoring syscall mprotect(46912787197952, ...)
+warn: ignoring syscall mprotect(46912787202048, ...)
+warn: ignoring syscall mprotect(46912787206144, ...)
+warn: instruction 'ptest_Vdq_Wdq' unimplemented
+WeightUpdate:  9.18 msecs
+         0          1       0.38   1.108500 420500
+         1          1       0.56   2.153000 1210000
+         2          1       0.15   3.779500 576000
+         3          1       0.15   2.080000 320000
+         4          1       0.13   0.060500 8000
+Pass_run_time: 0.134913secs
+Total_run_time: 0.176697secs
+Exiting @ tick 177212461500 because target called exit()
+gem5 Simulator System.  http://gem5.org
+gem5 is copyrighted software; use the --copyright option for details.
+
+gem5 compiled Nov  9 2015 15:47:54
+gem5 started Nov 10 2015 13:15:34
+gem5 executing on tunji-Virtual-Machine
+command line: /home/tunji/sc-dnn/code/gem5-stable/build/X86_MESI_Three_Level/gem5.opt -d l3-ruby-m5out-k4 /home/tunji/sc-dnn/code/gem5-stable/configs/example/se.py --ruby --cpu-type=timing --caches --l2cache --num-l3caches=1 --num-cpus=2 -c /home/tunji/sc-dnn/code/SparseCompute/M5SparseCompute -o --kernel 4 --samples 1 --threads 1
+Global frequency set at 1000000000000 ticks per second
+warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (512 Mbytes)
+0: system.remote_gdb.listener: listening for remote gdb #0 on port 7000
+0: system.remote_gdb.listener: listening for remote gdb #1 on port 7001
+**** REAL SIMULATION ****
+info: Entering event queue @ 0.  Starting simulation...
+info: Increasing stack size by one page.
+warn: ignoring syscall access(5371649, ...)
+Model: MNIST 
+Pass: ALL 
+WorkerCount: 1 
+ThreadCount: 1 
+SampleCount: 1 
+KernelVersion: HW_SPARSE
+FeedForwardSparsity: 0
+BackPropSparsity: 0
+SignalCacheLineSparsity: 0
+WeightUpdateSparsity: 0
+DeltaCacheLineSparsity: 0
+Layers     Threads    GFLOP/s    MSec       FLOPs     
+warn: ignoring syscall mprotect(46912518488064, ...)
+warn: ignoring syscall mprotect(46912518623232, ...)
+warn: ignoring syscall mprotect(46912518729728, ...)
+warn: ignoring syscall mprotect(46912518742016, ...)
+warn: ignoring syscall mprotect(46912518746112, ...)
+ForwardProp:  6.67 msecs
+         0          1       0.34   1.225500 420500
+         1          1       0.45   2.664000 1210000
+         2          1       0.33   1.746000 576000
+         3          1       0.33   0.983000 320000
+         4          1       0.15   0.052000 8000
+Pass_run_time: 0.024754secs
+warn: ignoring syscall mprotect(46912652705792, ...)
+warn: ignoring syscall mprotect(46912652840960, ...)
+warn: ignoring syscall mprotect(46912652947456, ...)
+warn: ignoring syscall mprotect(46912652959744, ...)
+warn: ignoring syscall mprotect(46912652963840, ...)
+BackwardProp:  7.32 msecs
+         0          1       0.28   1.514500 420500
+         1          1       0.38   3.215500 1210000
+         2          1       0.36   1.608500 576000
+         3          1       0.35   0.916500 320000
+         4          1       0.13   0.060000 8000
+Pass_run_time: 0.017362secs
+warn: ignoring syscall mprotect(46912786923520, ...)
+warn: ignoring syscall mprotect(46912787058688, ...)
+warn: ignoring syscall mprotect(46912787169280, ...)
+warn: ignoring syscall mprotect(46912787177472, ...)
+warn: ignoring syscall mprotect(46912787197952, ...)
+warn: ignoring syscall mprotect(46912787202048, ...)
+warn: ignoring syscall mprotect(46912787206144, ...)
+WeightUpdate: 13.19 msecs
+         0          1       0.29   1.442000 420500
+         1          1       0.39   3.110000 1210000
+         2          1       0.11   5.475500 576000
+         3          1       0.10   3.074500 320000
+         4          1       0.09   0.084500 8000
+Pass_run_time: 0.139172secs
+Total_run_time: 0.181288secs
+
